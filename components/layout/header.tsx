@@ -17,6 +17,8 @@ import {
 
 import { removeTokenCookie } from '@/lib/utils';
 
+import { SidebarTrigger } from '../ui/sidebar';
+
 export function Header() {
   const router = useRouter();
 
@@ -27,11 +29,13 @@ export function Header() {
   };
 
   return (
-    <header className='flex h-16 shrink-0 items-center justify-between border-b bg-background/95 px-6 backdrop-blur supports-backdrop-filter:bg-background/60'>
+    <header className='flex h-16 shrink-0 items-center justify-between border-b bg-background/95 px-4 backdrop-blur supports-backdrop-filter:bg-background/60'>
       {/* Left — Breadcrumb placeholder */}
-      <div className='flex items-center gap-2'>
+      {/* <div className='flex items-center gap-2 border '>
         <div className='h-4 w-px bg-border' />
-      </div>
+      </div> */}
+
+      <SidebarTrigger size={'icon-sm'} />
 
       {/* Right — Actions */}
       <div className='flex items-center gap-2'>

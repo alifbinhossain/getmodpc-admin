@@ -130,3 +130,17 @@
     @apply font-sans;
   }
 }
+
+@layer utilities {
+  .sb-red {
+    @apply border-2 border-red-600;
+  }
+
+  .sb-green {
+    @apply border-2 border-green-600;
+  }
+
+  .sb-blue {
+    @apply border-2 border-blue-600;
+  }
+}

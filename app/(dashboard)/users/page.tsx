@@ -6,5 +6,5 @@ import { MOCK_USERS } from './_config/mockdata';
 export const metadata: Metadata = { title: 'Users' };
 
 export default function UsersPage() {
-  return <UsersTable data={MOCK_USERS} />;
+  return <UsersTable data={MOCK_USERS} canDelete={true} />;
 }
