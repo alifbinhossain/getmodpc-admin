@@ -1,311 +1,366 @@
+// components/table/DataTable.tsx
 'use client';
 
-import {
-  type ColumnDef,
-  flexRender,
-  type Table as TanstackTable,
-} from '@tanstack/react-table';
-import {
-  ChevronDown,
-  ChevronsUpDown,
-  ChevronUp,
-  Search,
-  Settings2,
-} from 'lucide-react';
+// Central orchestrator — assembles all sub-components.
+// SRP: this component ONLY composes. It owns no state directly —
+// all state lives in useDataTable.
+import { useMemo } from 'react';
 
-import { Button } from '@/components/ui/button';
+import type { ColumnMeta, DataTableProps, WithTimestamps } from '@/types/table';
+import { type ColumnDef, flexRender } from '@tanstack/react-table';
+import { ArrowDown, ArrowUp, ArrowUpDown, Loader2 } from 'lucide-react';
+
+import { Checkbox } from '@/components/ui/checkbox';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 import { cn } from '@/lib/utils';
 
-// =============================================================================
-// TABLE TYPES
-// =============================================================================
+import { DataTableActions } from './_helpers/data-table-actions';
+import { DataTableHeader } from './_helpers/data-table-header';
+import { DataTablePagination } from './_helpers/data-table-pagination';
+import { DataTableToolbar } from './_helpers/data-table-toolbar';
+import { useDataTable } from './useDataTable';
 
-interface DataTableProps<TData> {
-  table: TanstackTable<TData>;
-  columns: ColumnDef<TData, unknown>[];
-  globalFilter?: string;
-  onGlobalFilterChange?: (value: string) => void;
-  isLoading?: boolean;
-  emptyMessage?: string;
-  toolbar?: React.ReactNode;
+// ─── Static column builders ───────────────────────────────────────────────────
+// These are generated per-render via useMemo so they participate in
+// TypeScript's generic inference on TData.
+
+function buildSelectionColumn<TData>(): ColumnDef<TData> {
+  return {
+    id: '_select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() ? 'indeterminate' : false)
+        }
+        onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
+        aria-label='Select all rows on this page'
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(v) => row.toggleSelected(!!v)}
+        aria-label={`Select row ${row.index + 1}`}
+        onClick={(e) => e.stopPropagation()}
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+    meta: {
+      isStatic: true,
+      hideFromToggle: true,
+      align: 'center',
+    } satisfies ColumnMeta,
+    size: 40,
+  };
 }
 
-// =============================================================================
-// SORT ICON HELPER
-// =============================================================================
-
-function SortIcon({ direction }: { direction: false | 'asc' | 'desc' }) {
-  if (direction === 'asc') return <ChevronUp className='ml-1 h-4 w-4' />;
-  if (direction === 'desc') return <ChevronDown className='ml-1 h-4 w-4' />;
-  return <ChevronsUpDown className='ml-1 h-4 w-4 opacity-40' />;
+function buildDateColumn<TData>(
+  accessor: 'createdAt' | 'updatedAt',
+  label: string
+): ColumnDef<TData> {
+  return {
+    accessorKey: accessor,
+    header: label,
+    cell: ({ getValue }) => {
+      const raw = getValue<string | undefined>();
+      if (!raw) return <span className='text-muted-foreground'>—</span>;
+      return (
+        <span className='text-sm text-muted-foreground'>
+          {new Intl.DateTimeFormat('en-US', {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }).format(new Date(raw))}
+        </span>
+      );
+    },
+    meta: {
+      isStatic: true,
+    } satisfies ColumnMeta,
+  };
 }
 
-// =============================================================================
-// MAIN COMPONENT
-// =============================================================================
+function buildActionsColumn<TData extends WithTimestamps>(
+  permissions: DataTableProps<TData>['permissions'],
+  actions: DataTableProps<TData>['actions']
+): ColumnDef<TData> {
+  return {
+    id: '_actions',
+    header: '',
+    cell: ({ row }) => (
+      <DataTableActions
+        row={row.original}
+        permissions={permissions}
+        actions={actions}
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+    meta: {
+      isStatic: true,
+      hideFromToggle: true,
+      align: 'right',
+    } satisfies ColumnMeta,
+    size: 48,
+  };
+}
 
-export function DataTable<TData>({
-  table,
-  globalFilter,
-  onGlobalFilterChange,
-  isLoading,
-  emptyMessage = 'No results found.',
-  toolbar,
-}: DataTableProps<TData>) {
+// ─── Sort icon helper ─────────────────────────────────────────────────────────
+
+function SortIcon({ sorted }: { sorted: false | 'asc' | 'desc' }) {
+  if (sorted === 'asc') return <ArrowUp className='ml-1.5 h-3.5 w-3.5' />;
+  if (sorted === 'desc') return <ArrowDown className='ml-1.5 h-3.5 w-3.5' />;
   return (
-    <div className='space-y-4'>
-      {/* Toolbar */}
-      <div className='flex items-center justify-between gap-4'>
-        {/* Global Search */}
-        {onGlobalFilterChange && (
-          <div className='relative max-w-sm flex-1'>
-            <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
-            <Input
-              placeholder='Search...'
-              value={globalFilter ?? ''}
-              onChange={(e) => onGlobalFilterChange(e.target.value)}
-              className='pl-9'
-            />
+    <ArrowUpDown className='ml-1.5 h-3.5 w-3.5 text-muted-foreground/50' />
+  );
+}
+
+// ─── Loading skeleton ─────────────────────────────────────────────────────────
+
+function TableSkeleton({ columnCount }: { columnCount: number }) {
+  return (
+    <>
+      {Array.from({ length: 6 }).map((_, r) => (
+        <TableRow key={r} className='animate-pulse'>
+          {Array.from({ length: columnCount }).map((_, c) => (
+            <TableCell key={c}>
+              <div className='h-4 rounded bg-muted' />
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </>
+  );
+}
+
+// ─── DataTable ────────────────────────────────────────────────────────────────
+
+export function DataTable<TData extends WithTimestamps>({
+  data,
+  columns,
+  isLoading = false,
+  isFetching = false,
+  title,
+  description,
+  permissions,
+  actions,
+  manualPagination,
+  manualSorting,
+  manualFiltering,
+  rowCount,
+  onStateChange,
+  enableSearch = true,
+  enableColumnToggle = true,
+  enablePagination = true,
+  enableSorting = true,
+  enableRowSelection = false,
+  defaultPageSize = 10,
+  pageSizeOptions = [10, 20, 50, 100],
+  searchPlaceholder,
+  toolbarExtra,
+}: DataTableProps<TData>) {
+  // ── Assemble final column list ─────────────────────────────────────────
+  // Order: selection? | user columns | createdAt | updatedAt | actions?
+  const finalColumns = useMemo<ColumnDef<TData>[]>(() => {
+    const result: ColumnDef<TData>[] = [];
+
+    if (enableRowSelection) {
+      result.push(buildSelectionColumn<TData>());
+    }
+
+    result.push(...columns);
+
+    // Inject date columns only if TData likely has them
+    // (checked at runtime via first data item — safe for static data)
+    const sample = data[0] as Record<string, unknown> | undefined;
+    if (sample?.createdAt !== undefined) {
+      result.push(buildDateColumn<TData>('createdAt', 'Created'));
+    }
+    if (sample?.updatedAt !== undefined) {
+      result.push(buildDateColumn<TData>('updatedAt', 'Updated'));
+    }
+
+    if (
+      actions &&
+      (permissions?.canEdit || permissions?.canDelete || permissions?.canView)
+    ) {
+      result.push(buildActionsColumn<TData>(permissions, actions));
+    }
+
+    return result;
+  }, [columns, enableRowSelection, data, actions, permissions]);
+
+  // ── Table state ────────────────────────────────────────────────────────
+  const { table, globalFilter, setGlobalFilter } = useDataTable<TData>({
+    data,
+    columns: finalColumns,
+    manualPagination,
+    manualSorting,
+    manualFiltering,
+    rowCount,
+    defaultPageSize,
+    pageSizeOptions,
+    enableRowSelection,
+    onStateChange,
+  });
+
+  const { rows } = table.getRowModel();
+  const headerGroups = table.getHeaderGroups();
+
+  return (
+    <div className='space-y-1'>
+      {/* Section header */}
+      <DataTableHeader title={title} description={description} />
+
+      {/* Toolbar: search + column toggle + extra */}
+      <DataTableToolbar
+        table={table}
+        globalFilter={globalFilter}
+        onGlobalFilterChange={setGlobalFilter}
+        enableSearch={enableSearch}
+        enableColumnToggle={enableColumnToggle}
+        searchPlaceholder={searchPlaceholder}
+        toolbarExtra={toolbarExtra}
+      />
+
+      {/* Table */}
+      <div className='relative rounded-md border overflow-hidden'>
+        {/* Fetching overlay (server-side background refetch indicator) */}
+        {isFetching && !isLoading && (
+          <div className='absolute right-3 top-3 z-10'>
+            <Loader2 className='h-4 w-4 animate-spin text-muted-foreground' />
           </div>
         )}
 
-        <div className='ml-auto flex items-center gap-2'>
-          {toolbar}
-
-          {/* Column Visibility */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline' size='sm' className='gap-2'>
-                <Settings2 className='h-4 w-4' />
-                Columns
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='w-45'>
-              <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {table
-                .getAllColumns()
-                .filter((col) => col.getCanHide())
-                .map((col) => (
-                  <DropdownMenuItem
-                    key={col.id}
-                    className='cursor-pointer capitalize'
-                    onClick={() => col.toggleVisibility(!col.getIsVisible())}
-                  >
-                    <span
-                      className={cn(
-                        'mr-2 flex h-4 w-4 items-center justify-center rounded border text-xs',
-                        col.getIsVisible()
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-input'
-                      )}
-                    >
-                      {col.getIsVisible() && '✓'}
-                    </span>
-                    {col.id}
-                  </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className='overflow-hidden rounded-md border'>
         <div className='overflow-x-auto'>
-          <table className='w-full text-sm'>
-            {/* Head */}
-            <thead className='bg-muted/50'>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      className='h-11 px-4 text-left align-middle font-medium text-muted-foreground'
-                      style={{
-                        width:
-                          header.getSize() !== 150
-                            ? header.getSize()
-                            : undefined,
-                      }}
-                    >
-                      {header.isPlaceholder ? null : (
-                        <div
-                          className={cn(
-                            'flex items-center',
-                            header.column.getCanSort() &&
-                              'cursor-pointer select-none transition-colors hover:text-foreground'
-                          )}
-                          onClick={
-                            header.column.getCanSort()
-                              ? header.column.getToggleSortingHandler()
-                              : undefined
-                          }
-                        >
-                          {flexRender(
+          <Table>
+            <TableHeader>
+              {headerGroups.map((headerGroup) => (
+                <TableRow
+                  key={headerGroup.id}
+                  className='hover:bg-transparent bg-slate-50'
+                >
+                  {headerGroup.headers.map((header) => {
+                    const meta = header.column.columnDef.meta as
+                      | ColumnMeta
+                      | undefined;
+                    const canSort = enableSorting && header.column.getCanSort();
+
+                    return (
+                      <TableHead
+                        key={header.id}
+                        style={{
+                          width:
+                            header.getSize() !== 150
+                              ? header.getSize()
+                              : undefined,
+                        }}
+                        className={cn(
+                          'first:pl-4 ',
+                          meta?.align === 'right'
+                            ? 'text-right'
+                            : meta?.align === 'center'
+                              ? 'text-center'
+                              : ''
+                        )}
+                      >
+                        {header.isPlaceholder ? null : canSort ? (
+                          <button
+                            type='button'
+                            className='flex items-center gap-0.5 text-xs font-medium uppercase tracking-wide hover:text-foreground transition-colors'
+                            onClick={header.column.getToggleSortingHandler()}
+                            aria-label={`Sort by ${header.id}`}
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            <SortIcon sorted={header.column.getIsSorted()} />
+                          </button>
+                        ) : (
+                          flexRender(
                             header.column.columnDef.header,
                             header.getContext()
-                          )}
-                          {header.column.getCanSort() && (
-                            <SortIcon direction={header.column.getIsSorted()} />
-                          )}
-                        </div>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-
-            {/* Body */}
-            <tbody className='divide-y divide-border'>
-              {isLoading ? (
-                // Loading skeleton
-                Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i} className='animate-pulse'>
-                    {table.getAllColumns().map((col) => (
-                      <td key={col.id} className='px-4 py-3'>
-                        <div className='h-4 rounded bg-muted' />
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : table.getRowModel().rows.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={table.getAllColumns().length}
-                    className='h-32 text-center text-muted-foreground'
-                  >
-                    {emptyMessage}
-                  </td>
-                </tr>
-              ) : (
-                table.getRowModel().rows.map((row) => (
-                  <tr
-                    key={row.id}
-                    className='transition-colors hover:bg-muted/30 data-[state=selected]:bg-muted'
-                    data-state={row.getIsSelected() ? 'selected' : undefined}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className='px-4 py-3 align-middle'>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+                          )
                         )}
-                      </td>
-                    ))}
-                  </tr>
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+
+            <TableBody>
+              {isLoading ? (
+                <TableSkeleton columnCount={finalColumns.length} />
+              ) : rows.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={finalColumns.length}
+                    className='h-32 text-center text-muted-foreground text-sm'
+                  >
+                    No results found.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() ? 'selected' : undefined}
+                    className='group/row transition-colors'
+                  >
+                    {row.getVisibleCells().map((cell) => {
+                      const meta = cell.column.columnDef.meta as
+                        | ColumnMeta
+                        | undefined;
+                      return (
+                        <TableCell
+                          key={cell.id}
+                          className={cn(
+                            'first:pl-4 ',
+                            meta?.align === 'right'
+                              ? 'text-right'
+                              : meta?.align === 'center'
+                                ? 'text-center'
+                                : ''
+                          )}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          ) ??
+                            flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
                 ))
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
 
       {/* Pagination */}
-      <DataTablePagination table={table} />
-    </div>
-  );
-}
-
-// =============================================================================
-// PAGINATION SUB-COMPONENT
-// =============================================================================
-
-function DataTablePagination<TData>({
-  table,
-}: {
-  table: TanstackTable<TData>;
-}) {
-  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
-  const totalCount = table.getFilteredRowModel().rows.length;
-
-  return (
-    <div className='flex items-center justify-between px-1'>
-      <div className='text-sm text-muted-foreground'>
-        {selectedCount > 0 ? (
-          <span>
-            {selectedCount} of {totalCount} row(s) selected.
-          </span>
-        ) : (
-          <span>{totalCount} total row(s)</span>
-        )}
-      </div>
-
-      <div className='flex items-center gap-6'>
-        {/* Rows per page */}
-        <div className='flex items-center gap-2 text-sm'>
-          <span className='text-muted-foreground'>Rows per page</span>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => table.setPageSize(Number(e.target.value))}
-            className='h-8 rounded-md border border-input bg-background px-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring'
-          >
-            {[10, 20, 50, 100].map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Page info */}
-        <span className='text-sm text-muted-foreground'>
-          Page {table.getState().pagination.pageIndex + 1} of{' '}
-          {Math.max(1, table.getPageCount())}
-        </span>
-
-        {/* Nav buttons */}
-        <div className='flex items-center gap-1'>
-          <Button
-            variant='outline'
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className='sr-only'>First page</span>«
-          </Button>
-          <Button
-            variant='outline'
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className='sr-only'>Previous page</span>‹
-          </Button>
-          <Button
-            variant='outline'
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className='sr-only'>Next page</span>›
-          </Button>
-          <Button
-            variant='outline'
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className='sr-only'>Last page</span>»
-          </Button>
-        </div>
-      </div>
+      {enablePagination && (
+        <DataTablePagination
+          table={table}
+          pageSizeOptions={pageSizeOptions}
+          enableRowSelection={enableRowSelection}
+        />
+      )}
     </div>
   );
 }

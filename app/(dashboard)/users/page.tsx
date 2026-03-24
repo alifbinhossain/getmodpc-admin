@@ -1,16 +1,10 @@
 import type { Metadata } from 'next';
 
+import { UsersTable } from './_components/users-table';
+import { MOCK_USERS } from './_config/mockdata';
+
 export const metadata: Metadata = { title: 'Users' };
 
 export default function UsersPage() {
-  return (
-    <div className='space-y-6'>
-      <div>
-        <h1 className='text-2xl font-bold tracking-tight'>Users</h1>
-        <p className='text-muted-foreground'>
-          Manage your team members and their roles.
-        </p>
-      </div>
-    </div>
-  );
+  return <UsersTable data={MOCK_USERS} />;
 }

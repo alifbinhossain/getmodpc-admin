@@ -1,5 +1,17 @@
-import { useState } from 'react';
+// hooks/table/use-data-table.ts
+//
+// SRP: owns ALL table state (pagination, sorting, filtering, column visibility,
+// row selection). Components only read from `table` — no local state needed.
 
+'use client';
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import type {
+  DataTableProps,
+  UseDataTableReturn,
+  WithTimestamps,
+} from '@/types/table';
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -14,113 +26,116 @@ import {
   type VisibilityState,
 } from '@tanstack/react-table';
 
-// =============================================================================
-// useDataTable — reusable TanStack Table abstraction
-// =============================================================================
+// ─── Debounce helper ──────────────────────────────────────────────────────────
+// Kept module-local to avoid a library dependency for a 10-line function.
 
-interface UseDataTableOptions<TData> {
-  data: TData[];
-  columns: ColumnDef<TData, unknown>[];
-  pageSize?: number;
-  // For server-side pagination
-  manualPagination?: boolean;
-  pageCount?: number;
-  onPaginationChange?: (pagination: PaginationState) => void;
-  onSortingChange?: (sorting: SortingState) => void;
-  onFilterChange?: (filters: ColumnFiltersState) => void;
+function useDebounce<T>(value: T, delay = 300): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debouncedValue;
 }
 
-export function useDataTable<TData>({
+// ─── useDataTable ─────────────────────────────────────────────────────────────
+
+export function useDataTable<TData extends WithTimestamps>({
   data,
   columns,
-  pageSize = 10,
   manualPagination = false,
-  pageCount,
-  onPaginationChange,
-  onSortingChange,
-  onFilterChange,
-}: UseDataTableOptions<TData>) {
+  manualSorting = false,
+  manualFiltering = false,
+  rowCount,
+  defaultPageSize = 10,
+  pageSizeOptions = [10, 20, 50, 100],
+  enableRowSelection = false,
+  onStateChange,
+}: Pick<
+  DataTableProps<TData>,
+  | 'data'
+  | 'columns'
+  | 'manualPagination'
+  | 'manualSorting'
+  | 'manualFiltering'
+  | 'rowCount'
+  | 'defaultPageSize'
+  | 'pageSizeOptions'
+  | 'enableRowSelection'
+  | 'onStateChange'
+>): UseDataTableReturn<TData> {
+  // ── Core state ───────────────────────────────────────────────────────────
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [globalFilter, setGlobalFilter] = useState('');
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize,
+    pageSize: defaultPageSize,
   });
+  const [globalFilter, setGlobalFilter] = useState('');
+  const debouncedFilter = useDebounce(globalFilter, 300);
 
-  const table = useReactTable({
-    data,
-    columns,
+  // ── Notify parent on state changes (server-side mode) ────────────────────
+  // Use ref to hold onStateChange so it never triggers the effect loop
+  const onStateChangeRef = useRef(onStateChange);
+  onStateChangeRef.current = onStateChange;
+
+  useEffect(() => {
+    if (!onStateChangeRef.current) return;
+    onStateChangeRef.current({
+      pagination: {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+      },
+      sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
+      globalFilter: debouncedFilter,
+    });
+  }, [pagination, sorting, debouncedFilter]);
+
+  // ── Memoize data and columns to avoid unnecessary re-renders ─────────────
+  const memoData = useMemo(() => data, [data]);
+  const memoColumns = useMemo(() => columns, [columns]);
+
+  const table = useReactTable<TData>({
+    data: memoData,
+    columns: memoColumns,
+    // Row counting for server pagination
+    ...(manualPagination && rowCount !== undefined ? { rowCount } : {}),
+    // State
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
-      globalFilter,
       pagination,
+      globalFilter: debouncedFilter,
     },
-    // Server-side support
+    // Mode flags
     manualPagination,
-    pageCount: manualPagination ? pageCount : undefined,
-    manualSorting: !!onSortingChange,
-    manualFiltering: !!onFilterChange,
-
-    // Row selection
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-
-    // Sorting
-    onSortingChange: (updater) => {
-      setSorting(updater);
-      if (onSortingChange) {
-        const newSorting =
-          typeof updater === 'function' ? updater(sorting) : updater;
-        onSortingChange(newSorting);
-      }
-    },
-
-    // Filtering
-    onColumnFiltersChange: (updater) => {
-      setColumnFilters(updater);
-      if (onFilterChange) {
-        const newFilters =
-          typeof updater === 'function' ? updater(columnFilters) : updater;
-        onFilterChange(newFilters);
-      }
-    },
-    onGlobalFilterChange: setGlobalFilter,
+    manualSorting,
+    manualFiltering,
+    // Handlers
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-
-    // Pagination
-    onPaginationChange: (updater) => {
-      setPagination(updater);
-      if (onPaginationChange) {
-        const newPagination =
-          typeof updater === 'function' ? updater(pagination) : updater;
-        onPaginationChange(newPagination);
-      }
-    },
-
-    // Row models
+    onRowSelectionChange: enableRowSelection ? setRowSelection : undefined,
+    onPaginationChange: setPagination,
+    onGlobalFilterChange: (value) => setGlobalFilter(String(value ?? '')),
+    // Row models — only include what's needed to keep the bundle lean
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    // Debug only in development
+    debugTable: process.env.NODE_ENV === 'development',
   });
 
-  const selectedRows = table
-    .getFilteredSelectedRowModel()
-    .rows.map((row) => row.original);
+  const handleSetGlobalFilter = useCallback((value: string) => {
+    setGlobalFilter(value);
+    // Reset to first page on new search
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, []);
 
-  return {
-    table,
-    selectedRows,
-    globalFilter,
-    setGlobalFilter,
-    pagination,
-    sorting,
-    columnFilters,
-  };
+  return { table, globalFilter, setGlobalFilter: handleSetGlobalFilter };
 }
