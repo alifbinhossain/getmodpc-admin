@@ -36,10 +36,10 @@ import { SidebarItem } from './sidebar-item';
 
 const NAV_ITEMS: NavItem[] = [
   { title: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { title: 'Apps', href: '/app', icon: AppWindow },
-  { title: 'Categories', href: '/category', icon: ChartBarStacked },
-  { title: 'Tags', href: '/tag', icon: Tags },
-  { title: 'Developers', href: '/developer', icon: Code },
+  { title: 'Apps', href: '/apps', icon: AppWindow },
+  { title: 'Categories', href: '/categories', icon: ChartBarStacked },
+  { title: 'Tags', href: '/tags', icon: Tags },
+  { title: 'Developers', href: '/developers', icon: Code },
   {
     title: 'Reports',
     href: '/report',

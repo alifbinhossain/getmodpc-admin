@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
+import { DeveloperForm } from '@/app/(dashboard)/developers/_components/developer-form';
 import { ReportReasonForm } from '@/app/(dashboard)/report-reasons/_components/report-reason-form';
 import { ReportForm } from '@/app/(dashboard)/reports/_components/report-form';
 
@@ -24,6 +25,8 @@ export function GlobalFormModal() {
     ADD_REPORT_REASON: ReportReasonForm,
     EDIT_REPORT_REASON: ReportReasonForm,
     EDIT_REPORT: ReportForm,
+    EDIT_DEVELOPER: DeveloperForm,
+    ADD_DEVELOPER: DeveloperForm,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,
   };

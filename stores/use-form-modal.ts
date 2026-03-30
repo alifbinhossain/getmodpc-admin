@@ -4,6 +4,8 @@ type ModalType =
   | 'ADD_REPORT_REASON'
   | 'EDIT_REPORT_REASON'
   | 'EDIT_REPORT'
+  | 'EDIT_DEVELOPER'
+  | 'ADD_DEVELOPER'
   | 'EDIT_USER'
   | 'EDIT_APP'
   | null;
