@@ -3,17 +3,17 @@
 import { useRouter } from 'next/navigation';
 
 import { useFormModal } from '@/stores/use-form-modal';
-import { ReportReasonRecord } from '@/types/report-reason';
+import { ReportRecord } from '@/types/report';
 import { RefreshCw } from 'lucide-react';
 
 import { DataTable } from '@/components/table';
 import { Button } from '@/components/ui/button';
 
-import { reportReasonColumns } from '../_config/report-reason-column';
-import { reportReasonsService } from '../_config/report-reasons.service';
+import { reportColumns } from '../_config/report-column';
+import { reportsService } from '../_config/reports.service';
 
-interface ReportReasonTableProps {
-  data: ReportReasonRecord[];
+interface ReportTableProps {
+  data: ReportRecord[];
   isLoading?: boolean;
   isFetching?: boolean;
   canEdit?: boolean;
@@ -21,12 +21,12 @@ interface ReportReasonTableProps {
   // Server-side pagination props (optional)
   rowCount?: number;
   onStateChange?: Parameters<
-    typeof DataTable<ReportReasonRecord>
+    typeof DataTable<ReportRecord>
   >[0]['onStateChange'];
   refetch: () => void;
 }
 
-export function ReportReasonTable({
+export function ReportTable({
   data,
   isLoading,
   isFetching,
@@ -35,27 +35,26 @@ export function ReportReasonTable({
   rowCount,
   onStateChange,
   refetch,
-}: ReportReasonTableProps) {
+}: ReportTableProps) {
   const router = useRouter();
   const { openModal } = useFormModal();
 
   return (
-    <DataTable<ReportReasonRecord>
+    <DataTable<ReportRecord>
       data={data}
-      columns={reportReasonColumns}
+      columns={reportColumns}
       isLoading={isLoading}
       isFetching={isFetching}
-      title='Report Reasons'
-      description='Manage all report reason.'
+      title='Reports'
+      description='Manage all report.'
       permissions={{ canEdit, canDelete, canView: false }}
       actions={{
-        onView: (reportReason) =>
-          router.push(`/report-reasons/${reportReason.id}`),
+        onView: (report) => router.push(`/reports/${report.id}`),
         onEdit: (raw) => {
-          openModal('EDIT_REPORT_REASON', raw, refetch);
+          openModal('EDIT_REPORT', raw, refetch);
         },
-        onDelete: async (reportReason) => {
-          await reportReasonsService.deleteReportReason(reportReason.id);
+        onDelete: async (report) => {
+          await reportsService.deleteReport(report.id);
           refetch();
         },
       }}
@@ -64,21 +63,16 @@ export function ReportReasonTable({
       enableColumnToggle
       enablePagination
       enableSorting
-      searchPlaceholder='Search by name or email...'
+      searchPlaceholder='Search by details or email...'
       // ── Server-side (optional)
       rowCount={rowCount}
       onStateChange={onStateChange}
       pageSizeOptions={[20, 30, 50]}
       defaultPageSize={20}
       toolbarExtra={
-        <div className='flex items-center gap-2'>
-          <Button variant='ghost' size='sm' onClick={() => refetch()}>
-            <RefreshCw />
-          </Button>
-          <Button onClick={() => openModal('ADD_REPORT_REASON', null, refetch)}>
-            Add
-          </Button>
-        </div>
+        <Button variant='ghost' size='sm' onClick={() => refetch()}>
+          <RefreshCw />
+        </Button>
       }
     />
   );

@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 
 import { ReportReasonForm } from '@/app/(dashboard)/report-reasons/_components/report-reason-form';
+import { ReportForm } from '@/app/(dashboard)/reports/_components/report-form';
 
 import { Separator } from '../ui/separator';
 
@@ -22,6 +23,7 @@ export function GlobalFormModal() {
   const modalFormMap: Record<string, React.FC<any>> = {
     ADD_REPORT_REASON: ReportReasonForm,
     EDIT_REPORT_REASON: ReportReasonForm,
+    EDIT_REPORT: ReportForm,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,
   };

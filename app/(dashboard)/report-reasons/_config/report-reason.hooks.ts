@@ -6,17 +6,17 @@ import type {
   UpdateReportReasonPayload,
 } from '@/types/report-reason';
 
-import { useApiListQuery, useApiMutation } from '@/hooks/api';
+import { useApiListQuery, useApiMutation, useApiQuery } from '@/hooks/api';
 
 import { queryKeys } from '@/lib/react-query';
 
 import { reportReasonsService } from './report-reasons.service';
 
 // =============================================================================
-// USERS QUERY HOOKS
+// REPORT REASONS QUERY HOOKS
 // =============================================================================
 
-/** Fetch paginated users */
+/** Fetch paginated report reasons */
 export function useReportReasons(
   params?: ReportReasonQueryParams,
   initialData?: PaginatedResponse<ReportReasonRecord>
@@ -30,54 +30,62 @@ export function useReportReasons(
   });
 }
 
-/** Fetch single user */
-export function useUser(id: string) {
+/** Fetch active report reasons */
+export function useActiveReportReasons() {
+  return useApiQuery({
+    queryKey: queryKeys.reportReason.active(),
+    queryFn: () => reportReasonsService.getAllActiveReportReasons(),
+  });
+}
+
+/** Fetch single report reason */
+export function useReportReason(id: string) {
   return useApiListQuery({
-    queryKey: queryKeys.users.detail(id),
+    queryKey: queryKeys.reportReason.detail(id),
     queryFn: () => reportReasonsService.getReportReasons({ searchTerm: id }),
     enabled: !!id,
   });
 }
 
 // =============================================================================
-// USERS MUTATION HOOKS
+// REPORT REASONS MUTATION HOOKS
 // =============================================================================
 
-/** Create user */
+/** Create report reason */
 export function useCreateReportReason() {
   return useApiMutation({
     mutationFn: (payload: CreateReportReasonPayload) =>
       reportReasonsService.createReportReason(payload),
-    invalidateKeys: [queryKeys.users.lists()],
+    invalidateKeys: [queryKeys.reportReason.lists()],
     successMessage: 'Report Reason created successfully.',
   });
 }
 
-/** Update user */
+/** Update report reason */
 export function useUpdateReportReason() {
   return useApiMutation({
     mutationFn: (payload: UpdateReportReasonPayload) =>
       reportReasonsService.updateReportReason(payload),
-    invalidateKeys: [queryKeys.users.lists()],
+    invalidateKeys: [queryKeys.reportReason.lists()],
     successMessage: 'Report Reason updated successfully.',
   });
 }
 
-/** Delete user */
+/** Delete report reason */
 export function useDeleteReportReason() {
   return useApiMutation({
     mutationFn: (id: string) => reportReasonsService.deleteReportReason(id),
-    invalidateKeys: [queryKeys.users.lists()],
+    invalidateKeys: [queryKeys.reportReason.lists()],
     successMessage: 'Report Reason deleted successfully.',
   });
 }
 
-/** Bulk delete users */
+/** Bulk delete report reasons */
 export function useDeleteReportReasons() {
   return useApiMutation({
     mutationFn: (ids: string[]) =>
       reportReasonsService.deleteReportReasons(ids),
-    invalidateKeys: [queryKeys.users.lists()],
+    invalidateKeys: [queryKeys.reportReason.lists()],
     successMessage: 'Report Reasons deleted successfully.',
   });
 }

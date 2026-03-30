@@ -3,6 +3,7 @@ import { create } from 'zustand';
 type ModalType =
   | 'ADD_REPORT_REASON'
   | 'EDIT_REPORT_REASON'
+  | 'EDIT_REPORT'
   | 'EDIT_USER'
   | 'EDIT_APP'
   | null;

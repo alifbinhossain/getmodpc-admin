@@ -3,8 +3,8 @@ import {
   CreateReportReasonPayload,
   ReportReasonQueryParams,
   ReportReasonRecord,
+  UpdateReportReasonPayload,
 } from '@/types/report-reason';
-import type { UpdateUserPayload } from '@/types/users';
 
 import { api } from '@/lib/axios';
 import { buildQueryString } from '@/lib/utils';
@@ -14,7 +14,7 @@ import { buildQueryString } from '@/lib/utils';
 // =============================================================================
 
 export const reportReasonsService = {
-  /** Fetch paginated list of users */
+  /** Fetch paginated list of report reasons */
   getReportReasons(
     params?: ReportReasonQueryParams
   ): Promise<PaginatedResponse<ReportReasonRecord>> {
@@ -24,12 +24,17 @@ export const reportReasonsService = {
     return api.list<ReportReasonRecord>(`/report-reasons${qs ? `?${qs}` : ''}`);
   },
 
-  /** Fetch a single user by ID */
+  /** Fetch a all active report reasons */
   getReportReason(id: string): Promise<ApiResponse<ReportReasonRecord>> {
     return api.get<ReportReasonRecord>(`/report-reasons/${id}`);
   },
 
-  /** Create a new user */
+  /** Fetch a single report reason by ID */
+  getAllActiveReportReasons(): Promise<ApiResponse<ReportReasonRecord[]>> {
+    return api.get<ReportReasonRecord[]>(`/report-reasons/active`);
+  },
+
+  /** Create a new report reason */
   createReportReason(
     payload: CreateReportReasonPayload
   ): Promise<ApiResponse<ReportReasonRecord>> {
@@ -39,23 +44,23 @@ export const reportReasonsService = {
     );
   },
 
-  /** Update an existing user */
+  /** Update an existing report reason */
   updateReportReason({
     id,
     ...payload
-  }: UpdateUserPayload): Promise<ApiResponse<ReportReasonRecord>> {
-    return api.patch<ReportReasonRecord, Omit<UpdateUserPayload, 'id'>>(
+  }: UpdateReportReasonPayload): Promise<ApiResponse<ReportReasonRecord>> {
+    return api.patch<ReportReasonRecord, Omit<UpdateReportReasonPayload, 'id'>>(
       `/report-reasons/${id}`,
       payload
     );
   },
 
-  /** Delete a user */
+  /** Delete a report reason */
   deleteReportReason(id: string): Promise<ApiResponse<void>> {
     return api.delete<void>(`/report-reasons/${id}`);
   },
 
-  /** Bulk delete users */
+  /** Bulk delete report reasons */
   deleteReportReasons(ids: string[]): Promise<ApiResponse<void>> {
     return api.post<void, { ids: string[] }>('/report-reasons/bulk-delete', {
       ids,

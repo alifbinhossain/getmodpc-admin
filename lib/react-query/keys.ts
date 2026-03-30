@@ -21,14 +21,25 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.users.details(), id] as const,
   },
 
-  // Products
+  // reportReason
   reportReason: {
     all: ['reportReason'] as const,
+    active: () => [...queryKeys.reportReason.all, 'active'] as const,
     lists: () => [...queryKeys.reportReason.all, 'list'] as const,
     list: (params: Record<string, unknown>) =>
       [...queryKeys.reportReason.lists(), params] as const,
     details: () => [...queryKeys.reportReason.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.reportReason.details(), id] as const,
+  },
+
+  // report
+  report: {
+    all: ['reports'] as const,
+    lists: () => [...queryKeys.report.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.report.lists(), params] as const,
+    details: () => [...queryKeys.report.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.report.details(), id] as const,
   },
 
   // Dashboard

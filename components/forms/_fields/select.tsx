@@ -43,7 +43,7 @@ export const FormSelect: IFormSelect = ({
             value={field?.value?.toString()}
           >
             <ButtonGroup>
-              <SelectTrigger className='flex-1'>
+              <SelectTrigger className='flex-1 capitalize'>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
 
@@ -57,6 +57,7 @@ export const FormSelect: IFormSelect = ({
             <SelectContent>
               {options.map((option) => (
                 <SelectItem
+                  className='capitalize'
                   key={option.value}
                   value={option?.value?.toString()}
                 >
