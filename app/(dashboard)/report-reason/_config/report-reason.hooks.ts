@@ -26,7 +26,7 @@ export function useReportReasons(params?: ReportReasonQueryParams) {
 export function useUser(id: string) {
   return useApiListQuery({
     queryKey: queryKeys.users.detail(id),
-    queryFn: () => reportReasonsService.getReportReasons({ search: id }),
+    queryFn: () => reportReasonsService.getReportReasons({ searchTerm: id }),
     enabled: !!id,
   });
 }

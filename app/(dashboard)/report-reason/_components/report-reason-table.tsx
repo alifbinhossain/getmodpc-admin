@@ -10,21 +10,23 @@
 
 import { useRouter } from 'next/navigation';
 
-import { User } from '@/types/auth';
+import { ReportReasonRecord } from '@/types/report-reason';
 
 import { DataTable } from '@/components/table';
 
 import { reportReasonColumns } from '../_config/report-reason-column';
 
 interface ReportReasonTableProps {
-  data: User[];
+  data: ReportReasonRecord[];
   isLoading?: boolean;
   isFetching?: boolean;
   canEdit?: boolean;
   canDelete?: boolean;
   // Server-side pagination props (optional)
   rowCount?: number;
-  onStateChange?: Parameters<typeof DataTable<User>>[0]['onStateChange'];
+  onStateChange?: Parameters<
+    typeof DataTable<ReportReasonRecord>
+  >[0]['onStateChange'];
 }
 
 export function ReportReasonTable({
@@ -39,15 +41,15 @@ export function ReportReasonTable({
   const router = useRouter();
 
   return (
-    <DataTable<User>
+    <DataTable<ReportReasonRecord>
       // ── Data
       data={data}
       columns={reportReasonColumns}
       isLoading={isLoading}
       isFetching={isFetching}
       // ── Header
-      title='Users'
-      description='Manage all registered users and their roles.'
+      title='Report Reason'
+      description='Manage all report reason.'
       // ── Permissions
       permissions={{ canEdit, canDelete, canView: true }}
       // ── Action handlers
@@ -77,4 +79,3 @@ export function ReportReasonTable({
     />
   );
 }
-

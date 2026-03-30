@@ -65,7 +65,7 @@ function buildSelectionColumn<TData>(): ColumnDef<TData> {
 }
 
 function buildDateColumn<TData>(
-  accessor: 'createdAt' | 'updatedAt',
+  accessor: 'created_at' | 'updated_at',
   label: string
 ): ColumnDef<TData> {
   return {
@@ -182,11 +182,11 @@ export function DataTable<TData extends WithTimestamps>({
     // Inject date columns only if TData likely has them
     // (checked at runtime via first data item — safe for static data)
     const sample = data[0] as Record<string, unknown> | undefined;
-    if (sample?.createdAt !== undefined) {
-      result.push(buildDateColumn<TData>('createdAt', 'Created'));
+    if (sample?.created_at !== undefined) {
+      result.push(buildDateColumn<TData>('created_at', 'Created At'));
     }
-    if (sample?.updatedAt !== undefined) {
-      result.push(buildDateColumn<TData>('updatedAt', 'Updated'));
+    if (sample?.updated_at !== undefined) {
+      result.push(buildDateColumn<TData>('updated_at', 'Updated At'));
     }
 
     if (

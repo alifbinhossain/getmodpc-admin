@@ -72,8 +72,8 @@ export interface TableStateChange {
 
 export interface WithTimestamps {
   id: string;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // ─── useDataTable return ──────────────────────────────────────────────────────

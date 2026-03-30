@@ -1,63 +1,27 @@
-import { User } from '@/types/auth';
+import { ReportReasonRecord } from '@/types/report-reason';
 import type { ColumnMeta } from '@/types/table';
 import { type ColumnDef } from '@tanstack/react-table';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
-export const reportReasonColumns: ColumnDef<User>[] = [
+export const reportReasonColumns: ColumnDef<ReportReasonRecord>[] = [
   {
-    accessorKey: 'name',
-    header: 'Name',
-    cell: ({ row }) => {
-      const { name, avatar, email } = row.original;
-      const initials = name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
-
-      return (
-        <div className='flex items-center gap-3'>
-          <Avatar className='h-8 w-8'>
-            <AvatarImage src={avatar} alt={name} />
-            <AvatarFallback className='text-xs'>{initials}</AvatarFallback>
-          </Avatar>
-          <div className='min-w-0'>
-            <p className='text-sm font-medium truncate'>{name}</p>
-            <p className='text-xs text-muted-foreground truncate'>{email}</p>
-          </div>
-        </div>
-      );
-    },
-    minSize: 200,
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email',
+    accessorKey: 'title',
+    header: 'Title',
     // Hidden by default — shown in the name cell above.
     // Still here so global search can match on it.
     enableHiding: true,
     meta: { hideFromToggle: true } satisfies ColumnMeta,
   },
   {
-    accessorKey: 'role',
-    header: 'Role',
+    accessorKey: 'is_active',
+    header: 'Status',
     cell: ({ getValue }) => {
-      const role = getValue<User['role']>();
-      const variantMap: Record<
-        User['role'],
-        'default' | 'secondary' | 'outline'
-      > = {
-        admin: 'default',
-        manager: 'default',
-        super_admin: 'secondary',
-        viewer: 'outline',
-      };
+      const isActive = getValue<ReportReasonRecord['is_active']>();
+      const variant = isActive ? 'default' : 'secondary';
       return (
-        <Badge variant={variantMap[role]} className='capitalize'>
-          {role}
+        <Badge variant={variant} className='capitalize'>
+          {isActive ? 'active' : 'inactive'}
         </Badge>
       );
     },

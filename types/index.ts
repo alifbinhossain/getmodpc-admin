@@ -16,6 +16,7 @@ export interface PaginatedResponse<T> {
   meta: PaginationMeta;
   message: string;
   success: boolean;
+  statusCode: number;
 }
 
 export interface PaginationMeta {
@@ -39,9 +40,9 @@ export interface ApiError {
 export interface BaseQueryParams {
   page?: number;
   limit?: number;
-  search?: string;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  searchTerm?: string;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
 }
 
 // Generic select option

@@ -15,12 +15,17 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000/api/v1';
 const API_TIMEOUT = Number(process.env.NEXT_PUBLIC_API_TIMEOUT ?? 30000);
 
+const token =
+  getTokenFromCookie() ??
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0NDQxYmNlZS0xZDYyLTRlZTQtODVlNC01YjA3MTE4OTJiYzUiLCJpYXQiOjE3NzM5NTE1MDgsImV4cCI6MTc3NjU0MzUwOH0.YquhqkaarOgITLKKsp6AXrvT9tMRwVOH0e-WqtCqfR4';
+
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
+    Authorization: `Bearer ${token}`,
   },
 });
 
