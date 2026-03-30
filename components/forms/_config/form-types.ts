@@ -31,3 +31,11 @@ export type IFormSelect = FormControlFunc<{
   valueType?: 'string' | 'number';
   isLoading?: boolean;
 }>;
+
+export type IFormSwitch = FormControlFunc<{
+  fieldProps?: {
+    onValueChange?: (value: boolean) => void;
+    [key: string]: any;
+  };
+  disabled?: boolean;
+}>;

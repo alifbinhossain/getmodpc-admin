@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import type { TableActionHandlers, TablePermissions } from '@/types/table';
 import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
   AlertDialog,
@@ -40,7 +41,6 @@ export function DataTableActions<TData>({
   const [selectedRow, setSelectedRow] = useState<TData | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Check if any actions exist
   const hasBuiltInActions =
     (permissions.canView && actions?.onView) ||
     (permissions.canEdit && actions?.onEdit) ||
@@ -53,16 +53,23 @@ export function DataTableActions<TData>({
     return null;
   }
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = () => {
     if (!selectedRow || !actions?.onDelete) return;
 
     try {
       setLoading(true);
-      await actions.onDelete(selectedRow);
-    } finally {
-      setLoading(false);
+      actions.onDelete(selectedRow);
+      toast.success('Deleted successfully');
       setOpen(false);
       setSelectedRow(null);
+    } catch (error: any) {
+      toast.error(
+        error?.message || 'Something went wrong. Could not delete item.'
+      );
+      setOpen(false);
+      setSelectedRow(null);
+    } finally {
+      setLoading(false);
     }
   };
 

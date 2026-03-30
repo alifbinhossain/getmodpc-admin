@@ -1,19 +1,13 @@
-// example/UsersTable.tsx
-//
-// Usage example — shows how to wire DataTable for the Users module.
-// This component owns only the Users-specific concern:
-// - which columns to show
-// - which permissions apply
-// - which action handlers to call
-
 'use client';
 
 import { useRouter } from 'next/navigation';
 
+import { useFormModal } from '@/stores/use-form-modal';
 import { ReportReasonRecord } from '@/types/report-reason';
 
 import { DataTable } from '@/components/table';
 
+import { deleteReportReason } from '../_actions';
 import { reportReasonColumns } from '../_config/report-reason-column';
 
 interface ReportReasonTableProps {
@@ -39,30 +33,25 @@ export function ReportReasonTable({
   onStateChange,
 }: ReportReasonTableProps) {
   const router = useRouter();
+  const { openModal } = useFormModal();
 
   return (
     <DataTable<ReportReasonRecord>
-      // ── Data
       data={data}
       columns={reportReasonColumns}
       isLoading={isLoading}
       isFetching={isFetching}
-      // ── Header
       title='Report Reason'
       description='Manage all report reason.'
-      // ── Permissions
       permissions={{ canEdit, canDelete, canView: true }}
-      // ── Action handlers
       actions={{
-        onView: (user) => router.push(`/dashboard/users/${user.id}`),
-        onEdit: (user) => {
-          console.log({ user });
-          // router.push(`/dashboard/users/${user.id}/edit`);
+        onView: (reportReason) =>
+          router.push(`/report-reasons/${reportReason.id}`),
+        onEdit: (raw) => {
+          openModal('EDIT_REPORT_REASON', raw);
         },
-        onDelete: async (user) => {
-          // In production: call your mutation hook here, e.g.:
-          // await deleteUser(user.id)
-          console.warn('Delete user', user.id);
+        onDelete: async (reportReason) => {
+          await deleteReportReason(reportReason.id);
         },
       }}
       // ── Features

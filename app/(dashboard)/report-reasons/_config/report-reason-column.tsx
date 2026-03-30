@@ -18,7 +18,7 @@ export const reportReasonColumns: ColumnDef<ReportReasonRecord>[] = [
     header: 'Status',
     cell: ({ getValue }) => {
       const isActive = getValue<ReportReasonRecord['is_active']>();
-      const variant = isActive ? 'default' : 'secondary';
+      const variant = isActive ? 'default' : 'destructive';
       return (
         <Badge variant={variant} className='capitalize'>
           {isActive ? 'active' : 'inactive'}

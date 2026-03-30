@@ -1,7 +1,18 @@
 'use client';
 
 import { NavItem } from '@/types';
-import { AppWindow, Bug, ChartBarStacked, Code, LayoutDashboard, Settings, Shield, Tags, User2, Users } from 'lucide-react';
+import {
+  AppWindow,
+  Bug,
+  ChartBarStacked,
+  Code,
+  LayoutDashboard,
+  Settings,
+  Shield,
+  Tags,
+  User2,
+  Users,
+} from 'lucide-react';
 
 import {
   Sidebar,
@@ -29,10 +40,16 @@ const NAV_ITEMS: NavItem[] = [
   { title: 'Categories', href: '/category', icon: ChartBarStacked },
   { title: 'Tags', href: '/tag', icon: Tags },
   { title: 'Developers', href: '/developer', icon: Code },
-  { title: 'Reports', href: '/report', icon: Bug,children: [
-    { title: 'Reports', href: '/reports' },
-    { title: 'Report Reasons', href: '/report-reason' },
-  ],disabled: true },
+  {
+    title: 'Reports',
+    href: '/report',
+    icon: Bug,
+    children: [
+      { title: 'Reports', href: '/reports' },
+      { title: 'Report Reasons', href: '/report-reasons' },
+    ],
+    disabled: true,
+  },
   {
     title: 'Users',
     href: '/users',
@@ -71,7 +88,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-             {NAV_ITEMS.map((item) => (
+              {NAV_ITEMS.map((item) => (
                 <SidebarItem key={item.title} item={item} />
               ))}
             </SidebarMenu>
