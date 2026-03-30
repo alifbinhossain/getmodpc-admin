@@ -30,11 +30,13 @@ export function GlobalFormModal() {
 
   if (!FormComponent) return null; //
 
+  const isEditing = type.startsWith('EDIT');
+
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent
         className='sm:max-w-md'
-        aria-describedby='Global Form Modal'
+        aria-describedby={`${type}-form-modal-description`}
       >
         <DialogHeader>
           <DialogTitle className='uppercase'>
@@ -44,11 +46,7 @@ export function GlobalFormModal() {
 
         <Separator />
 
-        <FormComponent
-          data={data}
-          onClose={closeModal}
-          isEditing={type.startsWith('EDIT')}
-        />
+        <FormComponent data={data} onClose={closeModal} isEditing={isEditing} />
       </DialogContent>
     </Dialog>
   );

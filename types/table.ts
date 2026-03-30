@@ -14,7 +14,7 @@ export interface TablePermissions {
 
 export interface TableActionHandlers<TData> {
   onEdit?: (row: TData) => void;
-  onDelete?: (row: TData) => void;
+  onDelete?: (row: TData) => Promise<void>;
   onView?: (row: TData) => void;
   custom?: Array<{
     label: string;

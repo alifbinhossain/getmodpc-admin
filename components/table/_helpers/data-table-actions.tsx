@@ -53,23 +53,21 @@ export function DataTableActions<TData>({
     return null;
   }
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!selectedRow || !actions?.onDelete) return;
 
     try {
       setLoading(true);
-      actions.onDelete(selectedRow);
+      await actions.onDelete(selectedRow);
       toast.success('Deleted successfully');
-      setOpen(false);
-      setSelectedRow(null);
     } catch (error: any) {
       toast.error(
         error?.message || 'Something went wrong. Could not delete item.'
       );
-      setOpen(false);
-      setSelectedRow(null);
     } finally {
       setLoading(false);
+      setOpen(false);
+      setSelectedRow(null);
     }
   };
 
@@ -172,13 +170,13 @@ export function DataTableActions<TData>({
               Cancel
             </AlertDialogCancel>
 
-            <AlertDialogAction
+            <Button
               disabled={loading}
               onClick={handleConfirmDelete}
               className='bg-destructive! cursor-pointer text-white hover:bg-destructive/90'
             >
               {loading ? 'Deleting...' : 'Confirm'}
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -13,12 +13,12 @@ import {
   ICreateReportReasonSchema,
 } from '@/lib/schemas/report-schema';
 
-import { createReportReason, updateReportReason } from '../_actions';
+import { reportReasonsService } from '../_config/report-reasons.service';
 
 type Props = {
   isEditing?: boolean;
   data?: ICreateReportReasonSchema & { id: string };
-  onClose?: () => void;
+  onClose?: (isRefreshData?: boolean) => void;
 };
 export function ReportReasonForm({ isEditing, data, onClose }: Props) {
   const form = useAppForm({
@@ -36,14 +36,14 @@ export function ReportReasonForm({ isEditing, data, onClose }: Props) {
   const onSubmit = async (values: ICreateReportReasonSchema) => {
     try {
       if (isEditing) {
-        await updateReportReason<ICreateReportReasonSchema>(
-          data?.id ?? '',
-          values
-        );
+        await reportReasonsService.updateReportReason({
+          id: data!.id,
+          ...values,
+        });
       } else {
-        await createReportReason<ICreateReportReasonSchema>(values);
+        await reportReasonsService.createReportReason(values);
       }
-      onClose?.();
+      onClose?.(true);
       form.reset();
       toast.success(
         `Report reason ${isEditing ? 'updated' : 'created'} successfully`

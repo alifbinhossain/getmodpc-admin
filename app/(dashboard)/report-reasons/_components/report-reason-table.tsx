@@ -9,8 +9,8 @@ import { RefreshCw } from 'lucide-react';
 import { DataTable } from '@/components/table';
 import { Button } from '@/components/ui/button';
 
-import { deleteReportReason } from '../_actions';
 import { reportReasonColumns } from '../_config/report-reason-column';
+import { reportReasonsService } from '../_config/report-reasons.service';
 
 interface ReportReasonTableProps {
   data: ReportReasonRecord[];
@@ -47,15 +47,16 @@ export function ReportReasonTable({
       isFetching={isFetching}
       title='Report Reason'
       description='Manage all report reason.'
-      permissions={{ canEdit, canDelete, canView: true }}
+      permissions={{ canEdit, canDelete, canView: false }}
       actions={{
         onView: (reportReason) =>
           router.push(`/report-reasons/${reportReason.id}`),
         onEdit: (raw) => {
-          openModal('EDIT_REPORT_REASON', raw);
+          openModal('EDIT_REPORT_REASON', raw, refetch);
         },
         onDelete: async (reportReason) => {
-          await deleteReportReason(reportReason.id);
+          await reportReasonsService.deleteReportReason(reportReason.id);
+          refetch();
         },
       }}
       // ── Features
@@ -74,7 +75,9 @@ export function ReportReasonTable({
           <Button variant='ghost' size='sm' onClick={() => refetch()}>
             <RefreshCw />
           </Button>
-          <Button onClick={() => openModal('ADD_REPORT_REASON')}>Add</Button>
+          <Button onClick={() => openModal('ADD_REPORT_REASON', null, refetch)}>
+            Add
+          </Button>
         </div>
       }
     />

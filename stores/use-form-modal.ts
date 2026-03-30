@@ -12,26 +12,35 @@ interface ModalState {
   data: any;
   isOpen: boolean;
 
-  openModal: (type: ModalType, data?: any) => void;
-  closeModal: () => void;
+  openModal: (type: ModalType, data?: any, refreshData?: () => void) => void;
+  closeModal: (isRefreshData?: boolean) => void;
+  refreshData: (() => void) | null;
 }
 
-export const useFormModal = create<ModalState>((set) => ({
+export const useFormModal = create<ModalState>((set, get) => ({
   type: null,
   data: null,
   isOpen: false,
+  refreshData: null,
 
-  openModal: (type, data = null) =>
+  openModal: (type, data = null, refreshData) =>
     set({
       type,
       data,
       isOpen: true,
+      refreshData,
     }),
 
-  closeModal: () =>
+  closeModal: (isRefreshData) => {
+    if (isRefreshData) {
+      const fn = get().refreshData;
+      if (fn) fn();
+    }
     set({
       type: null,
       data: null,
       isOpen: false,
-    }),
+      refreshData: null,
+    });
+  },
 }));

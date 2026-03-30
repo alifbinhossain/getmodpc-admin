@@ -7,13 +7,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useTablePagination } from '@/stores/use-table-pagination';
 import type {
   DataTableProps,
   UseDataTableReturn,
   WithTimestamps,
 } from '@/types/table';
 import {
-  type ColumnDef,
   type ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
@@ -74,7 +74,16 @@ export function useDataTable<TData extends WithTimestamps>({
     pageSize: defaultPageSize,
   });
   const [globalFilter, setGlobalFilter] = useState('');
+  const { setPage, setSearchTerm } = useTablePagination();
   const debouncedFilter = useDebounce(globalFilter, 300);
+
+  // when debouncedFilter changes, update Zustand and reset page
+  useEffect(() => {
+    if (debouncedFilter !== undefined) {
+      setSearchTerm(debouncedFilter);
+      setPage(1);
+    }
+  }, [debouncedFilter, setPage, setSearchTerm]);
 
   // ── Notify parent on state changes (server-side mode) ────────────────────
   // Use ref to hold onStateChange so it never triggers the effect loop
@@ -83,6 +92,8 @@ export function useDataTable<TData extends WithTimestamps>({
 
   useEffect(() => {
     if (!onStateChangeRef.current) return;
+    if (debouncedFilter) {
+    }
     onStateChangeRef.current({
       pagination: {
         pageIndex: pagination.pageIndex,
