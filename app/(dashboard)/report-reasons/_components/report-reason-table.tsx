@@ -80,6 +80,10 @@ export function ReportReasonTable({
           </Button>
         </div>
       }
+      deleteBulkAction={async (ids) => {
+        await reportReasonsService.deleteReportReasons(ids);
+        refetch();
+      }}
     />
   );
 }

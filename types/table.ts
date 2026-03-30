@@ -58,6 +58,7 @@ export interface DataTableProps<TData extends WithTimestamps> {
   pageSizeOptions?: number[];
   searchPlaceholder?: string;
   toolbarExtra?: React.ReactNode;
+  deleteBulkAction?: (ids: string[]) => Promise<void>;
 }
 
 // ─── State ────────────────────────────────────────────────────────────────────

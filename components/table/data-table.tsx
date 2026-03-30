@@ -162,11 +162,12 @@ export function DataTable<TData extends WithTimestamps>({
   enableColumnToggle = true,
   enablePagination = true,
   enableSorting = true,
-  enableRowSelection = false,
+  enableRowSelection = true,
   defaultPageSize = 10,
   pageSizeOptions = [10, 20, 50, 100],
   searchPlaceholder,
   toolbarExtra,
+  deleteBulkAction,
 }: DataTableProps<TData>) {
   // ── Assemble final column list ─────────────────────────────────────────
   // Order: selection? | user columns | createdAt | updatedAt | actions?
@@ -230,6 +231,7 @@ export function DataTable<TData extends WithTimestamps>({
         enableColumnToggle={enableColumnToggle}
         searchPlaceholder={searchPlaceholder}
         toolbarExtra={toolbarExtra}
+        deleteBulkAction={deleteBulkAction}
       />
 
       {/* Table */}

@@ -74,6 +74,10 @@ export function ReportTable({
           <RefreshCw />
         </Button>
       }
+      deleteBulkAction={async (ids) => {
+        await reportsService.deleteReports(ids);
+        refetch();
+      }}
     />
   );
 }

@@ -4,18 +4,8 @@ import { useState } from 'react';
 
 import type { TableActionHandlers, TablePermissions } from '@/types/table';
 import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import DeleteAlertModal from '@/components/shared/delete-alert-modal';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -39,7 +29,6 @@ export function DataTableActions<TData>({
 }: DataTableActionsProps<TData>) {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<TData | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const hasBuiltInActions =
     (permissions.canView && actions?.onView) ||
@@ -52,24 +41,6 @@ export function DataTableActions<TData>({
   if (!hasBuiltInActions && visibleCustomActions.length === 0) {
     return null;
   }
-
-  const handleConfirmDelete = async () => {
-    if (!selectedRow || !actions?.onDelete) return;
-
-    try {
-      setLoading(true);
-      await actions.onDelete(selectedRow);
-      toast.success('Deleted successfully');
-    } catch (error: any) {
-      toast.error(
-        error?.message || 'Something went wrong. Could not delete item.'
-      );
-    } finally {
-      setLoading(false);
-      setOpen(false);
-      setSelectedRow(null);
-    }
-  };
 
   return (
     <>
@@ -155,31 +126,15 @@ export function DataTableActions<TData>({
       </DropdownMenu>
 
       {/* Alert Dialog */}
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              item.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={loading} className='cursor-pointer'>
-              Cancel
-            </AlertDialogCancel>
-
-            <Button
-              disabled={loading}
-              onClick={handleConfirmDelete}
-              className='bg-destructive! cursor-pointer text-white hover:bg-destructive/90'
-            >
-              {loading ? 'Deleting...' : 'Confirm'}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteAlertModal
+        open={open}
+        setOpen={setOpen}
+        onSubmit={async () => {
+          if (!selectedRow || !actions?.onDelete) return;
+          await actions.onDelete(selectedRow);
+          setSelectedRow(null);
+        }}
+      />
     </>
   );
 }
