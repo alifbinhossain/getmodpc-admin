@@ -32,7 +32,7 @@ export function DataTableToolbar<TData extends WithTimestamps>({
   enableColumnToggle = true,
   searchPlaceholder = 'Search...',
   toolbarExtra,
-  deleteBulkAction
+  deleteBulkAction,
 }: DataTableToolbarProps<TData>) {
   const hasActiveFilters = globalFilter.length > 0;
   const [open, setOpen] = useState(false);
@@ -88,7 +88,7 @@ export function DataTableToolbar<TData extends WithTimestamps>({
           {toolbarExtra}
           {selectedRows.length > 0 && (
             <Button variant='destructive' onClick={() => setOpen(true)}>
-              Delete
+              Delete ({selectedRows.length})
             </Button>
           )}
           {enableColumnToggle && <DataTableColumnToggle table={table} />}
