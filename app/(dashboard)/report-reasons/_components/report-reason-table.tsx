@@ -4,8 +4,10 @@ import { useRouter } from 'next/navigation';
 
 import { useFormModal } from '@/stores/use-form-modal';
 import { ReportReasonRecord } from '@/types/report-reason';
+import { RefreshCw } from 'lucide-react';
 
 import { DataTable } from '@/components/table';
+import { Button } from '@/components/ui/button';
 
 import { deleteReportReason } from '../_actions';
 import { reportReasonColumns } from '../_config/report-reason-column';
@@ -21,6 +23,7 @@ interface ReportReasonTableProps {
   onStateChange?: Parameters<
     typeof DataTable<ReportReasonRecord>
   >[0]['onStateChange'];
+  refetch: () => void;
 }
 
 export function ReportReasonTable({
@@ -31,6 +34,7 @@ export function ReportReasonTable({
   canDelete = false,
   rowCount,
   onStateChange,
+  refetch,
 }: ReportReasonTableProps) {
   const router = useRouter();
   const { openModal } = useFormModal();
@@ -63,8 +67,16 @@ export function ReportReasonTable({
       // ── Server-side (optional)
       rowCount={rowCount}
       onStateChange={onStateChange}
-      pageSizeOptions={[10, 20, 50]}
-      defaultPageSize={10}
+      pageSizeOptions={[20, 30, 50]}
+      defaultPageSize={20}
+      toolbarExtra={
+        <div className='flex items-center gap-2'>
+          <Button variant='ghost' size='sm' onClick={() => refetch()}>
+            <RefreshCw />
+          </Button>
+          <Button onClick={() => openModal('ADD_REPORT_REASON')}>Add</Button>
+        </div>
+      }
     />
   );
 }

@@ -22,13 +22,13 @@ export const queryKeys = {
   },
 
   // Products
-  products: {
-    all: ['products'] as const,
-    lists: () => [...queryKeys.products.all, 'list'] as const,
+  reportReason: {
+    all: ['reportReason'] as const,
+    lists: () => [...queryKeys.reportReason.all, 'list'] as const,
     list: (params: Record<string, unknown>) =>
-      [...queryKeys.products.lists(), params] as const,
-    details: () => [...queryKeys.products.all, 'detail'] as const,
-    detail: (id: string) => [...queryKeys.products.details(), id] as const,
+      [...queryKeys.reportReason.lists(), params] as const,
+    details: () => [...queryKeys.reportReason.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.reportReason.details(), id] as const,
   },
 
   // Dashboard

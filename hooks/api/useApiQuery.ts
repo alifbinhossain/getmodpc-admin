@@ -42,16 +42,19 @@ interface UseApiListQueryOptions<TItem> {
   queryFn: () => Promise<PaginatedResponse<TItem>>;
   enabled?: boolean;
   staleTime?: number;
+  initialData?: PaginatedResponse<TItem>;
 }
 
 export function useApiListQuery<TItem>({
   queryKey,
   queryFn,
   enabled = true,
+  initialData,
 }: UseApiListQueryOptions<TItem>) {
   return useQuery<PaginatedResponse<TItem>, Error>({
     queryKey,
     queryFn,
     enabled,
+    placeholderData: initialData,
   });
 }

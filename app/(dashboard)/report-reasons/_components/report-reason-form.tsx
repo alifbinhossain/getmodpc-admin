@@ -73,7 +73,7 @@ export function ReportReasonForm({ isEditing, data, onClose }: Props) {
         )}
 
         <Button
-          disabled={isSubmitting || !form.formState.isDirty}
+          disabled={isSubmitting || (isEditing && !form.formState.isDirty)}
           type='submit'
           className='w-full'
           loading={isSubmitting}

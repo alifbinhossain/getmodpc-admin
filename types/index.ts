@@ -42,7 +42,7 @@ export interface BaseQueryParams {
   limit?: number;
   searchTerm?: string;
   sort_by?: string;
-  sort_order?: 'asc' | 'desc';
+  sort_order?: 'ASC' | 'DESC';
 }
 
 // Generic select option
@@ -82,3 +82,5 @@ export interface BaseRecord {
   created_at: string;
   updated_at: string;
 }
+
+export type QueryKeyT = [string, object | undefined];

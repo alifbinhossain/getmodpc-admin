@@ -1,6 +1,8 @@
+import { PaginatedResponse } from '@/types';
 import type {
   CreateReportReasonPayload,
   ReportReasonQueryParams,
+  ReportReasonRecord,
   UpdateReportReasonPayload,
 } from '@/types/report-reason';
 
@@ -15,10 +17,16 @@ import { reportReasonsService } from './report-reasons.service';
 // =============================================================================
 
 /** Fetch paginated users */
-export function useReportReasons(params?: ReportReasonQueryParams) {
+export function useReportReasons(
+  params?: ReportReasonQueryParams,
+  initialData?: PaginatedResponse<ReportReasonRecord>
+) {
   return useApiListQuery({
-    queryKey: queryKeys.users.list((params ?? {}) as Record<string, unknown>),
+    queryKey: queryKeys.reportReason.list(
+      (params ?? {}) as Record<string, unknown>
+    ),
     queryFn: () => reportReasonsService.getReportReasons(params),
+    initialData,
   });
 }
 

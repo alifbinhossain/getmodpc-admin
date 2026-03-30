@@ -17,6 +17,5 @@ export interface ReportReasonRecord extends BaseRecord {
   is_active: boolean;
 }
 export interface ReportReasonQueryParams extends BaseQueryParams {
-  title?: string;
   is_active?: boolean;
 }
