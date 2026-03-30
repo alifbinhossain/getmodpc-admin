@@ -9,8 +9,8 @@ import { RefreshCw } from 'lucide-react';
 import { DataTable } from '@/components/table';
 import { Button } from '@/components/ui/button';
 
-import { developerColumns } from '../_config/developer-column';
-import { developersService } from '../_config/developers.service';
+import { tagColumns } from '../_config/tags-column';
+import { tagsService } from '../_config/tags.service';
 
 interface DevelopersTableProps {
   data: TagAndDeveloperRecord[];
@@ -26,7 +26,7 @@ interface DevelopersTableProps {
   refetch: () => void;
 }
 
-export function DevelopersTable({
+export function TagsTable({
   data,
   isLoading,
   isFetching,
@@ -42,19 +42,19 @@ export function DevelopersTable({
   return (
     <DataTable<TagAndDeveloperRecord>
       data={data}
-      columns={developerColumns}
+      columns={tagColumns}
       isLoading={isLoading}
       isFetching={isFetching}
-      title='Developers'
-      description='Manage all developer.'
+      title='Tags'
+      description='Manage all tag.'
       permissions={{ canEdit, canDelete, canView: false }}
       actions={{
-        onView: (developer) => router.push(`/developers/${developer.id}`),
+        onView: (tag) => router.push(`/tags/${tag.id}`),
         onEdit: (raw) => {
-          openModal('EDIT_DEVELOPER', raw, refetch);
+          openModal('EDIT_TAG', raw, refetch);
         },
-        onDelete: async (developer) => {
-          await developersService.deleteDeveloper(developer.id);
+        onDelete: async (tag) => {
+          await tagsService.deleteTag(tag.id);
           refetch();
         },
       }}
@@ -71,8 +71,8 @@ export function DevelopersTable({
       defaultPageSize={20}
       toolbarExtra={
         <div className='flex items-center gap-2'>
-          <Button onClick={() => openModal('ADD_DEVELOPER', null, refetch)}>
-            Add Developer
+          <Button onClick={() => openModal('ADD_TAG', null, refetch)}>
+            Add Tag
           </Button>
           <Button variant='ghost' size='sm' onClick={() => refetch()}>
             <RefreshCw />
@@ -80,7 +80,7 @@ export function DevelopersTable({
         </div>
       }
       deleteBulkAction={async (ids) => {
-        await developersService.deleteDevelopers(ids);
+        await tagsService.deleteTags(ids);
         refetch();
       }}
     />

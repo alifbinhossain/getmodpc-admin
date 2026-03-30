@@ -6,6 +6,8 @@ type ModalType =
   | 'EDIT_REPORT'
   | 'EDIT_DEVELOPER'
   | 'ADD_DEVELOPER'
+  | 'EDIT_TAG'
+  | 'ADD_TAG'
   | 'EDIT_USER'
   | 'EDIT_APP'
   | null;

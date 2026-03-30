@@ -1,16 +1,16 @@
 import { PaginatedResponse } from '@/types';
 import type {
-  CreateDeveloperPayload,
-  DeveloperQueryParams,
-  DeveloperRecord,
-  UpdateDeveloperPayload,
-} from '@/types/developer';
+  CreateTagAndDeveloperPayload,
+  TagAndDeveloperQueryParams,
+  TagAndDeveloperRecord,
+  UpdateTagAndDeveloperPayload,
+} from '@/types/tagAndDeveloper';
 
 import { useApiListQuery, useApiMutation } from '@/hooks/api';
 
 import { queryKeys } from '@/lib/react-query';
-import { developersService } from './developers.service';
 
+import { developersService } from './developers.service';
 
 // =============================================================================
 // REPORTS QUERY HOOKS
@@ -18,11 +18,13 @@ import { developersService } from './developers.service';
 
 /** Fetch paginated developers */
 export function useDevelopers(
-  params?: DeveloperQueryParams,
-  initialData?: PaginatedResponse<DeveloperRecord>
+  params?: TagAndDeveloperQueryParams,
+  initialData?: PaginatedResponse<TagAndDeveloperRecord>
 ) {
   return useApiListQuery({
-    queryKey: queryKeys.developer.list((params ?? {}) as Record<string, unknown>),
+    queryKey: queryKeys.developer.list(
+      (params ?? {}) as Record<string, unknown>
+    ),
     queryFn: () => developersService.getDevelopers(params),
     initialData,
   });
@@ -44,7 +46,7 @@ export function useUser(id: string) {
 /** Create developer */
 export function useCreateDeveloper() {
   return useApiMutation({
-    mutationFn: (payload: CreateDeveloperPayload) =>
+    mutationFn: (payload: CreateTagAndDeveloperPayload) =>
       developersService.createDeveloper(payload),
     invalidateKeys: [queryKeys.developer.lists()],
     successMessage: 'Developer created successfully.',
@@ -54,7 +56,7 @@ export function useCreateDeveloper() {
 /** Update developer */
 export function useUpdateDeveloper() {
   return useApiMutation({
-    mutationFn: (payload: UpdateDeveloperPayload) =>
+    mutationFn: (payload: UpdateTagAndDeveloperPayload) =>
       developersService.updateDeveloper(payload),
     invalidateKeys: [queryKeys.developer.lists()],
     successMessage: 'Developer updated successfully.',

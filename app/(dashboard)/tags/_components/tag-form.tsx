@@ -13,14 +13,14 @@ import {
   tagDeveloperSchema,
 } from '@/lib/schemas/tagAndDeveloper-schema';
 
-import { developersService } from '../_config/developers.service';
+import { tagsService } from '../_config/tags.service';
 
 type Props = {
   isEditing?: boolean;
   data?: UpdateTagAndDeveloperPayload;
   onClose?: (isRefreshData?: boolean) => void;
 };
-export function DeveloperForm({ isEditing, data, onClose }: Props) {
+export function TagForm({ isEditing, data, onClose }: Props) {
   const form = useAppForm({
     schema: tagDeveloperSchema,
     defaultValues: data,
@@ -36,16 +36,16 @@ export function DeveloperForm({ isEditing, data, onClose }: Props) {
   const onSubmit = async (values: ITagDeveloperSchema) => {
     try {
       if (isEditing) {
-        await developersService.updateDeveloper({
+        await tagsService.updateTag({
           id: data!.id,
           ...values,
         });
       } else {
-        await developersService.createDeveloper(values);
+        await tagsService.createTag(values);
       }
       onClose?.(true);
       form.reset();
-      toast.success(`Developer updated successfully`);
+      toast.success(`Tag updated successfully`);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Invalid credentials';
@@ -83,7 +83,7 @@ export function DeveloperForm({ isEditing, data, onClose }: Props) {
           className='w-full'
           loading={isSubmitting}
         >
-          {isEditing ? 'Update Developer' : 'Create Developer'}
+          {isEditing ? 'Update Tag' : 'Create Tag'}
         </Button>
       </FormWrapper>
     </form>

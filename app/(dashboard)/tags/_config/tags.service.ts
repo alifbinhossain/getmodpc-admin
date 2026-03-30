@@ -13,34 +13,34 @@ import { buildQueryString } from '@/lib/utils';
 // USERS API SERVICE
 // =============================================================================
 
-export const developersService = {
+export const tagsService = {
   /** Fetch paginated list of users */
-  getDevelopers(
+  getTags(
     params?: TagAndDeveloperQueryParams
   ): Promise<PaginatedResponse<TagAndDeveloperRecord>> {
     const qs = params
       ? buildQueryString(params as Record<string, unknown>)
       : '';
-    return api.list<TagAndDeveloperRecord>(`/developers${qs ? `?${qs}` : ''}`);
+    return api.list<TagAndDeveloperRecord>(`/tags${qs ? `?${qs}` : ''}`);
   },
 
   /** Fetch a single user by ID */
-  getDeveloper(id: string): Promise<ApiResponse<TagAndDeveloperRecord>> {
-    return api.get<TagAndDeveloperRecord>(`/developers/${id}`);
+  getTag(id: string): Promise<ApiResponse<TagAndDeveloperRecord>> {
+    return api.get<TagAndDeveloperRecord>(`/tags/${id}`);
   },
 
   /** Create a new user */
-  createDeveloper(
+  createTag(
     payload: CreateTagAndDeveloperPayload
   ): Promise<ApiResponse<TagAndDeveloperRecord>> {
     return api.post<TagAndDeveloperRecord, CreateTagAndDeveloperPayload>(
-      '/developers',
+      '/tags',
       payload
     );
   },
 
   /** Update an existing user */
-  updateDeveloper({
+  updateTag({
     id,
     ...payload
   }: UpdateTagAndDeveloperPayload): Promise<
@@ -49,17 +49,17 @@ export const developersService = {
     return api.patch<
       TagAndDeveloperRecord,
       Omit<UpdateTagAndDeveloperPayload, 'id'>
-    >(`/developers/${id}`, payload);
+    >(`/tags/${id}`, payload);
   },
 
   /** Delete a user */
-  deleteDeveloper(id: string): Promise<ApiResponse<void>> {
-    return api.delete<void>(`/developers/${id}`);
+  deleteTag(id: string): Promise<ApiResponse<void>> {
+    return api.delete<void>(`/tags/${id}`);
   },
 
   /** Bulk delete users */
-  deleteDevelopers(ids: string[]): Promise<ApiResponse<void>> {
-    return api.post<void, { ids: string[] }>('/developers/bulk-delete', {
+  deleteTags(ids: string[]): Promise<ApiResponse<void>> {
+    return api.post<void, { ids: string[] }>('/tags/bulk-delete', {
       ids,
     });
   },

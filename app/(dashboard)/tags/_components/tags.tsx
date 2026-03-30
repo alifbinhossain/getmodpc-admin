@@ -5,13 +5,13 @@ import { useTablePagination } from '@/stores/use-table-pagination';
 import { PaginatedResponse } from '@/types';
 import { TagAndDeveloperRecord } from '@/types/tagAndDeveloper';
 
-import { useDevelopers } from '../_config/developer.hooks';
-import { DevelopersTable } from './developers-table';
+import { useTags } from '../_config/tags.hooks';
+import { TagsTable } from './tags-table';
 
 type Props = {
   initialData: PaginatedResponse<TagAndDeveloperRecord>;
 };
-function Developers({ initialData }: Props) {
+function TagsComp({ initialData }: Props) {
   const { getDefinedParams } = useTablePagination();
   const params = getDefinedParams();
   const {
@@ -19,9 +19,9 @@ function Developers({ initialData }: Props) {
     isLoading,
     isFetching,
     refetch,
-  } = useDevelopers(params, initialData);
+  } = useTags(params, initialData);
   return (
-    <DevelopersTable
+    <TagsTable
       isLoading={isLoading || isFetching}
       data={reports?.data ?? []}
       canDelete={true}
@@ -31,4 +31,4 @@ function Developers({ initialData }: Props) {
   );
 }
 
-export default Developers;
+export default TagsComp;

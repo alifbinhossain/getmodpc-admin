@@ -2,7 +2,7 @@ import type { ColumnMeta } from '@/types/table';
 import { TagAndDeveloperRecord } from '@/types/tagAndDeveloper';
 import { type ColumnDef } from '@tanstack/react-table';
 
-export const developerColumns: ColumnDef<TagAndDeveloperRecord>[] = [
+export const tagColumns: ColumnDef<TagAndDeveloperRecord>[] = [
   {
     accessorKey: 'name',
     header: 'name',

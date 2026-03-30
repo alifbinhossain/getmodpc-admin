@@ -52,6 +52,16 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.developer.details(), id] as const,
   },
 
+  // tag
+  tag: {
+    all: ['tags'] as const,
+    lists: () => [...queryKeys.tag.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.tag.lists(), params] as const,
+    details: () => [...queryKeys.tag.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.tag.details(), id] as const,
+  },
+
   // Dashboard
   dashboard: {
     all: ['dashboard'] as const,

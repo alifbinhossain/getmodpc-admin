@@ -12,6 +12,7 @@ import {
 import { DeveloperForm } from '@/app/(dashboard)/developers/_components/developer-form';
 import { ReportReasonForm } from '@/app/(dashboard)/report-reasons/_components/report-reason-form';
 import { ReportForm } from '@/app/(dashboard)/reports/_components/report-form';
+import { TagForm } from '@/app/(dashboard)/tags/_components/tag-form';
 
 import { Separator } from '../ui/separator';
 
@@ -27,6 +28,8 @@ export function GlobalFormModal() {
     EDIT_REPORT: ReportForm,
     EDIT_DEVELOPER: DeveloperForm,
     ADD_DEVELOPER: DeveloperForm,
+    EDIT_TAG: TagForm,
+    ADD_TAG: TagForm,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,
   };

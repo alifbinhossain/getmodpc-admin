@@ -3,20 +3,20 @@
 // =============================================================================
 import { BaseQueryParams, BaseRecord } from '.';
 
-export interface CreateDeveloperPayload {
+export interface CreateTagAndDeveloperPayload {
   name: string;
   description?: string | null;
 }
-export interface UpdateDeveloperPayload extends CreateDeveloperPayload {
+export interface UpdateTagAndDeveloperPayload extends CreateTagAndDeveloperPayload {
   id: string;
 }
 
-export interface DeveloperRecord extends BaseRecord {
+export interface TagAndDeveloperRecord extends BaseRecord {
   name: string;
   description: string;
   slug: string;
 }
-export interface DeveloperQueryParams extends BaseQueryParams {
+export interface TagAndDeveloperQueryParams extends BaseQueryParams {
   name?: string;
   slug?: string;
 }
