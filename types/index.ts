@@ -75,3 +75,9 @@ export interface StatusConfig {
   label: string;
   variant: StatusVariant;
 }
+
+export interface BaseRecord {
+  id: string;
+  created_at: string;
+  updated_at: string;
+}

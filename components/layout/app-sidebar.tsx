@@ -1,7 +1,7 @@
 'use client';
 
 import { NavItem } from '@/types';
-import { LayoutDashboard, Settings, Shield, User2, Users } from 'lucide-react';
+import { AppWindow, Bug, ChartBarStacked, Code, LayoutDashboard, Settings, Shield, Tags, User2, Users } from 'lucide-react';
 
 import {
   Sidebar,
@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/sidebar';
 
 import { NavLink } from './nav-link';
+import { SidebarItem } from './sidebar-item';
 
 // =============================================================================
 // NAV CONFIG
@@ -24,6 +25,14 @@ import { NavLink } from './nav-link';
 
 const NAV_ITEMS: NavItem[] = [
   { title: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { title: 'Apps', href: '/app', icon: AppWindow },
+  { title: 'Categories', href: '/category', icon: ChartBarStacked },
+  { title: 'Tags', href: '/tag', icon: Tags },
+  { title: 'Developers', href: '/developer', icon: Code },
+  { title: 'Reports', href: '/report', icon: Bug,children: [
+    { title: 'Reports', href: '/reports' },
+    { title: 'Report Reasons', href: '/report-reason' },
+  ],disabled: true },
   {
     title: 'Users',
     href: '/users',
@@ -62,10 +71,8 @@ export function AppSidebar() {
           <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV_ITEMS.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <NavLink item={item} />
-                </SidebarMenuItem>
+             {NAV_ITEMS.map((item) => (
+                <SidebarItem key={item.title} item={item} />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

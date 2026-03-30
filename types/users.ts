@@ -1,11 +1,10 @@
-import type { BaseQueryParams } from './index';
+import type { BaseQueryParams, BaseRecord } from './index';
 
 // =============================================================================
 // USER MODULE TYPES
 // =============================================================================
 
-export interface UserRecord {
-  id: string;
+export interface UserRecord extends BaseRecord {
   name: string;
   email: string;
   role: string;
@@ -13,8 +12,6 @@ export interface UserRecord {
   avatar?: string;
   phone?: string;
   department?: string;
-  createdAt: string;
-  updatedAt: string;
   lastLoginAt?: string;
 }
 
