@@ -7,6 +7,7 @@ import {
   ChartBarStacked,
   CircleFadingPlus,
   Code,
+  Images,
   LayoutDashboard,
   NotepadTextDashed,
   Settings,
@@ -66,6 +67,11 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Faqs',
     href: '/faqs',
     icon: CircleFadingPlus,
+  },
+  {
+    title: 'Media',
+    href: '/medias',
+    icon: Images,
   },
   {
     title: 'Users',

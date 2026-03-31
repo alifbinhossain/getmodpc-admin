@@ -73,6 +73,7 @@ export interface TableStateChange {
 
 export interface WithTimestamps {
   id: string;
+  key?: string;
   created_at?: string;
   updated_at?: string;
 }

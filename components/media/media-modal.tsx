@@ -51,7 +51,7 @@ export function MediaModal({
               </TabsTrigger>
             </TabsList>
             <TabsContent value='upload' className='flex-1 overflow-auto'>
-              <UploadTab onUploadSuccess={onUploadSuccess} />
+              <UploadTab onUploadSuccess={onUploadSuccess} onClose={onClose} />
             </TabsContent>
             <TabsContent value='gallery' className='flex-1 overflow-auto'>
               <GalleryTab

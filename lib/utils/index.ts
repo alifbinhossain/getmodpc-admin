@@ -95,6 +95,37 @@ export function formatCompact(num: number): string {
 }
 
 // =============================================================================
+// FILE SIZE UTILITIES
+// =============================================================================
+
+/**
+ * Convert bytes to human readable file size (B, KB, MB, GB, TB)
+ */
+export function formatFileSize(bytes: number): string {
+  if (bytes === 0) return '0 B';
+
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`;
+}
+
+/**
+ * Convert bytes to megabytes
+ */
+export function bytesToMB(bytes: number): number {
+  return bytes / (1024 * 1024);
+}
+
+/**
+ * Convert bytes to gigabytes
+ */
+export function bytesToGB(bytes: number): number {
+  return bytes / (1024 * 1024 * 1024);
+}
+
+// =============================================================================
 // OBJECT UTILITIES
 // =============================================================================
 

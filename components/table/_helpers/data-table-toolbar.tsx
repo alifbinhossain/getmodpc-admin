@@ -37,7 +37,9 @@ export function DataTableToolbar<TData extends WithTimestamps>({
   const hasActiveFilters = globalFilter.length > 0;
   const [open, setOpen] = useState(false);
   const selectedRows = table.getSelectedRowModel().rows;
-  const ids = selectedRows.map((row) => row.original.id);
+  const ids = selectedRows.map(
+    (row) => (row.original.id || row.original.key) as string
+  );
 
   return (
     <>

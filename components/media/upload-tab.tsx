@@ -2,16 +2,22 @@
 
 import { DragEvent, useCallback, useState } from 'react';
 
+import Image from 'next/image';
+
+import type { MediaRecord } from '@/types/media';
 import { Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 
+import api from '@/lib/axios';
+
 interface UploadTabProps {
   onUploadSuccess?: () => void;
+  onClose?: (isRefreshData?: boolean) => void;
 }
 
-export function UploadTab({ onUploadSuccess }: UploadTabProps) {
+export function UploadTab({ onUploadSuccess, onClose }: UploadTabProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -84,28 +90,23 @@ export function UploadTab({ onUploadSuccess }: UploadTabProps) {
 
     try {
       const formData = new FormData();
-      files.forEach((file) => formData.append('files', file));
+      files.forEach((file) => formData.append('medias', file));
 
       // Replace with actual upload API call
-      const response = await fetch('/api/media/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
+      await api.upload<MediaRecord[]>('/medias', formData);
 
       toast.success('Files uploaded successfully');
       setFiles([]);
       onUploadSuccess?.();
+
+      if (onClose) onClose(true);
     } catch (error) {
       toast.error('Upload failed');
       console.error(error);
     } finally {
       setUploading(false);
     }
-  }, [files, onUploadSuccess]);
+  }, [files, onUploadSuccess, onClose]);
 
   return (
     <div className='space-y-4 size-full'>
@@ -148,10 +149,12 @@ export function UploadTab({ onUploadSuccess }: UploadTabProps) {
                 className='flex items-center justify-between p-2 bg-gray-50 rounded'
               >
                 <div className='flex items-center space-x-2'>
-                  <img
+                  <Image
                     src={URL.createObjectURL(file)}
                     alt={file.name}
                     className='w-8 h-8 object-cover rounded'
+                    width={32}
+                    height={32}
                   />
                   <span className='text-sm truncate'>{file.name}</span>
                 </div>
@@ -166,7 +169,11 @@ export function UploadTab({ onUploadSuccess }: UploadTabProps) {
               </div>
             ))}
           </div>
-          <Button onClick={uploadFiles} disabled={uploading} className='w-full'>
+          <Button
+            onClick={uploadFiles}
+            disabled={uploading}
+            className='w-full mb-5'
+          >
             {uploading ? 'Uploading...' : 'Upload Files'}
           </Button>
         </div>

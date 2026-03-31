@@ -16,6 +16,7 @@ type ModalType =
   | 'EDIT_TESTIMONIAL'
   | 'ADD_FAQ'
   | 'EDIT_FAQ'
+  | 'ADD_MEDIA'
   | 'EDIT_USER'
   | 'EDIT_APP'
   | null;

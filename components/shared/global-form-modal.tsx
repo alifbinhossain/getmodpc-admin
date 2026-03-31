@@ -18,6 +18,7 @@ import { ReportForm } from '@/app/(dashboard)/reports/_components/report-form';
 import { TagForm } from '@/app/(dashboard)/tags/_components/tag-form';
 import { TestimonialForm } from '@/app/(dashboard)/testimonials/_components/testimonial-form';
 
+import { UploadTab } from '../media';
 import { Separator } from '../ui/separator';
 
 export function GlobalFormModal() {
@@ -42,6 +43,7 @@ export function GlobalFormModal() {
     EDIT_TESTIMONIAL: TestimonialForm,
     ADD_FAQ: FaqForm,
     EDIT_FAQ: FaqForm,
+    ADD_MEDIA: UploadTab,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,
   };
