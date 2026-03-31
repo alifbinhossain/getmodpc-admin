@@ -23,7 +23,10 @@ export function CategoryForm({ isEditing, data, onClose }: Props) {
   const form = useAppForm({
     schema: categorySchema,
     defaultValues: isEditing
-      ? data
+      ? {
+          ...data,
+          description: data?.description || '',
+        }
       : {
           category_bg_color: '#f9f9f9',
           category_icon_bg_color: '#f9f9f9',
