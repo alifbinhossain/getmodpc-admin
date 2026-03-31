@@ -1,9 +1,5 @@
 import type { ApiResponse, PaginatedResponse } from '@/types';
-import type {
-  CreateMediaPayload,
-  MediaQueryParams,
-  MediaRecord,
-} from '@/types/media';
+import type { MediaQueryParams, MediaRecord } from '@/types/media';
 
 import { api } from '@/lib/axios';
 import { buildQueryString } from '@/lib/utils';
@@ -29,8 +25,8 @@ export const mediasService = {
   },
 
   /** Upload a new media */
-  uploadMedias(payload: CreateMediaPayload): Promise<ApiResponse<MediaRecord>> {
-    return api.post<MediaRecord, CreateMediaPayload>('/medias', payload);
+  uploadMedias(payload: FormData): Promise<ApiResponse<MediaRecord>> {
+    return api.upload<MediaRecord>('/medias', payload);
   },
 
   /** Bulk delete medias */

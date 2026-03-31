@@ -1,9 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-
-import { PaginationMeta } from '@/types';
-import type { MediaRecord } from '@/types/media';
+import { useCallback, useState } from 'react';
 
 import {
   Dialog,
@@ -20,30 +17,38 @@ interface MediaModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectImage?: (url: string) => void;
-  galleryImages?: MediaRecord[];
-  galleryMeta?: PaginationMeta;
-  isLoadingGallery?: boolean;
-  onUploadSuccess?: () => void;
-  search?: string;
-  filterDate?: string;
-  onFiltersChange?: (search: string, filterDate?: string) => void;
-  onLoadMore?: () => void;
 }
 
 export function MediaModal({
   isOpen,
   onClose,
   onSelectImage,
-  galleryImages = [],
-  galleryMeta,
-  isLoadingGallery = false,
-  onUploadSuccess,
-  search = '',
-  filterDate = '',
-  onFiltersChange,
-  onLoadMore,
 }: MediaModalProps) {
   const [activeTab, setActiveTab] = useState('upload');
+  const [search, setSearch] = useState('');
+  const [dateFilter, setDateFilter] = useState<string | undefined>();
+
+  const handleFiltersChange = useCallback(
+    (newSearch: string, newDateFilter?: string) => {
+      setSearch(newSearch);
+      setDateFilter(newDateFilter);
+    },
+    []
+  );
+
+  const handleSelectImage = useCallback(
+    (url: string) => {
+      onSelectImage?.(url);
+      onClose();
+    },
+    [onSelectImage, onClose]
+  );
+
+  const handleUploadSuccess = useCallback(() => {
+    // Reset filters when new images are uploaded
+    setSearch('');
+    setDateFilter(undefined);
+  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -66,18 +71,17 @@ export function MediaModal({
               </TabsTrigger>
             </TabsList>
             <TabsContent value='upload' className='flex-1 overflow-auto'>
-              <UploadTab onUploadSuccess={onUploadSuccess} onClose={onClose} />
+              <UploadTab
+                onUploadSuccess={handleUploadSuccess}
+                onClose={onClose}
+              />
             </TabsContent>
             <TabsContent value='gallery' className='flex-1 overflow-auto'>
               <GalleryTab
-                images={galleryImages}
-                meta={galleryMeta}
-                isLoading={isLoadingGallery}
-                onSelectImage={onSelectImage}
                 search={search}
-                filterDate={filterDate}
-                onFiltersChange={onFiltersChange}
-                onLoadMore={onLoadMore}
+                dateFilter={dateFilter}
+                onFiltersChange={handleFiltersChange}
+                onSelectImage={handleSelectImage}
               />
             </TabsContent>
           </Tabs>

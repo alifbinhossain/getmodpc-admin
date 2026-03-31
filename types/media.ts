@@ -3,10 +3,6 @@
 // =============================================================================
 import { BaseQueryParams, BaseRecord } from '.';
 
-export interface CreateMediaPayload {
-  medias: File[];
-}
-
 export interface MediaRecord extends BaseRecord {
   name: string;
   key: string;

@@ -1,9 +1,5 @@
 import { PaginatedResponse } from '@/types';
-import type {
-  CreateMediaPayload,
-  MediaQueryParams,
-  MediaRecord,
-} from '@/types/media';
+import type { MediaQueryParams, MediaRecord } from '@/types/media';
 
 import { useApiListQuery, useApiMutation, useApiQuery } from '@/hooks/api';
 
@@ -45,8 +41,7 @@ export function useMedia(key: string) {
 /** Upload media */
 export function useUploadMedias() {
   return useApiMutation({
-    mutationFn: (payload: CreateMediaPayload) =>
-      mediasService.uploadMedias(payload),
+    mutationFn: (payload: FormData) => mediasService.uploadMedias(payload),
     invalidateKeys: [queryKeys.media.lists()],
     successMessage: 'Media created successfully.',
   });

@@ -24,7 +24,13 @@ export function CategoryForm({ isEditing, data, onClose }: Props) {
     schema: categorySchema,
     defaultValues: isEditing
       ? data
-      : { category_bg_color: '#f9f9f9', category_icon_bg_color: '#f9f9f9' },
+      : {
+          category_bg_color: '#f9f9f9',
+          category_icon_bg_color: '#f9f9f9',
+          description: '',
+          name: '',
+          category_icon: '',
+        },
   });
 
   const {
