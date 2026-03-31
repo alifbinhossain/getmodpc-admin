@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useAppForm } from '@/hooks/form';
 
 import { FormInput, FormTextarea, FormWrapper } from '@/components/forms';
+import { MediaInput } from '@/components/media';
 import { Button } from '@/components/ui/button';
 
 import { categorySchema, ICategorySchema } from '@/lib/schemas/category-schema';
@@ -70,6 +71,8 @@ export function CategoryForm({ isEditing, data, onClose }: Props) {
           label='Description'
           placeholder='Description'
         />
+
+        <MediaInput />
 
         <SelectCategoryField control={control} />
 
