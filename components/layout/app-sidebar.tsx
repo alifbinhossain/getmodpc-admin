@@ -5,6 +5,7 @@ import {
   AppWindow,
   Bug,
   ChartBarStacked,
+  CircleFadingPlus,
   Code,
   LayoutDashboard,
   NotepadTextDashed,
@@ -60,6 +61,11 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Testimonials',
     href: '/testimonials',
     icon: User2,
+  },
+  {
+    title: 'Faqs',
+    href: '/faqs',
+    icon: CircleFadingPlus,
   },
   {
     title: 'Users',

@@ -84,3 +84,9 @@ export interface BaseRecord {
 }
 
 export type QueryKeyT = [string, object | undefined];
+
+export enum EnumPlatformType {
+  ANDROID = 'android',
+  APPLE = 'apple',
+  WINDOWS = 'windows',
+}

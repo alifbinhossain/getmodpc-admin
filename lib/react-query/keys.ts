@@ -93,6 +93,16 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.testimonial.details(), id] as const,
   },
 
+  // faq
+  faq: {
+    all: ['faqs'] as const,
+    lists: () => [...queryKeys.faq.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.faq.lists(), params] as const,
+    details: () => [...queryKeys.faq.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.faq.details(), id] as const,
+  },
+
   // Dashboard
   dashboard: {
     all: ['dashboard'] as const,

@@ -11,6 +11,7 @@ import {
 
 import { CategoryForm } from '@/app/(dashboard)/categories/_components/category-form';
 import { DeveloperForm } from '@/app/(dashboard)/developers/_components/developer-form';
+import { FaqForm } from '@/app/(dashboard)/faqs/_components/faq-form';
 import { PageForm } from '@/app/(dashboard)/pages/_components/page-form';
 import { ReportReasonForm } from '@/app/(dashboard)/report-reasons/_components/report-reason-form';
 import { ReportForm } from '@/app/(dashboard)/reports/_components/report-form';
@@ -39,6 +40,8 @@ export function GlobalFormModal() {
     EDIT_PAGE: PageForm,
     ADD_TESTIMONIAL: TestimonialForm,
     EDIT_TESTIMONIAL: TestimonialForm,
+    ADD_FAQ: FaqForm,
+    EDIT_FAQ: FaqForm,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,
   };
