@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
 
+import '@mantine/core/styles.css';
+import '@mantine/tiptap/styles.css';
+
 import { cn } from '@/lib/utils';
 
 import './globals.css';

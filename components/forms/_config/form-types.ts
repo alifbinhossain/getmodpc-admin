@@ -20,6 +20,17 @@ export type IFormTextarea = FormControlFunc<{
   maxChars?: number;
 }>;
 
+export type IFormRichText = FormControlFunc<{
+  fieldProps?: {
+    height?: number;
+    preview?: 'live' | 'edit' | 'preview';
+    hideToolbar?: boolean;
+    visibleDragBar?: boolean;
+    [key: string]: any;
+  };
+  maxChars?: number;
+}>;
+
 export type IFormPhone = FormControlFunc<{
   register: UseFormRegister<any>;
   fieldProps?: InputProps;

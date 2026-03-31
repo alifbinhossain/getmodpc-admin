@@ -1,12 +1,14 @@
 'use client';
 
 import { PageType, UpdatePagePayload } from '@/types/page';
+import { MantineProvider } from '@mantine/core';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/hooks/form';
 
 import {
   FormInput,
+  FormRichText,
   FormSelect,
   FormTextarea,
   FormWrapper,
@@ -85,15 +87,15 @@ export function PageForm({ isEditing, data, onClose }: Props) {
           ]}
           required
         />
-
-        <FormTextarea
-          control={control}
-          name='content'
-          label='Content'
-          placeholder='Content'
-          required
-        />
-
+        <MantineProvider>
+          <FormRichText
+            control={control}
+            name='content'
+            label='Content'
+            placeholder='Content'
+            required
+          />
+        </MantineProvider>
         {watch('page_type') === PageType.EXTERNAL && (
           <>
             <FormInput

@@ -1,6 +1,7 @@
 import { PageRecord } from '@/types/page';
 import type { ColumnMeta } from '@/types/table';
 import { type ColumnDef } from '@tanstack/react-table';
+import parse from 'html-react-parser';
 
 import { Badge } from '@/components/ui/badge';
 
@@ -32,9 +33,9 @@ export const pageColumns: ColumnDef<PageRecord>[] = [
     cell: ({ getValue }) => {
       const details = getValue<PageRecord['content']>();
       return (
-        <span className='text-sm text-muted-foreground line-clamp-2'>
-          {details}
-        </span>
+        <div className='editor text-sm text-muted-foreground line-clamp-2'>
+          {parse(details)}
+        </div>
       );
     },
   },

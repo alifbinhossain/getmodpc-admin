@@ -61,7 +61,7 @@ export function PagesTable({
       enableColumnToggle
       enablePagination
       enableSorting
-      searchPlaceholder='Search by title or content...'
+      searchPlaceholder='Search by title or slug...'
       // ── Server-side (optional)
       rowCount={rowCount}
       onStateChange={onStateChange}
