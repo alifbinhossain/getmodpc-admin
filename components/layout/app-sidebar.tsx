@@ -7,6 +7,7 @@ import {
   ChartBarStacked,
   Code,
   LayoutDashboard,
+  NotepadTextDashed,
   Settings,
   Shield,
   Tags,
@@ -49,6 +50,11 @@ const NAV_ITEMS: NavItem[] = [
       { title: 'Report Reasons', href: '/report-reasons' },
     ],
     disabled: true,
+  },
+  {
+    title: 'Pages',
+    href: '/pages',
+    icon: NotepadTextDashed,
   },
   {
     title: 'Users',

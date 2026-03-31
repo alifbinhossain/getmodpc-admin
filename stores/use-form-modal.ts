@@ -10,6 +10,8 @@ type ModalType =
   | 'ADD_TAG'
   | 'EDIT_CATEGORY'
   | 'ADD_CATEGORY'
+  | 'ADD_PAGE'
+  | 'EDIT_PAGE'
   | 'EDIT_USER'
   | 'EDIT_APP'
   | null;
