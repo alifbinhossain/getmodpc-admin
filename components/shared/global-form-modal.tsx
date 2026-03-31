@@ -15,6 +15,7 @@ import { PageForm } from '@/app/(dashboard)/pages/_components/page-form';
 import { ReportReasonForm } from '@/app/(dashboard)/report-reasons/_components/report-reason-form';
 import { ReportForm } from '@/app/(dashboard)/reports/_components/report-form';
 import { TagForm } from '@/app/(dashboard)/tags/_components/tag-form';
+import { TestimonialForm } from '@/app/(dashboard)/testimonials/_components/testimonial-form';
 
 import { Separator } from '../ui/separator';
 
@@ -36,6 +37,8 @@ export function GlobalFormModal() {
     ADD_CATEGORY: CategoryForm,
     ADD_PAGE: PageForm,
     EDIT_PAGE: PageForm,
+    ADD_TESTIMONIAL: TestimonialForm,
+    EDIT_TESTIMONIAL: TestimonialForm,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,
   };

@@ -83,6 +83,16 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.page.details(), id] as const,
   },
 
+  // testimonial
+  testimonial: {
+    all: ['testimonials'] as const,
+    lists: () => [...queryKeys.testimonial.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.testimonial.lists(), params] as const,
+    details: () => [...queryKeys.testimonial.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.testimonial.details(), id] as const,
+  },
+
   // Dashboard
   dashboard: {
     all: ['dashboard'] as const,

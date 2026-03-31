@@ -57,6 +57,11 @@ const NAV_ITEMS: NavItem[] = [
     icon: NotepadTextDashed,
   },
   {
+    title: 'Testimonials',
+    href: '/testimonials',
+    icon: User2,
+  },
+  {
     title: 'Users',
     href: '/users',
     icon: Users,

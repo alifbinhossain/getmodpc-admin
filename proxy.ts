@@ -9,7 +9,7 @@ import { jwtVerify } from 'jose';
 
 const PUBLIC_ROUTES = ['/sign-in', '/not-found'];
 const AUTH_ROUTES = ['/sign-in']; // Redirect to dashboard if already logged in
-const PROTECTED_PREFIX = '/test'; // Prefix for protected routes (e.g. /dashboard)
+const PROTECTED_PREFIX = '/test4'; // Prefix for protected routes (e.g. /dashboard)
 
 const AUTH_COOKIE_NAME = process.env.AUTH_COOKIE_NAME ?? 'admin_auth_token';
 const AUTH_SECRET = new TextEncoder().encode(

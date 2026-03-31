@@ -12,6 +12,8 @@ type ModalType =
   | 'ADD_CATEGORY'
   | 'ADD_PAGE'
   | 'EDIT_PAGE'
+  | 'ADD_TESTIMONIAL'
+  | 'EDIT_TESTIMONIAL'
   | 'EDIT_USER'
   | 'EDIT_APP'
   | null;
