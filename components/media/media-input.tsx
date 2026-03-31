@@ -25,15 +25,32 @@ export function MediaInput({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [dateFilter, setDateFilter] = useState<string | undefined>(undefined);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [accumulatedImages, setAccumulatedImages] = useState<
+    { url: string; id: string }[]
+  >([]);
 
   const { data, isLoading, isFetching, refetch } = useMedias(
     {
       searchTerm: search,
       dateFilter,
+      page: currentPage,
+      limit: 1,
     },
     undefined,
     isModalOpen
   );
+
+  // Accumulate images when data changes
+  useEffect(() => {
+    if (data?.data) {
+      if (currentPage === 1) {
+        setAccumulatedImages(data.data);
+      } else {
+        setAccumulatedImages((prev) => [...prev, ...data.data]);
+      }
+    }
+  }, [data?.data, currentPage]);
 
   const handleSelectImage = (url: string) => {
     onChange?.(url);
@@ -43,11 +60,21 @@ export function MediaInput({
   const handleFiltersChange = (newSearch: string, newDateFilter?: string) => {
     setSearch(newSearch);
     setDateFilter(newDateFilter);
+    setCurrentPage(1); // Reset to first page when filters change
+    setAccumulatedImages([]); // Clear accumulated images
+  };
+
+  const handleLoadMore = () => {
+    if (data?.meta?.hasNextPage && !isFetching) {
+      setCurrentPage((prev) => prev + 1);
+    }
   };
 
   const handleUploadSuccess = useCallback(() => {
     setSearch('');
     setDateFilter(undefined);
+    setCurrentPage(1);
+    setAccumulatedImages([]);
     refetch();
   }, [refetch]);
 
@@ -73,11 +100,14 @@ export function MediaInput({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSelectImage={handleSelectImage}
-        galleryImages={data?.data || []}
+        galleryImages={accumulatedImages}
+        galleryMeta={data?.meta}
+        isLoadingGallery={isLoading || isFetching}
         onUploadSuccess={handleUploadSuccess}
         search={search}
         filterDate={dateFilter}
         onFiltersChange={handleFiltersChange}
+        onLoadMore={handleLoadMore}
       />
     </>
   );

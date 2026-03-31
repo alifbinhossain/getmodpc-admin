@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { PaginationMeta } from '@/types';
+import type { MediaRecord } from '@/types/media';
+
 import {
   Dialog,
   DialogContent,
@@ -17,11 +20,14 @@ interface MediaModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectImage?: (url: string) => void;
-  galleryImages?: { url: string; id: string }[];
+  galleryImages?: MediaRecord[];
+  galleryMeta?: PaginationMeta;
+  isLoadingGallery?: boolean;
   onUploadSuccess?: () => void;
   search?: string;
   filterDate?: string;
   onFiltersChange?: (search: string, filterDate?: string) => void;
+  onLoadMore?: () => void;
 }
 
 export function MediaModal({
@@ -29,10 +35,13 @@ export function MediaModal({
   onClose,
   onSelectImage,
   galleryImages = [],
+  galleryMeta,
+  isLoadingGallery = false,
   onUploadSuccess,
   search = '',
   filterDate = '',
   onFiltersChange,
+  onLoadMore,
 }: MediaModalProps) {
   const [activeTab, setActiveTab] = useState('upload');
 
@@ -62,10 +71,13 @@ export function MediaModal({
             <TabsContent value='gallery' className='flex-1 overflow-auto'>
               <GalleryTab
                 images={galleryImages}
+                meta={galleryMeta}
+                isLoading={isLoadingGallery}
                 onSelectImage={onSelectImage}
                 search={search}
                 filterDate={filterDate}
                 onFiltersChange={onFiltersChange}
+                onLoadMore={onLoadMore}
               />
             </TabsContent>
           </Tabs>
