@@ -16,9 +16,12 @@ import { UploadTab } from './upload-tab';
 interface MediaModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectImage?: (image: { url: string; id: string }) => void;
+  onSelectImage?: (url: string) => void;
   galleryImages?: { url: string; id: string }[];
   onUploadSuccess?: () => void;
+  search?: string;
+  filterDate?: string;
+  onFiltersChange?: (search: string, filterDate?: string) => void;
 }
 
 export function MediaModal({
@@ -27,6 +30,9 @@ export function MediaModal({
   onSelectImage,
   galleryImages = [],
   onUploadSuccess,
+  search = '',
+  filterDate = '',
+  onFiltersChange,
 }: MediaModalProps) {
   const [activeTab, setActiveTab] = useState('upload');
 
@@ -57,6 +63,9 @@ export function MediaModal({
               <GalleryTab
                 images={galleryImages}
                 onSelectImage={onSelectImage}
+                search={search}
+                filterDate={filterDate}
+                onFiltersChange={onFiltersChange}
               />
             </TabsContent>
           </Tabs>

@@ -18,12 +18,14 @@ import { mediasService } from './medias.service';
 /** Fetch paginated medias */
 export function useMedias(
   params?: MediaQueryParams,
-  initialData?: PaginatedResponse<MediaRecord>
+  initialData?: PaginatedResponse<MediaRecord>,
+  enabled?: boolean
 ) {
   return useApiListQuery({
     queryKey: queryKeys.media.list((params ?? {}) as Record<string, unknown>),
     queryFn: () => mediasService.getAllMedias(params),
     initialData,
+    enabled: enabled != undefined ? enabled : true,
   });
 }
 

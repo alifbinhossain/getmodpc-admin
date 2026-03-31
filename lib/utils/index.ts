@@ -119,6 +119,20 @@ export function bytesToMB(bytes: number): number {
 }
 
 /**
+ * Format bytes to MB with unit
+ */
+export function formatBytesToMB(bytes: number): string {
+  return `${bytesToMB(bytes).toFixed(2)} MB`;
+}
+
+/**
+ * Format bytes to GB with unit
+ */
+export function formatBytesToGB(bytes: number): string {
+  return `${bytesToGB(bytes).toFixed(2)} GB`;
+}
+
+/**
  * Convert bytes to gigabytes
  */
 export function bytesToGB(bytes: number): number {
@@ -195,4 +209,38 @@ export function setTokenCookie(token: string, days = 7): void {
 export function removeTokenCookie(): void {
   if (typeof document === 'undefined') return;
   document.cookie = `${TOKEN_COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+}
+
+export function generateMonthsFromStart(start?: string) {
+  const now = new Date();
+
+  // fallback → current month if no start provided
+  const [startYear, startMonth] = start
+    ? start.split("-").map(Number)
+    : [now.getFullYear(), now.getMonth() + 1];
+
+  const startDate = new Date(startYear, startMonth - 1);
+
+  const months: { label: string; value: string | undefined }[] = [
+    { label: "All Dates", value: undefined },
+  ];
+
+  const current = new Date(startDate);
+
+  while (current <= now) {
+    months.push({
+      label: current.toLocaleString("default", {
+        month: "long",
+        year: "numeric",
+      }),
+      value: `${current.getFullYear()}-${String(
+        current.getMonth() + 1
+      ).padStart(2, "0")}`,
+    });
+
+    // move to next month
+    current.setMonth(current.getMonth() + 1);
+  }
+
+  return months;
 }

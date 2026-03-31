@@ -10,14 +10,14 @@ export const categoryColumns: ColumnDef<CategoryRecord>[] = [
     header: 'Icon',
     cell: ({ getValue }) => {
       const src = getValue<CategoryRecord['category_icon']>();
-      if (!src) return <div className='h-6 w-6 rounded overflow-hidden'></div>;
+      if (!src) return <div className='size-10 rounded overflow-hidden'></div>;
       return (
         <Image
           src={src}
-          className='h-6 w-6 rounded overflow-hidden'
+          className='size-10 rounded overflow-hidden'
           alt='category icon'
-          width={24}
-          height={24}
+          width={40}
+          height={40}
         />
       );
     },

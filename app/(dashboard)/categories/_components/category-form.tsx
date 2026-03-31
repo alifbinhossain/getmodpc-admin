@@ -72,7 +72,16 @@ export function CategoryForm({ isEditing, data, onClose }: Props) {
           placeholder='Description'
         />
 
-        <MediaInput />
+        <MediaInput
+          value={form.getValues('category_icon') || ''}
+          onChange={(e) => {
+            form.setValue('category_icon', e, {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            });
+          }}
+        />
 
         <SelectCategoryField control={control} />
 

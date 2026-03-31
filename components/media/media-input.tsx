@@ -7,6 +7,8 @@ import { Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import { useMedias } from '@/app/(dashboard)/medias/_config/medias.hooks';
+
 import { MediaModal } from './media-modal';
 
 interface MediaInputProps {
@@ -21,37 +23,33 @@ export function MediaInput({
   placeholder = 'Select image',
 }: MediaInputProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [galleryImages, setGalleryImages] = useState<
-    { url: string; id: string }[]
-  >([]);
+  const [search, setSearch] = useState('');
+  const [dateFilter, setDateFilter] = useState<string | undefined>(undefined);
 
-  const fetchGalleryImages = useCallback(async () => {
-    try {
-      const response = await fetch('/api/media/images');
-      if (response.ok) {
-        const data = await response.json();
-        setGalleryImages(data.images);
-      }
-    } catch (error) {
-      console.error('Failed to fetch gallery images:', error);
-    }
-  }, []);
+  const { data, isLoading, isFetching, refetch } = useMedias(
+    {
+      searchTerm: search,
+      dateFilter,
+    },
+    undefined,
+    isModalOpen
+  );
 
-  useEffect(() => {
-    if (isModalOpen) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchGalleryImages();
-    }
-  }, [isModalOpen, fetchGalleryImages]);
-
-  const handleSelectImage = (image: { url: string; id: string }) => {
-    onChange?.(image.url);
+  const handleSelectImage = (url: string) => {
+    onChange?.(url);
     setIsModalOpen(false);
   };
 
-  const handleUploadSuccess = () => {
-    fetchGalleryImages();
+  const handleFiltersChange = (newSearch: string, newDateFilter?: string) => {
+    setSearch(newSearch);
+    setDateFilter(newDateFilter);
   };
+
+  const handleUploadSuccess = useCallback(() => {
+    setSearch('');
+    setDateFilter(undefined);
+    refetch();
+  }, [refetch]);
 
   return (
     <>
@@ -75,8 +73,11 @@ export function MediaInput({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSelectImage={handleSelectImage}
-        galleryImages={galleryImages}
+        galleryImages={data?.data || []}
         onUploadSuccess={handleUploadSuccess}
+        search={search}
+        filterDate={dateFilter}
+        onFiltersChange={handleFiltersChange}
       />
     </>
   );
