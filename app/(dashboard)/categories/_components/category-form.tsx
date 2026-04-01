@@ -82,6 +82,7 @@ export function CategoryForm({ isEditing, data, onClose }: Props) {
         />
 
         <MediaInput
+          label='Category Icon'
           value={form.getValues('category_icon') || ''}
           onChange={(e) => {
             form.setValue('category_icon', e, {

@@ -7,6 +7,7 @@ import { useAppForm } from '@/hooks/form';
 
 import { FormInput, FormTextarea, FormWrapper } from '@/components/forms';
 import { FormSwitch } from '@/components/forms/_fields/switch';
+import { MediaInput } from '@/components/media';
 import { Button } from '@/components/ui/button';
 
 import { ITestimonialSchema } from '@/lib/schemas/testimonial-schema';
@@ -73,6 +74,18 @@ export function TestimonialForm({ isEditing, data, onClose }: Props) {
           required
         />
 
+        <MediaInput
+          label='Image Url'
+          value={form.getValues('image_url') || ''}
+          onChange={(e) => {
+            form.setValue('image_url', e, {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            });
+          }}
+        />
+
         <FormInput
           control={control}
           name='designation'
@@ -80,18 +93,16 @@ export function TestimonialForm({ isEditing, data, onClose }: Props) {
           placeholder='Designation'
           required
         />
-        <FormInput
-          control={control}
-          name='image_url'
-          label='Image URL'
-          placeholder='Image URL'
-        />
-
-        <FormInput
-          control={control}
-          name='company_logo'
-          label='Company Logo URL'
-          placeholder='Company Logo URL'
+        <MediaInput
+          label='Company Logo'
+          value={form.getValues('company_logo') || ''}
+          onChange={(e) => {
+            form.setValue('company_logo', e, {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            });
+          }}
         />
 
         <FormInput

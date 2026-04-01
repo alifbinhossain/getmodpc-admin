@@ -12,14 +12,14 @@ export const testimonialColumns: ColumnDef<TestimonialRecord>[] = [
     header: 'Photo',
     cell: ({ getValue }) => {
       const src = getValue<TestimonialRecord['image_url']>();
-      if (!src) return <div className='h-6 w-6 rounded overflow-hidden'></div>;
+      if (!src) return <div className='size-10 rounded overflow-hidden'></div>;
       return (
         <Image
           src={src}
-          className='h-6 w-6 rounded overflow-hidden'
+          className='size-10 rounded overflow-hidden'
           alt='Testimonial icon'
-          width={24}
-          height={24}
+          width={40}
+          height={40}
         />
       );
     },
@@ -38,14 +38,14 @@ export const testimonialColumns: ColumnDef<TestimonialRecord>[] = [
     header: 'Company Logo',
     cell: ({ getValue }) => {
       const src = getValue<TestimonialRecord['company_logo']>();
-      if (!src) return <div className='h-6 w-6 rounded overflow-hidden'></div>;
+      if (!src) return <div className='size-10 rounded overflow-hidden'></div>;
       return (
         <Image
           src={src}
-          className='h-6 w-6 rounded overflow-hidden'
+          className='size-10 rounded overflow-hidden'
           alt='Testimonial icon'
-          width={24}
-          height={24}
+          width={40}
+          height={40}
         />
       );
     },
