@@ -133,6 +133,16 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.comment.details(), id] as const,
   },
 
+  // contact
+  contact: {
+    all: ['contacts'] as const,
+    lists: () => [...queryKeys.contact.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.contact.lists(), params] as const,
+    details: () => [...queryKeys.contact.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.contact.details(), id] as const,
+  },
+
   // userAppRequest
   userAppRequest: {
     all: ['userAppRequests'] as const,

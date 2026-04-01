@@ -10,6 +10,7 @@ import {
   GitPullRequestArrow,
   Images,
   LayoutDashboard,
+  Mail,
   MessageCircle,
   NotepadTextDashed,
   Settings,
@@ -85,6 +86,11 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Comments',
     href: '/comments',
     icon: MessageCircle,
+  },
+  {
+    title: 'Contacts',
+    href: '/contacts',
+    icon: Mail,
   },
   {
     title: 'User App Requests',

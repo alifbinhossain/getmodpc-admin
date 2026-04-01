@@ -12,6 +12,7 @@ import {
 import { AdForm } from '@/app/(dashboard)/ads/_components/ad-form';
 import { CategoryForm } from '@/app/(dashboard)/categories/_components/category-form';
 import { CommentForm } from '@/app/(dashboard)/comments/_components/comment-form';
+import { ContactForm } from '@/app/(dashboard)/contacts/_components/contact-form';
 import { DeveloperForm } from '@/app/(dashboard)/developers/_components/developer-form';
 import { FaqForm } from '@/app/(dashboard)/faqs/_components/faq-form';
 import { PageForm } from '@/app/(dashboard)/pages/_components/page-form';
@@ -49,7 +50,9 @@ export function GlobalFormModal() {
     ADD_MEDIA: UploadTab,
     ADD_AD: AdForm,
     EDIT_AD: AdForm,
+    ADD_COMMENT: CommentForm,
     EDIT_COMMENT: CommentForm,
+    EDIT_CONTACT: ContactForm,
     EDIT_USER_APP_REQUEST: UserAppRequestForm,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,

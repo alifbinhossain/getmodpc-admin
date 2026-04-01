@@ -21,6 +21,7 @@ type ModalType =
   | 'EDIT_AD'
   | 'ADD_COMMENT'
   | 'EDIT_COMMENT'
+  | 'EDIT_CONTACT'
   | 'EDIT_USER_APP_REQUEST'
   | 'EDIT_USER'
   | 'EDIT_APP'

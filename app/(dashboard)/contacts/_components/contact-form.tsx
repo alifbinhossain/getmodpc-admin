@@ -1,6 +1,6 @@
 'use client';
 
-import { UpdateCommentPayload } from '@/types/comment';
+import { UpdateContactPayload } from '@/types/contact';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/hooks/form';
@@ -8,19 +8,19 @@ import { useAppForm } from '@/hooks/form';
 import { FormTextarea, FormWrapper } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 
-import { commentSchema, ICommentSchema } from '@/lib/schemas/comment-schema';
+import { contactSchema, IContactSchema } from '@/lib/schemas/contact-schema';
 
-import { commentsService } from '../_config/comments.service';
+import { contactsService } from '../_config/contacts.service';
 
 type Props = {
   isEditing?: boolean;
-  data?: UpdateCommentPayload;
+  data?: UpdateContactPayload;
   onClose?: (isRefreshData?: boolean) => void;
 };
 
-export function CommentForm({ isEditing, data, onClose }: Props) {
+export function ContactForm({ isEditing, data, onClose }: Props) {
   const form = useAppForm({
-    schema: commentSchema,
+    schema: contactSchema,
     defaultValues: data,
   });
 
@@ -31,15 +31,15 @@ export function CommentForm({ isEditing, data, onClose }: Props) {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = async (values: ICommentSchema) => {
+  const onSubmit = async (values: IContactSchema) => {
     try {
-      await commentsService.updateComment({
+      await contactsService.updateContact({
         id: data!.id,
         ...values,
       });
       onClose?.(true);
       form.reset();
-      toast.success(`Comment Updated successfully`);
+      toast.success(`Contact updated successfully`);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'An error occurred';
       setError('root', { message });
@@ -51,9 +51,9 @@ export function CommentForm({ isEditing, data, onClose }: Props) {
       <FormWrapper>
         <FormTextarea
           control={control}
-          name='content'
-          label='Content'
-          placeholder='Enter comment content'
+          name='message'
+          label='Message'
+          placeholder='Enter message'
           required
         />
 
@@ -63,7 +63,7 @@ export function CommentForm({ isEditing, data, onClose }: Props) {
           className='w-full'
           loading={isSubmitting}
         >
-          {isEditing ? 'Update Comment' : 'Create Comment'}
+          Update Contact
         </Button>
       </FormWrapper>
     </form>
