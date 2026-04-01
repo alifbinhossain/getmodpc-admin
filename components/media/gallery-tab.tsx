@@ -121,7 +121,13 @@ export function GalleryTab({
               className='relative aspect-square group cursor-pointer border rounded-lg overflow-hidden hover:shadow-md transition-shadow'
               onClick={() => onSelectImage?.(image.url)}
             >
-              <Image src={image.url} alt='' className='object-cover' fill />
+              <Image
+                src={image.url}
+                alt={image.name}
+                sizes='100vw'
+                className='object-cover'
+                fill
+              />
               <div className='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
                 <Button size='sm' variant='secondary'>
                   <Check className='h-4 w-4 mr-1' />

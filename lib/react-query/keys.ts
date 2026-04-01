@@ -113,6 +113,15 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.media.details(), id] as const,
   },
 
+  // ad
+  ad: {
+    all: ['ads'] as const,
+    lists: () => [...queryKeys.ad.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.ad.lists(), params] as const,
+    details: () => [...queryKeys.ad.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.ad.details(), id] as const,
+  },
   // Dashboard
   dashboard: {
     all: ['dashboard'] as const,

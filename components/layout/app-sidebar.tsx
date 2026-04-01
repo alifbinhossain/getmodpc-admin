@@ -13,6 +13,7 @@ import {
   Settings,
   Shield,
   Tags,
+  Tornado,
   User2,
   Users,
 } from 'lucide-react';
@@ -72,6 +73,11 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Media',
     href: '/medias',
     icon: Images,
+  },
+  {
+    title: 'Ads',
+    href: '/ads',
+    icon: Tornado,
   },
   {
     title: 'Users',

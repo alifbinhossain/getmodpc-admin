@@ -20,6 +20,7 @@ import { TestimonialForm } from '@/app/(dashboard)/testimonials/_components/test
 
 import { UploadTab } from '../media';
 import { Separator } from '../ui/separator';
+import { AdForm } from '@/app/(dashboard)/ads/_components/ad-form';
 
 export function GlobalFormModal() {
   const { type, isOpen, closeModal, data } = useFormModal();
@@ -44,6 +45,8 @@ export function GlobalFormModal() {
     ADD_FAQ: FaqForm,
     EDIT_FAQ: FaqForm,
     ADD_MEDIA: UploadTab,
+    ADD_AD:AdForm,
+    EDIT_AD:AdForm,
     // EDIT_USER: EditUserForm,
     // EDIT_APP: EditAppForm,
   };
