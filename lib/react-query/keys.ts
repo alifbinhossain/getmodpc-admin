@@ -123,6 +123,16 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.ad.details(), id] as const,
   },
 
+  // comment
+  comment: {
+    all: ['comments'] as const,
+    lists: () => [...queryKeys.comment.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.comment.lists(), params] as const,
+    details: () => [...queryKeys.comment.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.comment.details(), id] as const,
+  },
+
   // userAppRequest
   userAppRequest: {
     all: ['userAppRequests'] as const,

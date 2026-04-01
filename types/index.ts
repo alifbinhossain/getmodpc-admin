@@ -90,3 +90,8 @@ export enum EnumPlatformType {
   APPLE = 'apple',
   WINDOWS = 'windows',
 }
+
+export enum EnumAppCommentStatus {
+  OPEN = 'open',
+  CLOSED = 'closed',
+}

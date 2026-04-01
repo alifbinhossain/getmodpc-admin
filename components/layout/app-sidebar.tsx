@@ -10,6 +10,7 @@ import {
   GitPullRequestArrow,
   Images,
   LayoutDashboard,
+  MessageCircle,
   NotepadTextDashed,
   Settings,
   Shield,
@@ -79,6 +80,11 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Ads',
     href: '/ads',
     icon: Tornado,
+  },
+  {
+    title: 'Comments',
+    href: '/comments',
+    icon: MessageCircle,
   },
   {
     title: 'User App Requests',
