@@ -103,7 +103,7 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.faq.details(), id] as const,
   },
 
-   // media
+  // media
   media: {
     all: ['medias'] as const,
     lists: () => [...queryKeys.media.all, 'list'] as const,
@@ -122,6 +122,18 @@ export const queryKeys = {
     details: () => [...queryKeys.ad.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.ad.details(), id] as const,
   },
+
+  // userAppRequest
+  userAppRequest: {
+    all: ['userAppRequests'] as const,
+    lists: () => [...queryKeys.userAppRequest.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.userAppRequest.lists(), params] as const,
+    details: () => [...queryKeys.userAppRequest.all, 'detail'] as const,
+    detail: (id: string) =>
+      [...queryKeys.userAppRequest.details(), id] as const,
+  },
+
   // Dashboard
   dashboard: {
     all: ['dashboard'] as const,

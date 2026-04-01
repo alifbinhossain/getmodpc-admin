@@ -7,6 +7,7 @@ import {
   ChartBarStacked,
   CircleFadingPlus,
   Code,
+  GitPullRequestArrow,
   Images,
   LayoutDashboard,
   NotepadTextDashed,
@@ -78,6 +79,11 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Ads',
     href: '/ads',
     icon: Tornado,
+  },
+  {
+    title: 'User App Requests',
+    href: '/user-app-requests',
+    icon: GitPullRequestArrow,
   },
   {
     title: 'Users',

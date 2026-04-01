@@ -19,7 +19,7 @@ export function useAds(
   initialData?: PaginatedResponse<AdRecord>
 ) {
   return useApiListQuery({
-    queryKey: queryKeys.testimonial.list(
+    queryKey: queryKeys.ad.list(
       (params ?? {}) as Record<string, unknown>
     ),
     queryFn: () => adsService.getAds(params),
@@ -30,7 +30,7 @@ export function useAds(
 /** Fetch single ad */
 export function useAd(id: string) {
   return useApiListQuery({
-    queryKey: queryKeys.testimonial.detail(id),
+    queryKey: queryKeys.ad.detail(id),
     queryFn: () => adsService.getAds({ searchTerm: id }),
     enabled: !!id,
   });
