@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useTablePagination } from '@/stores/use-table-pagination';
 import { PaginatedResponse } from '@/types';
@@ -13,7 +13,7 @@ type Props = {
 };
 function Medias({ initialData }: Props) {
   const { getDefinedParams } = useTablePagination();
-  const params = getDefinedParams();
+  const params = useMemo(() => getDefinedParams(), [getDefinedParams]);
   const {
     data: reports,
     isLoading,
