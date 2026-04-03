@@ -95,3 +95,9 @@ export enum EnumAppCommentStatus {
   OPEN = 'open',
   CLOSED = 'closed',
 }
+
+//========== dashboard =======
+export interface IDashboard {
+  title: string;
+  value: string;
+}
