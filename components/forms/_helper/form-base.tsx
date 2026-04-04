@@ -49,6 +49,7 @@ type FormBaseProps<
 > = FormControlProps<TFieldValues, TName, TTransformedValues> & {
   horizontal?: boolean;
   controlFirst?: boolean;
+  showLabel?: boolean;
   children: (
     field: Parameters<
       ControllerProps<TFieldValues, TName, TTransformedValues>['render']
@@ -78,6 +79,7 @@ export function FormBase<
   info,
   optional,
   required,
+  showLabel = true,
 }: FormBaseProps<TFieldValues, TName, TTransformedValues>) {
   return (
     <Controller
@@ -117,13 +119,13 @@ export function FormBase<
               <>
                 {control}
                 <FieldContent>
-                  {labelElement}
+                  {showLabel && labelElement}
                   {errorElem}
                 </FieldContent>
               </>
             ) : (
               <>
-                <FieldContent>{labelElement}</FieldContent>
+                {showLabel && <FieldContent>{labelElement}</FieldContent>}
                 {control}
                 {errorElem}
               </>

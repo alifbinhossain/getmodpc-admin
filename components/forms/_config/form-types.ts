@@ -49,6 +49,7 @@ export type IFormSwitch = FormControlFunc<{
     [key: string]: any;
   };
   disabled?: boolean;
+  showLabel?: boolean;
 }>;
 
 export type IFormArray = FormControlFunc<{
@@ -61,4 +62,15 @@ export type IFormArray = FormControlFunc<{
     defaultItem?: any;
     objectFields?: Record<string, string>;
   };
+}>;
+
+export type IFormCheckbox = FormControlFunc<{
+  name: string;
+  control: any;
+  label?: string;
+  disabled?: boolean;
+  fieldProps?: {
+    onValueChange?: (value: boolean) => void;
+  };
+  showLabel?: boolean;
 }>;

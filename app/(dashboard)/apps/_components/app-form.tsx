@@ -8,6 +8,7 @@ import {
   UpdateAppPayload,
 } from '@/types/app';
 import { MantineProvider } from '@mantine/core';
+import { format } from 'date-fns';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/hooks/form';
@@ -85,13 +86,15 @@ export function AppForm({ isEditing, data }: Props) {
             required
           />
 
-          <Tabs>
-            <TabsList defaultValue={'general'}>
+          <Tabs defaultValue='general'>
+            <TabsList>
               <TabsTrigger value='general'>General</TabsTrigger>
               <TabsTrigger value='summary'>Summary</TabsTrigger>
               <TabsTrigger value='modder'>Modder</TabsTrigger>
+              <TabsTrigger value='gallery'>Gallery Images</TabsTrigger>
               <TabsTrigger value='link'>Download Links</TabsTrigger>
             </TabsList>
+            <TabsCommonForm control={control} form={form} />
             <TabsContent value='general' className='space-y-5'>
               <div className='bg-gray-100 p-4 rounded-md'>
                 <FormInput
@@ -137,14 +140,7 @@ export function AppForm({ isEditing, data }: Props) {
                   required
                   className='bg-background'
                 />
-                <FormInput
-                  control={control}
-                  name='version'
-                  label='App Version'
-                  placeholder='App version'
-                  required
-                  className='bg-background'
-                />
+
                 <FormInput
                   control={control}
                   name='youtube_id'
@@ -224,6 +220,62 @@ export function AppForm({ isEditing, data }: Props) {
                         label={`Full Mod ${index + 1}`}
                         placeholder='Description'
                         className='bg-background'
+                      />
+                    </div>
+                  );
+                }}
+              />
+            </TabsContent>
+            <TabsContent value='gallery' className='space-y-5'>
+              <div className='grid gap-4 md:grid-cols-2'>
+                <div className='bg-gray-100 p-4 rounded-md h-max'>
+                  <MediaInput
+                    label='Poster Image'
+                    value={form.getValues('icon') || ''}
+                    onChange={(value) => {
+                      form.setValue('icon', value, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      });
+                    }}
+                  />
+                </div>
+                <div className='bg-gray-100 p-4 rounded-md h-max'>
+                  <MediaInput
+                    label='Background Image'
+                    value={form.getValues('header_image') || ''}
+                    onChange={(value) => {
+                      form.setValue('header_image', value, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+              <FormArrayField
+                control={control}
+                name='screenshots'
+                label='New Gallery'
+                fieldProps={{
+                  defaultItem: form.getValues('screenshots') ?? [''],
+                  type: 'array',
+                }}
+                render={({ index, value }) => {
+                  return (
+                    <div className='space-y-5 bg-gray-100 rounded-md p-4 w-full'>
+                      <MediaInput
+                        label={`New Gallery ${index + 1}`}
+                        value={value || ''}
+                        onChange={(value) => {
+                          form.setValue(`screenshots.${index}`, value, {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                            shouldTouch: true,
+                          });
+                        }}
                       />
                     </div>
                   );
@@ -331,41 +383,19 @@ export function AppForm({ isEditing, data }: Props) {
               }))}
             />
 
-            <div className='md:col-span-2'>
-              <MediaInput
-                label='Icon'
-                value={form.getValues('icon') || ''}
-                onChange={(value) => {
-                  form.setValue('icon', value, {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  });
-                }}
-              />
-            </div>
-
-            <div className='md:col-span-2'>
-              <MediaInput
-                label='Header Image'
-                value={form.getValues('header_image') || ''}
-                onChange={(value) => {
-                  form.setValue('header_image', value, {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  });
-                }}
-              />
-            </div>
-
             <FormSwitch
               control={control}
               name='show_in_slider'
               label='Show In Slider'
+              showLabel={false}
             />
 
-            <FormSwitch control={control} name='is_verified' label='Verified' />
+            <FormSwitch
+              showLabel={false}
+              control={control}
+              name='is_verified'
+              label='Verified'
+            />
 
             {form.formState.errors.root && (
               <div className='rounded-md border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive md:col-span-2'>
@@ -391,3 +421,53 @@ export function AppForm({ isEditing, data }: Props) {
     </MantineProvider>
   );
 }
+
+const TabsCommonForm: React.FC<{ control: any; form: any }> = ({
+  control,
+  form,
+}) => {
+  return (
+    <div className='grid gap-4 md:grid-cols-2 bg-yellow-50 p-4 w-full rounded-md'>
+      <FormInput
+        control={control}
+        name='version'
+        label='App Version'
+        placeholder='example: 1.0.0'
+        required
+        className='bg-background'
+      />
+      <FormInput
+        control={control}
+        name='size'
+        label='Size'
+        placeholder='example: 100 mb'
+        className='bg-background'
+      />
+      <FormInput
+        control={control}
+        name='short_mode'
+        label='Short Mode'
+        placeholder='example: mode menu'
+        className='bg-background'
+      />
+
+      <div className='flex gap-2 items-end'>
+        <FormInput
+          control={control}
+          name='updated'
+          label='Updated'
+          placeholder='example: 1.0.0'
+          className='bg-background'
+        />
+        <Button
+          type='button'
+          onClick={() =>
+            form.setValue('updated', format(new Date(), 'yyyy-MM-dd'))
+          }
+        >
+          Current Date
+        </Button>
+      </div>
+    </div>
+  );
+};

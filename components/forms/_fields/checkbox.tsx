@@ -1,12 +1,12 @@
 'use client';
 
+import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 
-import { IFormSwitch } from '../_config/form-types';
+import { IFormCheckbox } from '../_config/form-types';
 import { FormBase } from '../_helper/form-base';
 
-export const FormSwitch: IFormSwitch = ({
+export const FormCheckbox: IFormCheckbox = ({
   fieldProps,
   disabled,
   label,
@@ -16,11 +16,12 @@ export const FormSwitch: IFormSwitch = ({
     <FormBase {...props}>
       {(field) => (
         <div className='flex items-center gap-2'>
-          <Switch
-            checked={!!field.value} // ensure boolean
+          <Checkbox
+            checked={!!field.value}
             onCheckedChange={(checked) => {
-              field.onChange(checked);
-              fieldProps?.onValueChange?.(checked);
+              const value = checked === true;
+              field.onChange(value);
+              fieldProps?.onValueChange?.(value);
             }}
             disabled={disabled}
             id={field.id}
