@@ -172,6 +172,48 @@ export function AppForm({ isEditing, data }: Props) {
                   className='bg-background'
                 />
               </div>
+
+              <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3 bg-gray-100 p-4 rounded-md'>
+                <FormSelect
+                  control={control}
+                  name='platform'
+                  label='Platform'
+                  options={Object.values(EnumPlatformType).map((value) => ({
+                    label: value,
+                    value,
+                  }))}
+                />
+
+                <FormSelect
+                  control={control}
+                  name='type'
+                  label='Type'
+                  options={Object.values(EnumAppType).map((value) => ({
+                    label: value,
+                    value,
+                  }))}
+                />
+
+                <FormSelect
+                  control={control}
+                  name='status'
+                  label='Status'
+                  options={Object.values(EnumAppStatus).map((value) => ({
+                    label: value,
+                    value,
+                  }))}
+                />
+
+                <FormSelect
+                  control={control}
+                  name='comment_status'
+                  label='Comment Status'
+                  options={Object.values(EnumAppCommentStatus).map((value) => ({
+                    label: value,
+                    value,
+                  }))}
+                />
+              </div>
             </TabsContent>
             <TabsContent value='summary' className='space-y-5'>
               <div className='bg-gray-100 p-4 rounded-md '>
@@ -343,46 +385,6 @@ export function AppForm({ isEditing, data }: Props) {
           </Tabs>
 
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-            <FormSelect
-              control={control}
-              name='platform'
-              label='Platform'
-              options={Object.values(EnumPlatformType).map((value) => ({
-                label: value,
-                value,
-              }))}
-            />
-
-            <FormSelect
-              control={control}
-              name='type'
-              label='Type'
-              options={Object.values(EnumAppType).map((value) => ({
-                label: value,
-                value,
-              }))}
-            />
-
-            <FormSelect
-              control={control}
-              name='status'
-              label='Status'
-              options={Object.values(EnumAppStatus).map((value) => ({
-                label: value,
-                value,
-              }))}
-            />
-
-            <FormSelect
-              control={control}
-              name='comment_status'
-              label='Comment Status'
-              options={Object.values(EnumAppCommentStatus).map((value) => ({
-                label: value,
-                value,
-              }))}
-            />
-
             <FormSwitch
               control={control}
               name='show_in_slider'

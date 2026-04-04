@@ -42,9 +42,9 @@ export const FormSelect: IFormSelect = ({
             {...field}
             value={field?.value?.toString()}
           >
-            <ButtonGroup className='capitalize'>
-              <SelectTrigger className='flex-1 capitalize'>
-                <SelectValue className='capitalize' placeholder={placeholder} />
+            <ButtonGroup>
+              <SelectTrigger className='flex-1 capitalize! bg-background'>
+                <SelectValue placeholder={placeholder} />
               </SelectTrigger>
 
               {field.value && (

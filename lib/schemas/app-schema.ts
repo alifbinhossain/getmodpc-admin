@@ -28,6 +28,7 @@ export const appSchema = z.object({
   screenshots: z.array(z.string()).optional(),
   developer: z.string().min(2, 'Developer field is required'),
   app_tags: z.array(z.string()).optional(),
+  app_developers: z.array(z.string()).optional(),
   version: z.string().optional().nullable(),
   latest_version: z.string().optional().nullable(),
   show_in_slider: z.boolean().optional(),

@@ -54,6 +54,7 @@ export interface AppBody {
   screenshots?: string[];
   developer?: string;
   app_tags?: string[];
+  app_developers?: string[];
   version?: string | null;
   latest_version?: string | null;
   show_in_slider?: boolean;

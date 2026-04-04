@@ -286,6 +286,7 @@ export function getAppFormDefaults(data?: AppRecord): UpdateAppPayload {
     is_verified: data?.is_verified ?? false,
     categories: data?.categories?.map((c) => c.id) ?? [],
     app_tags: data?.app_tags ?? [],
+    app_developers: data?.app_developers ?? [],
     developer: data?.developer ?? '',
     tags: data?.tags?.map((t) => t.id) ?? [],
     latest_news: data?.latest_news ?? '',
