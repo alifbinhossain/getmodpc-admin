@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 
 import { AdForm } from '@/app/(dashboard)/ads/_components/ad-form';
+import { AppForm } from '@/app/(dashboard)/apps/_components/app-form';
 import { CategoryForm } from '@/app/(dashboard)/categories/_components/category-form';
 import { CommentForm } from '@/app/(dashboard)/comments/_components/comment-form';
 import { ContactForm } from '@/app/(dashboard)/contacts/_components/contact-form';
@@ -55,7 +56,8 @@ export function GlobalFormModal() {
     EDIT_CONTACT: ContactForm,
     EDIT_USER_APP_REQUEST: UserAppRequestForm,
     // EDIT_USER: EditUserForm,
-    // EDIT_APP: EditAppForm,
+    ADD_APP: AppForm,
+    EDIT_APP: AppForm,
   };
 
   const FormComponent = modalFormMap[type];
@@ -67,7 +69,11 @@ export function GlobalFormModal() {
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent
-        className='sm:max-w-lg max-h-[90vh] overflow-auto'
+        className={
+          type === 'ADD_APP' || type === 'EDIT_APP'
+            ? 'max-h-[90vh] overflow-auto sm:max-w-4xl'
+            : 'max-h-[90vh] overflow-auto sm:max-w-lg'
+        }
         aria-describedby={`${type}-form-modal-description`}
       >
         <DialogHeader>

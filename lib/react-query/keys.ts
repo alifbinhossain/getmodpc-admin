@@ -73,6 +73,16 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.category.details(), id] as const,
   },
 
+  // app
+  app: {
+    all: ['apps'] as const,
+    lists: () => [...queryKeys.app.all, 'list'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.app.lists(), params] as const,
+    details: () => [...queryKeys.app.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.app.details(), id] as const,
+  },
+
   // page
   page: {
     all: ['pages'] as const,

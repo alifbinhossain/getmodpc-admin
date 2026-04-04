@@ -2,14 +2,22 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 
-export default function NotFound() {
+type Props = {
+  title?: string;
+  description?: string;
+};
+export default function NotFound({
+  title = 'Page Not Found',
+  description,
+}: Props) {
   return (
     <div className='flex min-h-screen flex-col items-center justify-center gap-6 text-center'>
       <div className='space-y-2'>
         <h1 className='text-8xl font-bold text-muted-foreground/30'>404</h1>
-        <h2 className='text-2xl font-semibold'>Page not found</h2>
+        <h2 className='text-2xl font-semibold'>{title}</h2>
         <p className='text-muted-foreground'>
-          The page you&apos;re looking for doesn&apos;t exist or has been moved.
+          {description ||
+            "The page you're looking for doesn't exist or has been moved."}
         </p>
       </div>
       <Button asChild>

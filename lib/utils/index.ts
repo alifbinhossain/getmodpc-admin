@@ -1,3 +1,4 @@
+import { AppRecord, UpdateAppPayload } from '@/types/app';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -216,26 +217,26 @@ export function generateMonthsFromStart(start?: string) {
 
   // fallback → current month if no start provided
   const [startYear, startMonth] = start
-    ? start.split("-").map(Number)
+    ? start.split('-').map(Number)
     : [now.getFullYear(), now.getMonth() + 1];
 
   const startDate = new Date(startYear, startMonth - 1);
 
   const months: { label: string; value: string | undefined }[] = [
-    { label: "All Dates", value: undefined },
+    { label: 'All Dates', value: undefined },
   ];
 
   const current = new Date(startDate);
 
   while (current <= now) {
     months.push({
-      label: current.toLocaleString("default", {
-        month: "long",
-        year: "numeric",
+      label: current.toLocaleString('default', {
+        month: 'long',
+        year: 'numeric',
       }),
       value: `${current.getFullYear()}-${String(
         current.getMonth() + 1
-      ).padStart(2, "0")}`,
+      ).padStart(2, '0')}`,
     });
 
     // move to next month
@@ -248,7 +249,7 @@ export function generateMonthsFromStart(start?: string) {
 export function formatToDatetimeLocal(date: string | Date) {
   const d = new Date(date);
 
-  const pad = (n: number) => n.toString().padStart(2, "0");
+  const pad = (n: number) => n.toString().padStart(2, '0');
 
   const year = d.getFullYear();
   const month = pad(d.getMonth() + 1);
@@ -257,4 +258,53 @@ export function formatToDatetimeLocal(date: string | Date) {
   const minutes = pad(d.getMinutes());
 
   return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+// generate edit form app data//
+
+export function getAppFormDefaults(data?: AppRecord): UpdateAppPayload {
+  return {
+    id: data?.id ?? '',
+    name: data?.name ?? '',
+    source: data?.source ?? undefined,
+    description: data?.description ?? '',
+    summary: data?.summary ?? '',
+    header_image: data?.header_image ?? '',
+    icon: data?.icon ?? '',
+    platform: data?.platform ?? undefined,
+    type: data?.type ?? undefined,
+    os_version: data?.os_version ?? '',
+    version: data?.version ?? '',
+    latest_version: data?.latest_version ?? '',
+    url: data?.url ?? '',
+    package_name: data?.package_name ?? '',
+    installs: data?.installs ?? '',
+    score_text: data?.score_text ?? '',
+    status: data?.status,
+    comment_status: data?.comment_status,
+    show_in_slider: data?.show_in_slider ?? false,
+    is_verified: data?.is_verified ?? false,
+    categories: data?.categories?.map((c) => c.id) ?? [],
+    app_tags: data?.app_tags ?? [],
+    app_developers: data?.app_developers ?? [],
+    tags: data?.tags?.map((t) => t.id) ?? [],
+    latest_news: data?.latest_news ?? '',
+    genre: data?.genre ?? '',
+    youtube_id: data?.youtube_id ?? '',
+    screenshots: data?.screenshots ?? [],
+    updated: data?.updated ?? '',
+    links:
+      data?.links?.map((link) => ({
+        name: link.name,
+        link: link.link,
+        type: link.type ?? undefined,
+        size: link.size ?? undefined,
+        note: link.note ?? undefined,
+      })) ?? [],
+    reviews: data?.reviews ?? 0,
+    size: data?.size ?? '',
+    ratings: data?.ratings ?? 0,
+    modders: data?.modders ?? [],
+    short_mode: data?.short_mode ?? '',
+  };
 }
