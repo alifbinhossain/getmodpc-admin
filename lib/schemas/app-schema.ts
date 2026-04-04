@@ -11,6 +11,7 @@ const appLinkSchema = z.object({
 });
 export const appSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(255),
+  title: z.string().optional().nullable(),
   platform: z.nativeEnum(EnumPlatformType).optional(),
   type: z.nativeEnum(EnumAppType).optional(),
   source: z.nativeEnum(EnumAppSource, {

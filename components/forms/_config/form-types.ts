@@ -50,3 +50,16 @@ export type IFormSwitch = FormControlFunc<{
   };
   disabled?: boolean;
 }>;
+
+export type IFormArray = {
+  name: string;
+  label?: string;
+  placeholder?: string;
+  fieldProps?: {
+    type: "array";
+    arrayType?: "string" | "object";
+    defaultItem?: any;
+    objectFields?: Record<string, string>; // key: fieldName, value: placeholder
+  };
+  disabled?: boolean;
+};

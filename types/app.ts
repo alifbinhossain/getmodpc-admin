@@ -39,6 +39,7 @@ export interface IAppTags {
 
 export interface AppBody {
   name: string;
+  title?: string | null;
   platform?: EnumPlatformType;
   type?: EnumAppType;
   source: EnumAppSource;
@@ -51,7 +52,7 @@ export interface AppBody {
   youtube_id?: string | null;
   os_version: string;
   screenshots?: string[];
-  app_developers?: string[];
+  developer?: string;
   app_tags?: string[];
   version?: string | null;
   latest_version?: string | null;
