@@ -51,15 +51,14 @@ export type IFormSwitch = FormControlFunc<{
   disabled?: boolean;
 }>;
 
-export type IFormArray = {
-  name: string;
-  label?: string;
-  placeholder?: string;
+export type IFormArray = FormControlFunc<{
+  render: (
+    field: ControllerRenderProps<any, any> & { index: number }
+  ) => React.ReactNode;
   fieldProps?: {
-    type: "array";
-    arrayType?: "string" | "object";
+    type: 'array';
+    arrayType?: 'string' | 'object';
     defaultItem?: any;
-    objectFields?: Record<string, string>; // key: fieldName, value: placeholder
+    objectFields?: Record<string, string>;
   };
-  disabled?: boolean;
-};
+}>;

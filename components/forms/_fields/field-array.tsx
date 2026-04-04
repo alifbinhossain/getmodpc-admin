@@ -3,19 +3,15 @@ import React from 'react';
 import { Plus, Trash } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-
-import { cn } from '@/lib/utils';
 
 import { IFormArray } from '../_config/form-types';
 import { FormBase } from '../_helper/form-base';
 
-export const FormArrayField = ({
+export const FormArrayField: IFormArray = ({
   fieldProps,
-  placeholder,
-  disabled,
+  render,
   ...props
-}: IFormArray) => {
+}) => {
   return (
     <FormBase {...props}>
       {(field) => {
@@ -26,6 +22,7 @@ export const FormArrayField = ({
 
         const handleAdd = () => {
           const newItem = isObjectArray ? fieldProps.defaultItem || {} : '';
+          console.log({ newItem });
           field.onChange([...value, newItem]);
         };
 
@@ -47,23 +44,16 @@ export const FormArrayField = ({
         return (
           <div className='space-y-2'>
             {value.map((item, index) => (
-              <div key={index} className='flex gap-2 items-center'>
-                {isObjectArray ? (
-                  Object.keys(fieldProps.objectFields || {}).map((key) => (
-                    <Input
-                      key={key}
-                      placeholder={fieldProps.objectFields?.[key] || key}
-                      value={item?.[key] || ''}
-                      onChange={(e) => handleChange(index, key, e.target.value)}
-                    />
-                  ))
-                ) : (
-                  <Input
-                    placeholder={placeholder}
-                    value={item || ''}
-                    onChange={(e) => handleChange(index, null, e.target.value)}
-                  />
-                )}
+              <div key={index} className='flex gap-2 items-end'>
+                {render({
+                  name: field.name,
+                  onChange: (key: string | null, val: any) =>
+                    handleChange(index, key, val),
+                  value: item,
+                  onBlur: field.onBlur,
+                  index,
+                  ref: field.ref,
+                })}
                 <Button
                   type='button'
                   variant='destructive'

@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useAppForm } from '@/hooks/form';
 
 import {
+  FormArrayField,
   FormInput,
   FormRichText,
   FormSelect,
@@ -88,6 +89,8 @@ export function AppForm({ isEditing, data }: Props) {
             <TabsList defaultValue={'general'}>
               <TabsTrigger value='general'>General</TabsTrigger>
               <TabsTrigger value='summary'>Summary</TabsTrigger>
+              <TabsTrigger value='modder'>Modder</TabsTrigger>
+              <TabsTrigger value='link'>Download Links</TabsTrigger>
             </TabsList>
             <TabsContent value='general' className='space-y-5'>
               <div className='bg-gray-100 p-4 rounded-md'>
@@ -119,9 +122,9 @@ export function AppForm({ isEditing, data }: Props) {
 
                 <FormInput
                   control={control}
-                  name='name'
-                  label='App Name'
-                  placeholder='App name'
+                  name='developer'
+                  label='Developer'
+                  placeholder='example: Google'
                   required
                   className='bg-background'
                 />
@@ -131,6 +134,14 @@ export function AppForm({ isEditing, data }: Props) {
                   name='os_version'
                   label='OS Version'
                   placeholder='OS version'
+                  required
+                  className='bg-background'
+                />
+                <FormInput
+                  control={control}
+                  name='version'
+                  label='App Version'
+                  placeholder='App version'
                   required
                   className='bg-background'
                 />
@@ -156,6 +167,14 @@ export function AppForm({ isEditing, data }: Props) {
                   placeholder='Ratings'
                   className='bg-background'
                 />
+                <FormInput
+                  control={control}
+                  name='installs'
+                  label='Downloads'
+                  placeholder='10M+'
+                  required
+                  className='bg-background'
+                />
               </div>
             </TabsContent>
             <TabsContent value='summary' className='space-y-5'>
@@ -178,20 +197,100 @@ export function AppForm({ isEditing, data }: Props) {
                 />
               </div>
             </TabsContent>
+            <TabsContent value='modder' className='space-y-5'>
+              <FormArrayField
+                control={control}
+                name='modders'
+                label='Modders'
+                fieldProps={{
+                  defaultItem: form.getValues('modders') ?? [
+                    { title: '', descriptions: '' },
+                  ],
+                  type: 'array',
+                }}
+                render={({ index }) => {
+                  return (
+                    <div className='space-y-5 bg-gray-100 rounded-md p-4 w-full'>
+                      <FormInput
+                        control={control}
+                        name={`modders.${index}.title`}
+                        label={`Title Mod ${index + 1}`}
+                        placeholder=' title'
+                        className='bg-background'
+                      />
+                      <FormRichText
+                        control={control}
+                        name={`modders.${index}.descriptions`}
+                        label={`Full Mod ${index + 1}`}
+                        placeholder='Description'
+                        className='bg-background'
+                      />
+                    </div>
+                  );
+                }}
+              />
+            </TabsContent>
+            <TabsContent value='link' className='space-y-5'>
+              <FormArrayField
+                control={control}
+                name='links'
+                fieldProps={{
+                  defaultItem: form.getValues('links') ?? [
+                    { name: '', link: '', type: '', size: '', note: '' },
+                  ],
+                  type: 'array',
+                  arrayType: 'object',
+                }}
+                render={({ index }) => {
+                  return (
+                    <div className='space-y-5 bg-gray-100 p-4 w-full rounded-md'>
+                      <div className='grid gap-4 md:grid-cols-2'>
+                        <FormInput
+                          control={control}
+                          name={`links.${index}.name`}
+                          label={'Name'}
+                          placeholder='example: roblox mod menu'
+                          className='bg-background'
+                        />
+                        <FormInput
+                          control={control}
+                          name={`links.${index}.link`}
+                          label='Link'
+                          placeholder='example: your apk link'
+                          className='bg-background'
+                        />
+                      </div>
+                      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+                        <FormInput
+                          control={control}
+                          name={`links.${index}.type`}
+                          label='Type'
+                          placeholder='example: apk,zip,robo'
+                          className='bg-background'
+                        />
+                        <FormInput
+                          control={control}
+                          name={`links.${index}.size`}
+                          label='Size'
+                          placeholder='example: 100 mb'
+                          className='bg-background'
+                        />
+                        <FormInput
+                          control={control}
+                          name={`links.${index}.note`}
+                          label='Note'
+                          placeholder='example: mod menu'
+                          className='bg-background'
+                        />
+                      </div>
+                    </div>
+                  );
+                }}
+              />
+            </TabsContent>
           </Tabs>
 
           <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-            <FormSelect
-              control={control}
-              name='source'
-              label='Source'
-              options={Object.values(EnumAppSource).map((value) => ({
-                label: value.replaceAll('_', ' '),
-                value,
-              }))}
-              required
-            />
-
             <FormSelect
               control={control}
               name='platform'
@@ -231,71 +330,6 @@ export function AppForm({ isEditing, data }: Props) {
                 value,
               }))}
             />
-
-            <FormInput
-              control={control}
-              name='os_version'
-              label='OS Version'
-              placeholder='Android 8+'
-              required
-            />
-
-            <FormInput
-              control={control}
-              name='url'
-              label='App URL'
-              placeholder='https://example.com/app'
-              required
-            />
-
-            <FormInput
-              control={control}
-              name='installs'
-              label='Installs'
-              placeholder='10M+'
-              required
-            />
-
-            <FormInput
-              control={control}
-              name='score_text'
-              label='Score Text'
-              placeholder='4.8'
-              required
-            />
-
-            <FormInput
-              control={control}
-              name='version'
-              label='Version'
-              placeholder='1.0.0'
-            />
-
-            <FormInput
-              control={control}
-              name='latest_version'
-              label='Latest Version'
-              placeholder='1.0.1'
-            />
-
-            <div className='md:col-span-2'>
-              <FormTextarea
-                control={control}
-                name='description'
-                label='Description'
-                placeholder='Description'
-                required
-              />
-            </div>
-
-            <div className='md:col-span-2'>
-              <FormTextarea
-                control={control}
-                name='summary'
-                label='Summary'
-                placeholder='Short summary'
-              />
-            </div>
 
             <div className='md:col-span-2'>
               <MediaInput
