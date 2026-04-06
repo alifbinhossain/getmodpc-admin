@@ -16,6 +16,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import { formatNumber } from '@/lib/utils';
 
@@ -82,6 +83,7 @@ function SearchResults({
   });
   const apps = data?.data ?? [];
   const meta = data?.meta;
+  const showLoadingCards = isLoading || isFetching;
 
   if (!query) {
     return (
@@ -95,15 +97,7 @@ function SearchResults({
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className='mt-4 border bg-gray-100 p-4'>
-        <h2 className='text-lg font-bold uppercase'>Loading...</h2>
-      </div>
-    );
-  }
-
-  if (!apps.length) {
+  if (!showLoadingCards && !apps.length) {
     return (
       <Alert>
         <Search className='size-4' />
@@ -134,20 +128,32 @@ function SearchResults({
                 Showing {formatNumber(startItem)}-{formatNumber(endItem)} of{' '}
                 {formatNumber(meta.total)} apps
               </p>
+            ) : showLoadingCards ? (
+              <p className='text-xs text-muted-foreground'>
+                Loading results...
+              </p>
             ) : null}
           </div>
-          {isFetching ? (
+          {showLoadingCards ? (
             <p className='flex items-center gap-1 text-xs font-medium text-muted-foreground'>
               <LoaderCircle className='size-3.5 animate-spin' />
-              Updating results...
+              {isLoading ? 'Loading results...' : 'Updating results...'}
             </p>
           ) : null}
         </div>
       </div>
       <div className='grid gap-4 sm:grid-cols-2'>
-        {apps.map((app) => (
-          <PlayStoreAppCard key={app.appId} actionLabel='Open app' app={app} />
-        ))}
+        {showLoadingCards
+          ? Array.from({
+              length: meta?.limit ?? SEARCH_PAGE_SIZE,
+            }).map((_, index) => <SearchResultCardSkeleton key={index} />)
+          : apps.map((app) => (
+              <PlayStoreAppCard
+                key={app.appId}
+                actionLabel='Open app'
+                app={app}
+              />
+            ))}
       </div>
       {meta && totalPages > 1 ? (
         <Pagination className='flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
@@ -244,6 +250,26 @@ function buildPaginationItems(currentPage: number, totalPages: number) {
     'ellipsis',
     totalPages,
   ] as const;
+}
+
+function SearchResultCardSkeleton() {
+  return (
+    <div className='flex flex-col justify-between gap-4 rounded-md border bg-background p-4 shadow-xs sm:flex-row sm:items-center'>
+      <div className='flex flex-1 gap-3'>
+        <Skeleton className='size-14 shrink-0 rounded-md' />
+        <div className='flex-1 space-y-2'>
+          <Skeleton className='h-4 w-32' />
+          <Skeleton className='h-3 w-24' />
+          <Skeleton className='h-3 w-full' />
+          <Skeleton className='h-3 w-5/6' />
+        </div>
+      </div>
+      <div className='flex items-center justify-between gap-3 sm:flex-col sm:items-end'>
+        <Skeleton className='h-3 w-12' />
+        <Skeleton className='h-8 w-28' />
+      </div>
+    </div>
+  );
 }
 
 export default SearchResult;
