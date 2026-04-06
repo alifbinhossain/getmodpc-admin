@@ -1,5 +1,5 @@
-import React from 'react';
-
+import ManualPanel from './_components/manual-panel';
+import SearchPanel from './_components/search-panel';
 import Tabs from './_components/tabs';
 
 function PlayStorePage() {
@@ -10,7 +10,7 @@ function PlayStorePage() {
           Add sources from play.google.com
         </h2>
       </div>
-      <Tabs />
+      <Tabs searchTab={<SearchPanel />} manualTab={<ManualPanel />} />
     </div>
   );
 }

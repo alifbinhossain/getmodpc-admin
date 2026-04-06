@@ -37,24 +37,24 @@ export function useApiQuery<TData>({
   });
 }
 
-interface UseApiListQueryOptions<TItem> {
+interface UseApiListQueryOptions<TItem> extends Omit<
+  UseQueryOptions<PaginatedResponse<TItem>, Error>,
+  'queryKey' | 'queryFn'
+> {
   queryKey: QueryKey;
   queryFn: () => Promise<PaginatedResponse<TItem>>;
-  enabled?: boolean;
-  staleTime?: number;
-  initialData?: PaginatedResponse<TItem>;
 }
 
 export function useApiListQuery<TItem>({
   queryKey,
   queryFn,
   enabled = true,
-  initialData,
+  ...options
 }: UseApiListQueryOptions<TItem>) {
   return useQuery<PaginatedResponse<TItem>, Error>({
     queryKey,
     queryFn,
     enabled,
-    placeholderData: initialData,
+    ...options,
   });
 }

@@ -1,91 +1,111 @@
-import React from 'react';
+'use client';
 
-import Image from 'next/image';
+import { type FormEvent, startTransition, useState } from 'react';
 
-import { Star } from 'lucide-react';
+import { LoaderCircle, Search } from 'lucide-react';
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { useGetSearchPlayStoreApp } from '../../_config/scraping.hooks';
+import PlayStoreAppCard from './play-store-app-card';
 
 function SearchResult() {
-  const [search, setSearch] = React.useState('');
-  const [params, setParams] = React.useState('');
-  const handleSearch = () => {
-    if (search.trim()) {
-      setParams(search);
-      setSearch('');
+  const [query, setQuery] = useState('');
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const nextQuery = String(formData.get('query') ?? '').trim();
+
+    if (!nextQuery || nextQuery === query) {
+      return;
     }
+
+    startTransition(() => {
+      setQuery(nextQuery);
+    });
   };
-  const { data, isLoading, isFetching } = useGetSearchPlayStoreApp(
-    {
-      appName: params,
-    },
-    params !== ''
-  );
 
   return (
     <div className='space-y-5'>
-      <div className='border rounded-md p-2 flex items-center justify-between focus-within:ring-2 gap-2'>
+      <form
+        className='border rounded-md p-2 flex items-center justify-between focus-within:ring-2 gap-2'
+        onSubmit={handleSearch}
+      >
         <Input
-          placeholder='Example: whatsapp'
+          autoComplete='off'
           className='focus-visible:ring-0 border-none'
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          defaultValue={query}
+          name='query'
+          placeholder='Example: whatsapp'
         />
-        <Button onClick={handleSearch} size={'lg'}>
+        <Button size='lg' type='submit'>
           Search
         </Button>
-      </div>
+      </form>
+      <SearchResults query={query} />
+    </div>
+  );
+}
 
-      {isLoading || isFetching ? (
-        <div className='mt-4 bg-gray-100 p-4 border'>
-          <h2 className='text-lg font-bold uppercase'>Loading...</h2>
+function SearchResults({ query }: { query: string }) {
+  const { data, isFetching, isLoading } = useGetSearchPlayStoreApp(query);
+  const apps = data?.data ?? [];
+
+  if (!query) {
+    return (
+      <Alert>
+        <Search className='size-4' />
+        <AlertTitle>Start a search</AlertTitle>
+        <AlertDescription>
+          Submit a Play Store keyword to fetch matching apps.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className='mt-4 bg-gray-100 p-4 border'>
+        <h2 className='text-lg font-bold uppercase'>Loading...</h2>
+      </div>
+    );
+  }
+
+  if (!apps.length) {
+    return (
+      <Alert>
+        <Search className='size-4' />
+        <AlertTitle>No apps found</AlertTitle>
+        <AlertDescription>
+          No Play Store apps matched{' '}
+          <span className='font-semibold'>{query}</span>.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  return (
+    <div className='space-y-4'>
+      <div className='bg-gray-100 p-4 rounded-md border'>
+        <div className='flex items-center justify-between gap-3'>
+          <h2 className='text-lg font-bold uppercase'>Result</h2>
+          {isFetching ? (
+            <p className='flex items-center gap-1 text-xs font-medium text-muted-foreground'>
+              <LoaderCircle className='size-3.5 animate-spin' />
+              Updating results...
+            </p>
+          ) : null}
         </div>
-      ) : (
-        <>
-          {(data?.data ?? [])?.length > 0 && (
-            <div>
-              <div className='bg-gray-100 p-4 rounded-md'>
-                <h2 className='text-lg font-bold uppercase'>Result</h2>
-              </div>
-              <div className='grid sm:grid-cols-2 gap-4'>
-                {(data?.data ?? []).map((app) => (
-                  <div
-                    key={app.appId}
-                    className='flex justify-between gap-1 p-3 rounded-md'
-                  >
-                    <div className='flex-1 flex gap-3 items-center'>
-                      <div className='size-14 relative rounded-md overflow-hidden'>
-                        <Image
-                          src={app.icon}
-                          alt={app.title}
-                          className='object-cover'
-                          fill
-                        />
-                      </div>
-                      <div className='space-y-2'>
-                        <p>{app.title}</p>
-                        <p className='text-sm text-muted-foreground'>
-                          Devs: {app.developer}
-                        </p>
-                      </div>
-                    </div>
-                    <div className='flex flex-col gap-2 justify-center items-center'>
-                      <Button>Get Now</Button>
-                      <p className='text-xs flex items-center gap-1'>
-                        <Star className='text-yellow-500' size={12} />{' '}
-                        <span>{app.scoreText}</span>
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </>
-      )}
+      </div>
+      <div className='grid gap-4 sm:grid-cols-2'>
+        {apps.map((app) => (
+          <PlayStoreAppCard key={app.appId} actionLabel='Open app' app={app} />
+        ))}
+      </div>
     </div>
   );
 }

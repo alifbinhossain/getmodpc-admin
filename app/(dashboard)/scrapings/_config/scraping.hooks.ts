@@ -1,4 +1,4 @@
-import { IScrapingQueryParams } from '@/types/scrapping';
+import { keepPreviousData } from '@tanstack/react-query';
 
 import { useApiListQuery, useApiMutation } from '@/hooks/api';
 
@@ -11,16 +11,20 @@ import { scrapingService } from './scrapings.service';
 // =============================================================================
 
 /** Fetch paginated scrapping app */
-export function useGetSearchPlayStoreApp(
-  params?: IScrapingQueryParams,
-  enabled?: boolean
-) {
+export function useGetSearchPlayStoreApp(appName?: string) {
+  const normalizedAppName = appName?.trim();
+
   return useApiListQuery({
-    queryKey: queryKeys.scrapping.searchPlaystoreApp(
-      (params ?? {}) as Record<string, unknown>
-    ),
-    queryFn: () => scrapingService.getSearchPlayStoreApp(params),
-    enabled,
+    queryKey: queryKeys.scrapping.searchPlaystoreApp(normalizedAppName ?? ''),
+    queryFn: () =>
+      scrapingService.getSearchPlayStoreApp(
+        normalizedAppName ? { appName: normalizedAppName } : undefined
+      ),
+    enabled: Boolean(normalizedAppName),
+    staleTime: 5 * 60 * 1000,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    placeholderData: keepPreviousData,
   });
 }
 
@@ -28,7 +32,6 @@ export function useGetPlayStoreAppByUrl() {
   return useApiMutation({
     mutationFn: (payload: { url: string }) =>
       scrapingService.getPlayStoreAppByUrl(payload),
-    invalidateKeys: [queryKeys.scrapping.getPlayStoreAppByUrl()],
     successMessage: 'Play store app fetched successfully.',
   });
 }
