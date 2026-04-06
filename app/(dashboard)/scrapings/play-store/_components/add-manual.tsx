@@ -1,18 +1,40 @@
 'use client';
 
-import type { FormEvent } from 'react';
+import { type FormEvent, useState } from 'react';
 
-import { Search } from 'lucide-react';
+import { AlertCircle, Search } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import { useGetPlayStoreAppByUrl } from '../../_config/scraping.hooks';
-import PlayStoreAppCard from './play-store-app-card';
+import { useCreateApp } from '@/app/(dashboard)/apps/_config/app.hooks';
+import { categoriesService } from '@/app/(dashboard)/categories/_config/categories.service';
+import { useCreateCategory } from '@/app/(dashboard)/categories/_config/category.hooks';
+import {
+  buildPlayStoreAppPayload,
+  buildPlayStoreCategoryPayload,
+  categoryMatchesName,
+  normalizeValidationErrors,
+  type PlayStoreImportDebugData,
+  validatePlayStoreAppPayload,
+} from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
 
-function AddManual() {
-  const { data, isPending, mutateAsync } = useGetPlayStoreAppByUrl();
+import { useGetPlayStoreAppByUrl } from '../../_config/scraping.hooks';
+
+type AddManualProps = {
+  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+};
+
+function AddManual({ onImportComplete }: AddManualProps) {
+  const [lastImport, setLastImport] = useState<PlayStoreImportDebugData | null>(
+    null
+  );
+  const scrapeApp = useGetPlayStoreAppByUrl();
+  const createCategory = useCreateCategory();
+  const createApp = useCreateApp();
+  const isPending =
+    scrapeApp.isPending || createCategory.isPending || createApp.isPending;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,8 +47,78 @@ function AddManual() {
       return;
     }
 
-    await mutateAsync({ url });
-    form.reset();
+    const debugData: PlayStoreImportDebugData = {
+      requestedUrl: url,
+      startedAt: new Date().toISOString(),
+      finishedAt: new Date().toISOString(),
+      status: 'idle',
+    };
+
+    try {
+      const scrapedResponse = await scrapeApp.mutateAsync({ url });
+      const scrapedApp = scrapedResponse.data;
+      debugData.scrapedResponse = scrapedResponse;
+      debugData.scrapedApp = scrapedApp;
+
+      const generatedCategoryPayload =
+        buildPlayStoreCategoryPayload(scrapedApp);
+      debugData.generatedCategoryPayload = generatedCategoryPayload;
+
+      const existingCategories = await categoriesService.getCategories({
+        limit: 50,
+        searchTerm: generatedCategoryPayload.name,
+      });
+      const matchedCategory = existingCategories.data.find((category) =>
+        categoryMatchesName(category, generatedCategoryPayload.name)
+      );
+
+      if (matchedCategory) {
+        debugData.resolvedCategory = {
+          mode: 'existing',
+          record: matchedCategory,
+        };
+      } else {
+        const createdCategoryResponse = await createCategory.mutateAsync(
+          generatedCategoryPayload
+        );
+        debugData.resolvedCategory = {
+          mode: 'created',
+          record: createdCategoryResponse.data,
+        };
+      }
+
+      const generatedAppPayload = buildPlayStoreAppPayload(scrapedApp, [
+        debugData.resolvedCategory.record.id,
+      ]);
+      debugData.generatedAppPayload = generatedAppPayload;
+
+      const validationResult = validatePlayStoreAppPayload(generatedAppPayload);
+
+      if (!validationResult.success) {
+        const flattenedErrors = validationResult.error.flatten();
+        debugData.status = 'validation_error';
+        debugData.validationErrors = normalizeValidationErrors(
+          flattenedErrors.fieldErrors
+        );
+        debugData.formErrors = flattenedErrors.formErrors;
+        return;
+      }
+
+      const createdAppResponse = await createApp.mutateAsync(
+        validationResult.data
+      );
+      debugData.createdAppResponse = createdAppResponse;
+      debugData.status = 'success';
+      form.reset();
+    } catch (error) {
+      debugData.status = 'error';
+      debugData.errorMessage =
+        error instanceof Error ? error.message : 'Failed to import app.';
+    } finally {
+      debugData.finishedAt = new Date().toISOString();
+      setLastImport(debugData);
+      onImportComplete?.(debugData);
+    }
   };
 
   return (
@@ -47,18 +139,32 @@ function AddManual() {
           size='lg'
           type='submit'
         >
-          Get Now
+          Get App
         </Button>
       </form>
 
-      {data?.data ? (
-        <div className='space-y-4'>
-          <div className='bg-gray-100 p-4 rounded-md border'>
-            <h2 className='text-lg font-bold uppercase'>Fetched App</h2>
-          </div>
-          <PlayStoreAppCard app={data.data} />
-        </div>
-      ) : (
+      {lastImport?.status === 'validation_error' ? (
+        <Alert variant='destructive'>
+          <AlertCircle className='size-4' />
+          <AlertTitle>Payload validation failed</AlertTitle>
+          <AlertDescription>
+            The generated app payload did not satisfy the app schema. Open the
+            Debugs tab to inspect the validation errors.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      {lastImport?.status === 'error' ? (
+        <Alert variant='destructive'>
+          <AlertCircle className='size-4' />
+          <AlertTitle>Import failed</AlertTitle>
+          <AlertDescription>
+            {lastImport.errorMessage ?? 'The import flow did not complete.'}
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      {!lastImport?.scrapedApp && (
         <Alert>
           <Search className='size-4' />
           <AlertTitle>Paste a Play Store URL</AlertTitle>
