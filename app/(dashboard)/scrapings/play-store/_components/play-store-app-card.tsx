@@ -1,7 +1,6 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
-import { ExternalLink, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -27,13 +26,13 @@ function PlayStoreAppCard({
   return (
     <article className='flex flex-col justify-between gap-4 rounded-md border bg-background p-4 shadow-xs sm:flex-row sm:items-center'>
       <div className='flex flex-1 gap-3'>
-        <div className='relative size-14 shrink-0 overflow-hidden rounded-md border bg-muted'>
+        <div className='relative size-16 shrink-0 overflow-hidden rounded-md border bg-muted'>
           <Image
             src={app.icon}
             alt={app.title}
             className='object-cover'
             fill
-            sizes='56px'
+            sizes='64px'
           />
         </div>
         <div className='space-y-2'>
@@ -55,11 +54,8 @@ function PlayStoreAppCard({
           <Star className='size-3.5 text-yellow-500' />
           <span>{app.scoreText}</span>
         </p>
-        <Button asChild size='sm'>
-          <Link href={app.url} target='_blank' rel='noreferrer'>
-            <ExternalLink />
-            {actionLabel}
-          </Link>
+        <Button type='button' size='sm'>
+          Get Now
         </Button>
       </div>
     </article>

@@ -37,10 +37,10 @@ function Tabs({ searchTab, manualTab }: TabsProps) {
           </TabsTrigger>
         </TabsList>
       </div>
-      <TabsContent value='search' className='mt-0 space-y-5'>
+      <TabsContent forceMount value='search' className='mt-0 space-y-5'>
         {searchTab}
       </TabsContent>
-      <TabsContent value='manual' className='mt-0 space-y-5'>
+      <TabsContent forceMount value='manual' className='mt-0 space-y-5'>
         {manualTab}
       </TabsContent>
     </BaseTabs>
