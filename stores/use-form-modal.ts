@@ -24,8 +24,6 @@ type ModalType =
   | 'EDIT_CONTACT'
   | 'EDIT_USER_APP_REQUEST'
   | 'EDIT_USER'
-  | 'ADD_APP'
-  | 'EDIT_APP'
   | null;
 
 interface ModalState {

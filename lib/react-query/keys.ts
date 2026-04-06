@@ -164,6 +164,17 @@ export const queryKeys = {
       [...queryKeys.userAppRequest.details(), id] as const,
   },
 
+  // scrapping
+  scrapping: {
+    all: ['scrappings'] as const,
+    searchPlaystoreApp: (params: Record<string, unknown>) =>
+      [...queryKeys.scrapping.all, params] as const,
+    details: () => [...queryKeys.scrapping.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.scrapping.details(), id] as const,
+    getPlayStoreAppByUrl: () =>
+      [...queryKeys.scrapping.all, 'playstore-url'] as const,
+  },
+
   // Dashboard
   dashboard: {
     all: ['dashboard'] as const,

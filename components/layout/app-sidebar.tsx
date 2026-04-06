@@ -13,6 +13,7 @@ import {
   Mail,
   MessageCircle,
   NotepadTextDashed,
+  Play,
   Settings,
   Shield,
   Tags,
@@ -47,16 +48,7 @@ const NAV_ITEMS: NavItem[] = [
   { title: 'Categories', href: '/categories', icon: ChartBarStacked },
   { title: 'Tags', href: '/tags', icon: Tags },
   { title: 'Developers', href: '/developers', icon: Code },
-  {
-    title: 'Reports',
-    href: '/report',
-    icon: Bug,
-    children: [
-      { title: 'Reports', href: '/reports' },
-      { title: 'Report Reasons', href: '/report-reasons' },
-    ],
-    disabled: true,
-  },
+
   {
     title: 'Pages',
     href: '/pages',
@@ -96,6 +88,26 @@ const NAV_ITEMS: NavItem[] = [
     title: 'User App Requests',
     href: '/user-app-requests',
     icon: GitPullRequestArrow,
+  },
+  {
+    title: 'Extractor APK',
+    href: '/scrapings',
+    icon: Play,
+    children: [
+      { title: 'Play Store', href: '/scrapings/play-store' },
+      { title: 'LiteApks', href: '/scrapings/lite-apks' },
+    ],
+    disabled: true,
+  },
+  {
+    title: 'Reports',
+    href: '/report',
+    icon: Bug,
+    children: [
+      { title: 'Reports', href: '/reports' },
+      { title: 'Report Reasons', href: '/report-reasons' },
+    ],
+    disabled: true,
   },
   {
     title: 'Users',

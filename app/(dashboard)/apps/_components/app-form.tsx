@@ -1,12 +1,7 @@
 'use client';
 
 import { EnumAppCommentStatus, EnumPlatformType } from '@/types';
-import {
-  EnumAppSource,
-  EnumAppStatus,
-  EnumAppType,
-  UpdateAppPayload,
-} from '@/types/app';
+import { EnumAppStatus, EnumAppType, UpdateAppPayload } from '@/types/app';
 import { MantineProvider } from '@mantine/core';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
@@ -34,7 +29,7 @@ import MultiInputField from './multi-input-field';
 
 type Props = {
   isEditing?: boolean;
-  data: UpdateAppPayload;
+  data?: UpdateAppPayload;
 };
 
 export function AppForm({ isEditing, data }: Props) {

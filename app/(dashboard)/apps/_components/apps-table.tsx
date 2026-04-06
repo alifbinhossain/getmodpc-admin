@@ -63,9 +63,7 @@ export function AppsTable({
       defaultPageSize={20}
       toolbarExtra={
         <div className='flex items-center gap-2'>
-          <Button onClick={() => openModal('ADD_APP', null, refetch)}>
-            Add App
-          </Button>
+          <Button onClick={() => router.push('/apps/add')}>Add App</Button>
           <Button variant='ghost' size='sm' onClick={() => refetch()}>
             <RefreshCw />
           </Button>
