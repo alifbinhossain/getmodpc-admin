@@ -1,4 +1,5 @@
 import { BaseQueryParams } from '.';
+import { EnumAppType } from './app';
 
 export type ISearchAppRecord = {
   title: string;
@@ -16,6 +17,10 @@ export type ISearchAppRecord = {
 
 export interface IScrapingQueryParams extends BaseQueryParams {
   appName?: string;
+}
+
+export interface ILiteApksScrapingQueryParams extends BaseQueryParams {
+  type?: EnumAppType;
 }
 
 type Histogram = {

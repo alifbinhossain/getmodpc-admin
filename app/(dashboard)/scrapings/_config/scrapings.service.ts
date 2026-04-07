@@ -1,5 +1,6 @@
 import type { ApiResponse, PaginatedResponse } from '@/types';
 import type {
+  ILiteApksScrapingQueryParams,
   IPlayStoreScrapingApp,
   IScrapingQueryParams,
   ISearchAppRecord,
@@ -31,6 +32,26 @@ export const scrapingService = {
     return api.post<IPlayStoreScrapingApp, { url: string }>(
       '/scrapings/playstore-app-by-url',
       payload
+    );
+  },
+
+  getLiteApksAppByUrl(payload: {
+    url: string;
+  }): Promise<ApiResponse<IPlayStoreScrapingApp>> {
+    return api.post<IPlayStoreScrapingApp, { url: string }>(
+      '/scrapings/liteapks-app-by-url',
+      payload
+    );
+  },
+
+  getLiteApksAppByType(
+    params?: ILiteApksScrapingQueryParams
+  ): Promise<PaginatedResponse<ISearchAppRecord>> {
+    const qs = params
+      ? buildQueryString(params as Record<string, unknown>)
+      : '';
+    return api.list<ISearchAppRecord>(
+      `/scrapings/liteapks-app-by-type${qs ? `?${qs}` : ''}`
     );
   },
 };
