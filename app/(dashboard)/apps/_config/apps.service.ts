@@ -25,6 +25,15 @@ export const appsService = {
     return api.post<AppRecord, CreateAppPayload>('/apps', payload);
   },
 
+  createScrapingApp(
+    payload: CreateAppPayload
+  ): Promise<ApiResponse<AppRecord>> {
+    return api.post<AppRecord, CreateAppPayload>(
+      '/apps/scraping/create',
+      payload
+    );
+  },
+
   updateApp({
     id,
     ...payload

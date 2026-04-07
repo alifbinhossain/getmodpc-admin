@@ -52,7 +52,7 @@ function SearchResult() {
         onSubmit={handleSearch}
       >
         <Input
-          autoComplete='off'
+          autoComplete='on'
           className='border-none focus-visible:ring-0'
           defaultValue={query}
           name='query'

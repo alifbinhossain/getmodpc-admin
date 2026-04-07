@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import { useCreateApp } from '@/app/(dashboard)/apps/_config/app.hooks';
+import { useCreateScrapingApp } from '@/app/(dashboard)/apps/_config/app.hooks';
 import { categoriesService } from '@/app/(dashboard)/categories/_config/categories.service';
 import { useCreateCategory } from '@/app/(dashboard)/categories/_config/category.hooks';
 import {
@@ -32,7 +32,7 @@ function AddManual({ onImportComplete }: AddManualProps) {
   );
   const scrapeApp = useGetPlayStoreAppByUrl();
   const createCategory = useCreateCategory();
-  const createApp = useCreateApp();
+  const createApp = useCreateScrapingApp();
   const isPending =
     scrapeApp.isPending || createCategory.isPending || createApp.isPending;
 
@@ -128,7 +128,7 @@ function AddManual({ onImportComplete }: AddManualProps) {
         onSubmit={handleSubmit}
       >
         <Input
-          autoComplete='off'
+          autoComplete='on'
           className='focus-visible:ring-0 border-none'
           name='url'
           placeholder='Example: https://play.google.com/store/apps/details?id=com.example.app'

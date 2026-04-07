@@ -32,6 +32,7 @@ type Category = {
 };
 
 export type IPlayStoreScrapingApp = {
+  id: string;
   title: string;
   description: string;
   descriptionHTML: string;

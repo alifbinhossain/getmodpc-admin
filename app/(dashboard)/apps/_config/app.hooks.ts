@@ -31,6 +31,15 @@ export function useCreateApp() {
   });
 }
 
+export function useCreateScrapingApp() {
+  return useApiMutation({
+    mutationFn: (payload: CreateAppPayload) =>
+      appsService.createScrapingApp(payload),
+    invalidateKeys: [queryKeys.app.createScrapingApp()],
+    successMessage: 'App created successfully.',
+  });
+}
+
 export function useUpdateApp() {
   return useApiMutation({
     mutationFn: (payload: UpdateAppPayload) => appsService.updateApp(payload),

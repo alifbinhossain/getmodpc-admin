@@ -200,12 +200,6 @@ function uniqueStrings(values: Array<string | undefined | null>) {
   return normalized.length ? [...new Set(normalized)] : undefined;
 }
 
-function uniqueLinks(value: CreateAppPayload['links']) {
-  return value?.filter((link, index, links) => {
-    return links.findIndex((item) => item.link === link.link) === index;
-  });
-}
-
 function toOptionalInt(value?: number | null) {
   if (typeof value !== 'number' || Number.isNaN(value)) {
     return undefined;

@@ -46,13 +46,15 @@ function Tabs() {
             <ExternalLink />
             Add Manual
           </TabsTrigger>
-          <TabsTrigger
-            value='debugs'
-            className='border bg-background px-4 py-2 font-bold data-active:text-red-500'
-          >
-            <Bug />
-            Debugs
-          </TabsTrigger>
+          {debugData && (
+            <TabsTrigger
+              value='debugs'
+              className='border bg-background px-4 py-2 font-bold data-active:text-red-500'
+            >
+              <Bug />
+              Debugs
+            </TabsTrigger>
+          )}
         </TabsList>
       </div>
       <TabsContent forceMount value='search' className='mt-0 space-y-5'>
