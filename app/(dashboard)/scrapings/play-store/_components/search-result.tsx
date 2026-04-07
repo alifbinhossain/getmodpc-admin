@@ -2,7 +2,7 @@
 
 import { type FormEvent, startTransition, useState } from 'react';
 
-import { LoaderCircle, Search } from 'lucide-react';
+import { AlertCircle, LoaderCircle, Search } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -21,11 +21,17 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { formatNumber } from '@/lib/utils';
 
 import { useGetSearchPlayStoreApp } from '../../_config/scraping.hooks';
+import type { PlayStoreImportDebugData } from '../_config/play-store-import';
+import { usePlayStoreImport } from '../_config/play-store-import.hooks';
 import PlayStoreAppCard from './play-store-app-card';
 
 const SEARCH_PAGE_SIZE = 20;
 
-function SearchResult() {
+type SearchResultProps = {
+  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+};
+
+function SearchResult({ onImportComplete }: SearchResultProps) {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
 
@@ -33,7 +39,7 @@ function SearchResult() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const nextQuery = String(formData.get('query') ?? '').trim();
+    const nextQuery = String(formData.get('plystore-search') ?? '').trim();
 
     if (!nextQuery) {
       return;
@@ -55,27 +61,42 @@ function SearchResult() {
           autoComplete='on'
           className='border-none focus-visible:ring-0'
           defaultValue={query}
-          name='query'
+          name='plystore-search'
           placeholder='Example: whatsapp'
         />
         <Button size='lg' type='submit'>
           Search
         </Button>
       </form>
-      <SearchResults page={page} query={query} setPage={setPage} />
+      <SearchResults
+        onImportComplete={onImportComplete}
+        page={page}
+        query={query}
+        setPage={setPage}
+      />
     </div>
   );
 }
 
 function SearchResults({
+  onImportComplete,
   page,
   query,
   setPage,
 }: {
+  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
   page: number;
   query: string;
   setPage: (page: number) => void;
 }) {
+  const {
+    currentUrl,
+    importByUrl,
+    isPending: isImportPending,
+    lastImport,
+  } = usePlayStoreImport({
+    onImportComplete,
+  });
   const { data, isFetching, isLoading } = useGetSearchPlayStoreApp({
     appName: query,
     limit: SEARCH_PAGE_SIZE,
@@ -142,6 +163,25 @@ function SearchResults({
           ) : null}
         </div>
       </div>
+      {lastImport?.status === 'validation_error' ? (
+        <Alert variant='destructive'>
+          <AlertCircle className='size-4' />
+          <AlertTitle>Payload validation failed</AlertTitle>
+          <AlertDescription>
+            The generated app payload did not satisfy the app schema. Open the
+            Debugs tab to inspect the validation errors.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      {lastImport?.status === 'error' ? (
+        <Alert variant='destructive'>
+          <AlertCircle className='size-4' />
+          <AlertTitle>Import failed</AlertTitle>
+          <AlertDescription>
+            {lastImport.errorMessage ?? 'The import flow did not complete.'}
+          </AlertDescription>
+        </Alert>
+      ) : null}
       <div className='grid gap-4 sm:grid-cols-2'>
         {showLoadingCards
           ? Array.from({
@@ -150,8 +190,12 @@ function SearchResults({
           : apps.map((app) => (
               <PlayStoreAppCard
                 key={app.appId}
-                actionLabel='Open app'
                 app={app}
+                actionDisabled={isImportPending}
+                actionLoading={currentUrl === app.url}
+                onAction={() => {
+                  void importByUrl(app.url);
+                }}
               />
             ))}
       </div>

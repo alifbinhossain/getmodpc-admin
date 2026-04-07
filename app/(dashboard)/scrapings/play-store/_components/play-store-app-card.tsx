@@ -16,12 +16,18 @@ type PlayStoreCardApp = {
 
 type PlayStoreAppCardProps = {
   actionLabel?: string;
+  actionDisabled?: boolean;
+  actionLoading?: boolean;
   app: PlayStoreCardApp;
+  onAction?: () => void;
 };
 
 function PlayStoreAppCard({
-  actionLabel = 'View on Play Store',
+  actionDisabled = false,
+  actionLoading = false,
+  actionLabel = 'Get Now',
   app,
+  onAction,
 }: PlayStoreAppCardProps) {
   return (
     <article className='flex flex-col justify-between gap-4 rounded-md border bg-background p-4 shadow-xs sm:flex-row sm:items-center'>
@@ -54,8 +60,14 @@ function PlayStoreAppCard({
           <Star className='size-3.5 text-yellow-500' />
           <span>{app.scoreText}</span>
         </p>
-        <Button type='button' size='sm'>
-          Get Now
+        <Button
+          type='button'
+          size='sm'
+          disabled={!onAction || actionDisabled || actionLoading}
+          loading={actionLoading}
+          onClick={onAction}
+        >
+          {actionLabel}
         </Button>
       </div>
     </article>

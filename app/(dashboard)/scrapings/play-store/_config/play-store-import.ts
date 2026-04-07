@@ -74,11 +74,7 @@ export function buildPlayStoreAppPayload(
   categoryIds: string[]
 ): CreateAppPayload {
   const categoryName = getPlayStoreCategoryName(app);
-  const developerNames = uniqueStrings([
-    app.developer,
-    app.developerLegalName,
-    app.developerId,
-  ]);
+  const developerNames = uniqueStrings([app.developer, app.developerLegalName]);
   const appTags = uniqueStrings([app.title]);
 
   return {
@@ -87,10 +83,7 @@ export function buildPlayStoreAppPayload(
     platform: EnumPlatformType.ANDROID,
     type: inferAppType(app),
     source: EnumAppSource.PLAY_STORE,
-    description:
-      asOptionalString(app.descriptionHTML) ??
-      asOptionalString(app.description) ??
-      app.summary.trim(),
+    description: app.descriptionHTML ?? app.description,
     summary: asOptionalString(app.summary),
     latest_news: asOptionalString(app.recentChanges),
     header_image: asOptionalString(app.headerImage),

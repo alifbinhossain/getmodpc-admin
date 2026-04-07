@@ -23,6 +23,10 @@ function Tabs() {
   const [debugData, setDebugData] = useState<PlayStoreImportDebugData | null>(
     null
   );
+  const handleImportComplete = (payload: PlayStoreImportDebugData) => {
+    setDebugData(payload);
+    setActiveTab('debugs');
+  };
 
   return (
     <BaseTabs
@@ -65,7 +69,7 @@ function Tabs() {
           Just add your <span className='font-bold'>keyword</span> on form and
           click <span className='font-bold'>Search</span>
         </p>
-        <SearchResult />
+        <SearchResult onImportComplete={handleImportComplete} />
       </TabsContent>
       <TabsContent forceMount value='manual' className='mt-0 space-y-5'>
         <div className='bg-gray-100 p-4 border'>
@@ -74,12 +78,7 @@ function Tabs() {
             <span>Paste your link post here</span>
           </h2>
         </div>
-        <AddManual
-          onImportComplete={(payload) => {
-            setDebugData(payload);
-            setActiveTab('debugs');
-          }}
-        />
+        <AddManual onImportComplete={handleImportComplete} />
         <div className='bg-gray-100 p-4 border'>
           <h2 className='text-lg font-bold uppercase'>Add Manual</h2>
         </div>

@@ -37,7 +37,7 @@ function DebugPanel({ debugData }: DebugPanelProps) {
         <Bug className='size-4' />
         <AlertTitle>No debug data yet</AlertTitle>
         <AlertDescription>
-          Run the manual import flow to populate this tab.
+          Run a Play Store import to populate this tab.
         </AlertDescription>
       </Alert>
     );
