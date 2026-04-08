@@ -87,6 +87,13 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.app.details(), id] as const,
   },
 
+  // settings
+  settings: {
+    all: ['settings'] as const,
+    current: () => [...queryKeys.settings.all, 'current'] as const,
+    settingByKey: (key: string) => [...queryKeys.settings.all, key] as const,
+  },
+
   // page
   page: {
     all: ['pages'] as const,

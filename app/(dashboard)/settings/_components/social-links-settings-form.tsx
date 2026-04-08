@@ -3,14 +3,19 @@
 import { FormArrayField, FormInput } from '@/components/forms';
 
 import {
-  socialLinksSettingsDefaults,
+  getSocialLinksSettingsDefaults,
+  type ISocialLinksSettingsSchema,
   socialLinksSettingsSchema,
 } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
-export function SocialLinksSettingsForm() {
+type Props = {
+  initialValues?: ISocialLinksSettingsSchema;
+};
+
+export function SocialLinksSettingsForm({ initialValues }: Props) {
   return (
     <SettingsPanel
       title='Social Links'
@@ -18,8 +23,7 @@ export function SocialLinksSettingsForm() {
     >
       <SettingsSectionForm
         schema={socialLinksSettingsSchema}
-        defaultValues={socialLinksSettingsDefaults}
-        successMessage='Social links saved'
+        defaultValues={getSocialLinksSettingsDefaults(initialValues)}
         submitLabel='Save Social Links'
       >
         {({ control }) => (

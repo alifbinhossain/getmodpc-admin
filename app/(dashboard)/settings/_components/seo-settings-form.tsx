@@ -4,14 +4,19 @@ import { FormInput, FormTextarea } from '@/components/forms';
 import { FormSwitch } from '@/components/forms/_fields/switch';
 
 import {
-  seoSettingsDefaults,
+  getSeoSettingsDefaults,
+  type ISeoSettingsSchema,
   seoSettingsSchema,
 } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
-export function SeoSettingsForm() {
+type Props = {
+  initialValues?: ISeoSettingsSchema;
+};
+
+export function SeoSettingsForm({ initialValues }: Props) {
   return (
     <SettingsPanel
       title='Search Engine Defaults'
@@ -19,8 +24,7 @@ export function SeoSettingsForm() {
     >
       <SettingsSectionForm
         schema={seoSettingsSchema}
-        defaultValues={seoSettingsDefaults}
-        successMessage='Seo settings saved'
+        defaultValues={getSeoSettingsDefaults(initialValues)}
         submitLabel='Save Seo'
       >
         {({ control }) => (

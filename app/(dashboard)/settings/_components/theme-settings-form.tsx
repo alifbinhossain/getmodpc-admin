@@ -3,14 +3,19 @@
 import { FormInput } from '@/components/forms';
 
 import {
-  themeSettingsDefaults,
+  getThemeSettingsDefaults,
+  type IThemeSettingsSchema,
   themeSettingsSchema,
 } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
-export function ThemeSettingsForm() {
+type Props = {
+  initialValues?: IThemeSettingsSchema;
+};
+
+export function ThemeSettingsForm({ initialValues }: Props) {
   return (
     <SettingsPanel
       title='Theme Controls'
@@ -18,8 +23,7 @@ export function ThemeSettingsForm() {
     >
       <SettingsSectionForm
         schema={themeSettingsSchema}
-        defaultValues={themeSettingsDefaults}
-        successMessage='Theme settings saved'
+        defaultValues={getThemeSettingsDefaults(initialValues)}
         submitLabel='Save Theme'
       >
         {({ control }) => (

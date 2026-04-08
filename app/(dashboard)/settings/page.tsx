@@ -1,8 +1,11 @@
 import React from 'react';
 
 import { SettingsForm } from './_components/settings-form';
+import { settingsService } from './_config/settings.service';
 
-function SettingPage() {
+async function SettingPage() {
+  const initialData = await settingsService.getSettings().catch(() => null);
+
   return (
     <div className='space-y-6'>
       <div className='space-y-1'>
@@ -13,7 +16,7 @@ function SettingPage() {
         </p>
       </div>
 
-      <SettingsForm />
+      <SettingsForm initialData={initialData} />
     </div>
   );
 }

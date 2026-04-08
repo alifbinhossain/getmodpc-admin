@@ -8,14 +8,19 @@ import {
 } from '@/components/forms';
 
 import {
-  footerSettingsDefaults,
   footerSettingsSchema,
+  getFooterSettingsDefaults,
+  type IFooterSettingsSchema,
 } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
-export function FooterSettingsForm() {
+type Props = {
+  initialValues?: IFooterSettingsSchema;
+};
+
+export function FooterSettingsForm({ initialValues }: Props) {
   return (
     <SettingsPanel
       title='Footer Content'
@@ -23,8 +28,7 @@ export function FooterSettingsForm() {
     >
       <SettingsSectionForm
         schema={footerSettingsSchema}
-        defaultValues={footerSettingsDefaults}
-        successMessage='Footer settings saved'
+        defaultValues={getFooterSettingsDefaults(initialValues)}
         submitLabel='Save Footer'
       >
         {({ control }) => (

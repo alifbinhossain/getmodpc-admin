@@ -2,8 +2,8 @@
 
 import type { ReactNode } from 'react';
 
+import type { UpdateSettingsPayload } from '@/types/settings';
 import type { DefaultValues } from 'react-hook-form';
-import { toast } from 'sonner';
 import type { z, ZodSchema } from 'zod/v3';
 
 import type { AppForm } from '@/hooks/form';
@@ -12,10 +12,11 @@ import { useAppForm } from '@/hooks/form';
 import { FormWrapper } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 
+import { useUpdateSettings } from '../_config/settings.hooks';
+
 type SettingsSectionFormProps<TSchema extends ZodSchema> = {
   schema: TSchema;
   defaultValues: DefaultValues<z.infer<TSchema>>;
-  successMessage: string;
   submitLabel: string;
   children: (form: AppForm<TSchema>) => ReactNode;
 };
@@ -23,10 +24,10 @@ type SettingsSectionFormProps<TSchema extends ZodSchema> = {
 export function SettingsSectionForm<TSchema extends ZodSchema>({
   schema,
   defaultValues,
-  successMessage,
   submitLabel,
   children,
 }: SettingsSectionFormProps<TSchema>) {
+  const updateSettings = useUpdateSettings();
   const form = useAppForm({
     schema,
     defaultValues,
@@ -40,8 +41,8 @@ export function SettingsSectionForm<TSchema extends ZodSchema>({
 
   const onSubmit = async (values: z.infer<TSchema>) => {
     try {
+      await updateSettings.mutateAsync(values as UpdateSettingsPayload);
       form.reset(values);
-      toast.success(successMessage);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Invalid request';
       setError('root', { message });

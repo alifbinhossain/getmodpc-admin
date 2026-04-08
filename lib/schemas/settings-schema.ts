@@ -46,6 +46,15 @@ export const seoSettingsDefaults: ISeoSettingsSchema = {
   robots_follow: true,
 };
 
+export function getSeoSettingsDefaults(
+  values?: Partial<ISeoSettingsSchema>
+): ISeoSettingsSchema {
+  return {
+    ...seoSettingsDefaults,
+    ...values,
+  };
+}
+
 export const themeSettingsSchema = z.object({
   primary_color: z.string().regex(hexColor, 'Enter a valid hex color'),
   secondary_color: z.string().regex(hexColor, 'Enter a valid hex color'),
@@ -61,6 +70,15 @@ export const themeSettingsDefaults: IThemeSettingsSchema = {
   accent_color: '#16a34a',
   background_color: '#d7d7d7',
 };
+
+export function getThemeSettingsDefaults(
+  values?: Partial<IThemeSettingsSchema>
+): IThemeSettingsSchema {
+  return {
+    ...themeSettingsDefaults,
+    ...values,
+  };
+}
 
 export const ratingSettingsSchema = z.object({
   rating_style: ratingStyleField,
@@ -91,6 +109,15 @@ export const ratingSettingsDefaults: IRatingSettingsSchema = {
   show_user_rating: true,
 };
 
+export function getRatingSettingsDefaults(
+  values?: Partial<IRatingSettingsSchema>
+): IRatingSettingsSchema {
+  return {
+    ...ratingSettingsDefaults,
+    ...values,
+  };
+}
+
 export const linksSettingsSchema = z.object({
   primary_cta_label: z.string().min(2, 'Primary CTA label is required').max(80),
   primary_cta_url: z.string().url('Enter a valid URL'),
@@ -115,6 +142,15 @@ export const linksSettingsDefaults: ILinksSettingsSchema = {
   ],
 };
 
+export function getLinksSettingsDefaults(
+  values?: Partial<ILinksSettingsSchema>
+): ILinksSettingsSchema {
+  return {
+    ...linksSettingsDefaults,
+    ...values,
+  };
+}
+
 export const socialLinksSettingsSchema = z.object({
   social_links: z.array(linkItemSchema).default([]),
 });
@@ -130,6 +166,15 @@ export const socialLinksSettingsDefaults: ISocialLinksSettingsSchema = {
     { label: 'Telegram', url: 'https://t.me/getmodpc' },
   ],
 };
+
+export function getSocialLinksSettingsDefaults(
+  values?: Partial<ISocialLinksSettingsSchema>
+): ISocialLinksSettingsSchema {
+  return {
+    ...socialLinksSettingsDefaults,
+    ...values,
+  };
+}
 
 export const footerSettingsSchema = z.object({
   footer_heading: z.string().min(2, 'Footer heading is required').max(120),
@@ -162,6 +207,15 @@ export const footerSettingsDefaults: IFooterSettingsSchema = {
   ],
 };
 
+export function getFooterSettingsDefaults(
+  values?: Partial<IFooterSettingsSchema>
+): IFooterSettingsSchema {
+  return {
+    ...footerSettingsDefaults,
+    ...values,
+  };
+}
+
 export const iconSettingsSchema = z.object({
   site_logo: imageUrlField,
   header_logo: imageUrlField,
@@ -179,3 +233,12 @@ export const iconSettingsDefaults: IIconSettingsSchema = {
   apple_touch_icon: 'https://placehold.co/180x180/png',
   og_image: 'https://placehold.co/1200x630/png',
 };
+
+export function getIconSettingsDefaults(
+  values?: Partial<IIconSettingsSchema>
+): IIconSettingsSchema {
+  return {
+    ...iconSettingsDefaults,
+    ...values,
+  };
+}

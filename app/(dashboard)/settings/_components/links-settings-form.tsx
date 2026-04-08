@@ -3,14 +3,19 @@
 import { FormArrayField, FormInput } from '@/components/forms';
 
 import {
-  linksSettingsDefaults,
+  getLinksSettingsDefaults,
+  type ILinksSettingsSchema,
   linksSettingsSchema,
 } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
-export function LinksSettingsForm() {
+type Props = {
+  initialValues?: ILinksSettingsSchema;
+};
+
+export function LinksSettingsForm({ initialValues }: Props) {
   return (
     <SettingsPanel
       title='Primary Links'
@@ -18,8 +23,7 @@ export function LinksSettingsForm() {
     >
       <SettingsSectionForm
         schema={linksSettingsSchema}
-        defaultValues={linksSettingsDefaults}
-        successMessage='Link settings saved'
+        defaultValues={getLinksSettingsDefaults(initialValues)}
         submitLabel='Save Links'
       >
         {({ control }) => (

@@ -4,14 +4,19 @@ import { FormInput, FormSelect, FormTextarea } from '@/components/forms';
 import { FormSwitch } from '@/components/forms/_fields/switch';
 
 import {
-  ratingSettingsDefaults,
+  getRatingSettingsDefaults,
+  type IRatingSettingsSchema,
   ratingSettingsSchema,
 } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
-export function RatingSettingsForm() {
+type Props = {
+  initialValues?: IRatingSettingsSchema;
+};
+
+export function RatingSettingsForm({ initialValues }: Props) {
   return (
     <SettingsPanel
       title='Rating Presentation'
@@ -19,8 +24,7 @@ export function RatingSettingsForm() {
     >
       <SettingsSectionForm
         schema={ratingSettingsSchema}
-        defaultValues={ratingSettingsDefaults}
-        successMessage='Rating settings saved'
+        defaultValues={getRatingSettingsDefaults(initialValues)}
         submitLabel='Save Rating'
       >
         {({ control }) => (

@@ -3,14 +3,19 @@
 import { MediaInput } from '@/components/media';
 
 import {
-  iconSettingsDefaults,
+  getIconSettingsDefaults,
   iconSettingsSchema,
+  type IIconSettingsSchema,
 } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
-export function IconSettingsForm() {
+type Props = {
+  initialValues?: IIconSettingsSchema;
+};
+
+export function IconSettingsForm({ initialValues }: Props) {
   return (
     <SettingsPanel
       title='Brand Icons'
@@ -18,8 +23,7 @@ export function IconSettingsForm() {
     >
       <SettingsSectionForm
         schema={iconSettingsSchema}
-        defaultValues={iconSettingsDefaults}
-        successMessage='Icon settings saved'
+        defaultValues={getIconSettingsDefaults(initialValues)}
         submitLabel='Save Icons'
       >
         {(form) => {
