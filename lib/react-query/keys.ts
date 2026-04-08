@@ -181,13 +181,12 @@ export const queryKeys = {
         params.page,
         params.limit,
       ] as const,
-    liteApksByType: (params: { type: string; page: number; limit: number }) =>
+    liteApksByType: (params: { type: string; page: number }) =>
       [
         ...queryKeys.scrapping.all,
         'liteapks-by-type',
         params.type,
         params.page,
-        params.limit,
       ] as const,
     details: () => [...queryKeys.scrapping.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.scrapping.details(), id] as const,

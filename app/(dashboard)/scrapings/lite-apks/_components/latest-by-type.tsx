@@ -2,10 +2,20 @@
 
 import { useState } from 'react';
 
+import Image from 'next/image';
+
 import { EnumAppType } from '@/types/app';
-import { AlertCircle, Gamepad2, LoaderCircle, Smartphone } from 'lucide-react';
+import {
+  AlertCircle,
+  Gamepad2,
+  LoaderCircle,
+  Smartphone,
+  Star,
+} from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Pagination,
   PaginationContent,
@@ -19,13 +29,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { formatNumber } from '@/lib/utils';
 
-import PlayStoreAppCard from '@/app/(dashboard)/scrapings/play-store/_components/play-store-app-card';
 import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
 
 import { useGetLiteApksAppByType } from '../../_config/scraping.hooks';
 import { useLiteApksImport } from '../_config/lite-apks-import.hooks';
 
-const LATEST_PAGE_SIZE = 20;
+const LATEST_PAGE_SIZE = 18;
 
 type LatestByTypeProps = {
   description: string;
@@ -51,7 +60,6 @@ function LatestByType({
     onImportComplete,
   });
   const { data, isFetching, isLoading } = useGetLiteApksAppByType({
-    limit: LATEST_PAGE_SIZE,
     page,
     type,
   });
@@ -80,7 +88,7 @@ function LatestByType({
             {meta ? (
               <p className='text-xs text-muted-foreground'>
                 Showing {formatNumber(startItem)}-{formatNumber(endItem)} of{' '}
-                {formatNumber(meta.total)} apps
+                {formatNumber(meta.total)} listings
               </p>
             ) : null}
           </div>
@@ -130,13 +138,13 @@ function LatestByType({
               length: meta?.limit ?? LATEST_PAGE_SIZE,
             }).map((_, index) => <LatestCardSkeleton key={index} />)
           : apps.map((app) => (
-              <PlayStoreAppCard
-                key={app.appId}
+              <LiteApksAppCard
+                key={app.link}
                 app={app}
                 actionDisabled={isImportPending}
-                actionLoading={currentUrl === app.url}
+                actionLoading={currentUrl === app.link}
                 onAction={() => {
-                  void importByUrl(app.url, { type });
+                  void importByUrl(app.link, { type });
                 }}
               />
             ))}
@@ -237,6 +245,64 @@ function buildPaginationItems(currentPage: number, totalPages: number) {
     'ellipsis',
     totalPages,
   ] as const;
+}
+
+function LiteApksAppCard({
+  actionDisabled = false,
+  actionLoading = false,
+  app,
+  onAction,
+}: {
+  actionDisabled?: boolean;
+  actionLoading?: boolean;
+  app: {
+    icon: string;
+    link: string;
+    scoreText: string;
+    shortMode: string;
+    title: string;
+  };
+  onAction?: () => void;
+}) {
+  return (
+    <article className='flex flex-col justify-between gap-4 rounded-md border bg-background p-4 shadow-xs sm:flex-row sm:items-center'>
+      <div className='flex flex-1 gap-3'>
+        <div className='relative size-16 shrink-0 overflow-hidden rounded-md border bg-muted'>
+          <Image
+            src={app.icon}
+            alt={app.title}
+            className='object-cover'
+            fill
+            sizes='64px'
+          />
+        </div>
+        <div className='space-y-2'>
+          <div>
+            <p className='font-semibold text-foreground'>{app.title}</p>
+            <p className='text-sm text-muted-foreground'>Source: LiteApks</p>
+          </div>
+          {app.shortMode ? (
+            <Badge variant='outline'>{app.shortMode}</Badge>
+          ) : null}
+        </div>
+      </div>
+      <div className='flex items-center justify-between gap-3 sm:flex-col sm:items-end'>
+        <p className='flex items-center gap-1 text-xs text-muted-foreground'>
+          <Star className='size-3.5 text-yellow-500' />
+          <span>{app.scoreText}</span>
+        </p>
+        <Button
+          type='button'
+          size='sm'
+          disabled={!onAction || actionDisabled || actionLoading}
+          loading={actionLoading}
+          onClick={onAction}
+        >
+          Import
+        </Button>
+      </div>
+    </article>
+  );
 }
 
 function LatestCardSkeleton() {

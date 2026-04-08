@@ -26,7 +26,7 @@ function AddManual({ onImportComplete }: AddManualProps) {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const url = String(formData.get('url') ?? '').trim();
+    const url = String(formData.get('lite-apks-url') ?? '').trim();
 
     if (!url || isPending) {
       return;
@@ -48,7 +48,7 @@ function AddManual({ onImportComplete }: AddManualProps) {
         <Input
           autoComplete='on'
           className='focus-visible:ring-0 border-none'
-          name='url'
+          name='lite-apks-url'
           placeholder='Example: https://liteapks.com/your-app.html'
         />
         <Button

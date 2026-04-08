@@ -19,7 +19,8 @@ export interface IScrapingQueryParams extends BaseQueryParams {
   appName?: string;
 }
 
-export interface ILiteApksScrapingQueryParams extends BaseQueryParams {
+export interface ILiteApksScrapingQueryParams {
+  page?: number;
   type?: EnumAppType;
 }
 

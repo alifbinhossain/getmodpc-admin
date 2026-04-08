@@ -51,17 +51,15 @@ export function useGetPlayStoreAppByUrl() {
 export function useGetLiteApksAppByType(params?: ILiteApksScrapingQueryParams) {
   const type = params?.type;
   const page = params?.page ?? 1;
-  const limit = params?.limit ?? 20;
 
   return useApiListQuery({
     queryKey: queryKeys.scrapping.liteApksByType({
       type: type ?? '',
       page,
-      limit,
     }),
     queryFn: () =>
       scrapingService.getLiteApksAppByType(
-        type ? { ...params, type, page, limit } : undefined
+        type ? { ...params, type, page } : undefined
       ),
     enabled: Boolean(type),
     staleTime: 5 * 60 * 1000,
