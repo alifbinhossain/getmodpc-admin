@@ -2,18 +2,21 @@
 
 import { type FormEvent } from 'react';
 
+import { ILiteApksApp } from '@/types/scrapping';
 import { AlertCircle, Search } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
+import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/_config/scraping-import';
 
 import { useLiteApksImport } from '../_config/lite-apks-import.hooks';
 
 type AddManualProps = {
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<ILiteApksApp>
+  ) => void;
 };
 
 function AddManual({ onImportComplete }: AddManualProps) {

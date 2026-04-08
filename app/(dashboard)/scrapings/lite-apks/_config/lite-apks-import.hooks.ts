@@ -3,24 +3,27 @@
 import { useState } from 'react';
 
 import { EnumAppSource, type EnumAppType } from '@/types/app';
+import { ILiteApksApp } from '@/types/scrapping';
 
 import { useCreateScrapingApp } from '@/app/(dashboard)/apps/_config/app.hooks';
 import { categoriesService } from '@/app/(dashboard)/categories/_config/categories.service';
 import { useCreateCategory } from '@/app/(dashboard)/categories/_config/category.hooks';
 import {
-  buildPlayStoreAppPayload,
-  buildPlayStoreCategoryPayload,
+  buildCategoryPayload,
+  buildLiteApksAppPayload,
   categoryMatchesName,
   normalizeValidationErrors,
   type PlayStoreImportDebugData,
   validatePlayStoreAppPayload,
-} from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
+} from '@/app/(dashboard)/scrapings/_config/scraping-import';
 
 import { useGetLiteApksAppByUrl } from '../../_config/scraping.hooks';
 
 type UseLiteApksImportOptions = {
   defaultAppType?: EnumAppType;
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<ILiteApksApp>
+  ) => void;
 };
 
 type ImportByUrlOptions = {
@@ -31,9 +34,8 @@ export function useLiteApksImport({
   defaultAppType,
   onImportComplete,
 }: UseLiteApksImportOptions = {}) {
-  const [lastImport, setLastImport] = useState<PlayStoreImportDebugData | null>(
-    null
-  );
+  const [lastImport, setLastImport] =
+    useState<PlayStoreImportDebugData<ILiteApksApp> | null>(null);
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
 
   const scrapeApp = useGetLiteApksAppByUrl();
@@ -54,7 +56,7 @@ export function useLiteApksImport({
     }
 
     const startedAt = new Date().toISOString();
-    const debugData: PlayStoreImportDebugData = {
+    const debugData: PlayStoreImportDebugData<ILiteApksApp> = {
       requestedUrl: normalizedUrl,
       startedAt,
       finishedAt: startedAt,
@@ -71,8 +73,10 @@ export function useLiteApksImport({
       debugData.scrapedResponse = scrapedResponse;
       debugData.scrapedApp = scrapedApp;
 
-      const generatedCategoryPayload =
-        buildPlayStoreCategoryPayload(scrapedApp);
+      const generatedCategoryPayload = buildCategoryPayload({
+        categories: scrapedApp.categories,
+        genre: scrapedApp.genre ?? '',
+      });
       debugData.generatedCategoryPayload = generatedCategoryPayload;
 
       const existingCategories = await categoriesService.getCategories({
@@ -98,7 +102,7 @@ export function useLiteApksImport({
         };
       }
 
-      const generatedAppPayload = buildPlayStoreAppPayload(
+      const generatedAppPayload = buildLiteApksAppPayload(
         scrapedApp,
         [debugData.resolvedCategory.record.id],
         {

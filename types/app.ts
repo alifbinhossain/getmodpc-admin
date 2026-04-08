@@ -50,7 +50,7 @@ export interface AppBody {
   icon?: string | null;
   genre?: string | null;
   youtube_id?: string | null;
-  os_version: string;
+  os_version?: string | null;
   screenshots?: string[];
   developer?: string;
   app_tags?: string[];
@@ -64,7 +64,7 @@ export interface AppBody {
   categories?: IAppTags[];
   tags?: IAppTags[];
   url: string;
-  package_name: string;
+  package_name?: string | null;
   installs: string;
   score_text: string;
   ratings?: number;

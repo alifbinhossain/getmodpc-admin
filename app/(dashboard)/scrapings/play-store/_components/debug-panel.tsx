@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import { IPlayStoreScrapingApp } from '@/types/scrapping';
 import { Bug } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -9,10 +10,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
-import type { PlayStoreImportDebugData } from '../_config/play-store-import';
+import type { PlayStoreImportDebugData } from '../../_config/scraping-import';
 
 type DebugPanelProps = {
-  debugData: PlayStoreImportDebugData | null;
+  debugData: PlayStoreImportDebugData<any> | null;
 };
 
 type DebugDetails = {
@@ -189,7 +190,7 @@ function DebugTextareaField({
 }
 
 function getDebugDetails(
-  debugData: PlayStoreImportDebugData
+  debugData: PlayStoreImportDebugData<IPlayStoreScrapingApp>
 ): DebugDetails | null {
   const payload = debugData.generatedAppPayload;
   const scrapedApp = debugData.scrapedApp;

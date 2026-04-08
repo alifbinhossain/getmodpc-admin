@@ -1,6 +1,6 @@
 import { EnumAppType } from '@/types/app';
 
-import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
+import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/_config/scraping-import';
 
 import LatestByType from './latest-by-type';
 

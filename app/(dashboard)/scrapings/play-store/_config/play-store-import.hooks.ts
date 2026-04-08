@@ -2,30 +2,33 @@
 
 import { useState } from 'react';
 
+import { IPlayStoreScrapingApp } from '@/types/scrapping';
+
 import { useCreateScrapingApp } from '@/app/(dashboard)/apps/_config/app.hooks';
 import { categoriesService } from '@/app/(dashboard)/categories/_config/categories.service';
 import { useCreateCategory } from '@/app/(dashboard)/categories/_config/category.hooks';
 
-import { useGetPlayStoreAppByUrl } from '../../_config/scraping.hooks';
 import {
+  buildCategoryPayload,
   buildPlayStoreAppPayload,
-  buildPlayStoreCategoryPayload,
   categoryMatchesName,
   normalizeValidationErrors,
   type PlayStoreImportDebugData,
   validatePlayStoreAppPayload,
-} from './play-store-import';
+} from '../../_config/scraping-import';
+import { useGetPlayStoreAppByUrl } from '../../_config/scraping.hooks';
 
 type UsePlayStoreImportOptions = {
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<IPlayStoreScrapingApp>
+  ) => void;
 };
 
 export function usePlayStoreImport({
   onImportComplete,
 }: UsePlayStoreImportOptions = {}) {
-  const [lastImport, setLastImport] = useState<PlayStoreImportDebugData | null>(
-    null
-  );
+  const [lastImport, setLastImport] =
+    useState<PlayStoreImportDebugData<IPlayStoreScrapingApp> | null>(null);
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
 
   const scrapeApp = useGetPlayStoreAppByUrl();
@@ -46,7 +49,7 @@ export function usePlayStoreImport({
     }
 
     const startedAt = new Date().toISOString();
-    const debugData: PlayStoreImportDebugData = {
+    const debugData: PlayStoreImportDebugData<IPlayStoreScrapingApp> = {
       requestedUrl: normalizedUrl,
       startedAt,
       finishedAt: startedAt,
@@ -63,8 +66,7 @@ export function usePlayStoreImport({
       debugData.scrapedResponse = scrapedResponse;
       debugData.scrapedApp = scrapedApp;
 
-      const generatedCategoryPayload =
-        buildPlayStoreCategoryPayload(scrapedApp);
+      const generatedCategoryPayload = buildCategoryPayload(scrapedApp);
       debugData.generatedCategoryPayload = generatedCategoryPayload;
 
       const existingCategories = await categoriesService.getCategories({

@@ -32,7 +32,7 @@ type Histogram = {
   5: number;
 };
 
-type Category = {
+export type Category = {
   name: string;
   id: string;
 };
@@ -116,4 +116,29 @@ export type ILiteApkTypeAppItem = {
   shortMode: string;
   link: string;
   icon: string;
+};
+
+export type ILiteApksApp = {
+  title: string | null;
+  icon: string | null;
+  headerImage: string | null;
+  developer: string | null;
+  version: string | null;
+  size: string | null;
+  ratings: number;
+  recentChanges: string;
+  summary: string;
+  shortMode: string | null;
+  description: string;
+  descriptionHtml: string | null;
+  screenshots: string[];
+  scoreText: string | null;
+  installs: string | null;
+  genre: string | null;
+  genreId: string | null;
+  categories: Category[];
+  reviews: number;
+  url: string;
+  updated_text: string | null;
+  source: 'lite_apks';
 };

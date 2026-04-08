@@ -24,7 +24,7 @@ export const appSchema = z.object({
   icon: z.string().optional().nullable(),
   genre: z.string().optional().nullable(),
   youtube_id: z.string().optional().nullable(),
-  os_version: z.string().min(2, 'OS version field is required'),
+  os_version: z.string().optional().nullable(),
   screenshots: z.array(z.string()).optional(),
   developer: z.string().min(2, 'Developer field is required'),
   app_tags: z.array(z.string()).optional(),
@@ -38,7 +38,7 @@ export const appSchema = z.object({
   categories: z.array(z.string().uuid('Invalid category ID')).optional(), // array of category IDs
   tags: z.array(z.string().uuid('Invalid tag ID')).optional(), // array of tag IDs
   url: z.string(),
-  package_name: z.string(),
+  package_name: z.string().optional().nullable(),
   installs: z.string(),
   score_text: z.string(),
   ratings: z.number().int().optional(),

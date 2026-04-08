@@ -1,5 +1,6 @@
 import type { ApiResponse, PaginatedResponse } from '@/types';
 import type {
+  ILiteApksApp,
   ILiteApksScrapingQueryParams,
   ILiteApkTypeAppItem,
   IPlayStoreScrapingApp,
@@ -38,8 +39,8 @@ export const scrapingService = {
 
   getLiteApksAppByUrl(payload: {
     url: string;
-  }): Promise<ApiResponse<IPlayStoreScrapingApp>> {
-    return api.post<IPlayStoreScrapingApp, { url: string }>(
+  }): Promise<ApiResponse<ILiteApksApp>> {
+    return api.post<ILiteApksApp, { url: string }>(
       '/scrapings/liteapks-app-by-url',
       payload
     );

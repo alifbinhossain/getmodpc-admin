@@ -20,8 +20,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { formatNumber } from '@/lib/utils';
 
+import type { PlayStoreImportDebugData } from '../../_config/scraping-import';
 import { useGetSearchPlayStoreApp } from '../../_config/scraping.hooks';
-import type { PlayStoreImportDebugData } from '../_config/play-store-import';
 import { usePlayStoreImport } from '../_config/play-store-import.hooks';
 import PlayStoreAppCard from './play-store-app-card';
 

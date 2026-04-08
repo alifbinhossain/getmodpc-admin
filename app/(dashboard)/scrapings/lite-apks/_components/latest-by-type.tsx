@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { EnumAppType } from '@/types/app';
+import { ILiteApksApp } from '@/types/scrapping';
 import {
   AlertCircle,
   Gamepad2,
@@ -29,7 +30,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { formatNumber } from '@/lib/utils';
 
-import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
+import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/_config/scraping-import';
 
 import { useGetLiteApksAppByType } from '../../_config/scraping.hooks';
 import { useLiteApksImport } from '../_config/lite-apks-import.hooks';
@@ -38,7 +39,9 @@ const LATEST_PAGE_SIZE = 18;
 
 type LatestByTypeProps = {
   description: string;
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<ILiteApksApp>
+  ) => void;
   title: string;
   type: EnumAppType;
 };

@@ -13,7 +13,7 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 
-import type { PlayStoreImportDebugData } from '../_config/play-store-import';
+import type { PlayStoreImportDebugData } from '../../_config/scraping-import';
 import AddManual from './add-manual';
 import DebugPanel from './debug-panel';
 import SearchResult from './search-result';

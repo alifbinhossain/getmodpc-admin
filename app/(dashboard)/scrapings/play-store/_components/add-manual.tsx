@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
+import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/_config/scraping-import';
 
 import { usePlayStoreImport } from '../_config/play-store-import.hooks';
 

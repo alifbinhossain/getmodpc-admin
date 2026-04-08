@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
+import { ILiteApksApp } from '@/types/scrapping';
 import { Bug, ExternalLink, Gamepad2, Smartphone } from 'lucide-react';
 
 import {
@@ -13,8 +14,8 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 
+import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/_config/scraping-import';
 import DebugPanel from '@/app/(dashboard)/scrapings/play-store/_components/debug-panel';
-import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
 
 import AddManual from './add-manual';
 import LatestApps from './latest-apps';
@@ -22,11 +23,12 @@ import LatestGames from './latest-games';
 
 function Tabs() {
   const [activeTab, setActiveTab] = useState('latest-apps');
-  const [debugData, setDebugData] = useState<PlayStoreImportDebugData | null>(
-    null
-  );
+  const [debugData, setDebugData] =
+    useState<PlayStoreImportDebugData<ILiteApksApp> | null>(null);
 
-  const handleImportComplete = (payload: PlayStoreImportDebugData) => {
+  const handleImportComplete = (
+    payload: PlayStoreImportDebugData<ILiteApksApp>
+  ) => {
     setDebugData(payload);
     setActiveTab('debugs');
   };
