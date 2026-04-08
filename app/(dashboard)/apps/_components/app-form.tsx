@@ -55,9 +55,9 @@ export function AppForm({ isEditing, data }: Props) {
         });
       } else {
         await appsService.createApp(values);
+        form.reset();
       }
 
-      form.reset();
       toast.success(`App ${isEditing ? 'updated' : 'created'} successfully`);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Invalid request';
