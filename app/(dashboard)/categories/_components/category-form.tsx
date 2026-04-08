@@ -7,12 +7,12 @@ import { useAppForm } from '@/hooks/form';
 
 import { FormInput, FormTextarea, FormWrapper } from '@/components/forms';
 import { MediaInput } from '@/components/media';
+import SelectCategoryField from '@/components/shared/select-category-field';
 import { Button } from '@/components/ui/button';
 
 import { categorySchema, ICategorySchema } from '@/lib/schemas/category-schema';
 
 import { categoriesService } from '../_config/categories.service';
-import SelectCategoryField from './select-category-field';
 
 type Props = {
   isEditing?: boolean;
@@ -26,6 +26,7 @@ export function CategoryForm({ isEditing, data, onClose }: Props) {
       ? {
           ...data,
           description: data?.description || '',
+          parent_cat_id: data?.parent?.id ?? null,
         }
       : {
           category_bg_color: '#f9f9f9',

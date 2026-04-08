@@ -2,6 +2,7 @@ import type { ApiResponse, PaginatedResponse } from '@/types';
 import type {
   CategoryRecord,
   CreateCategoryPayload,
+  ParentCategoryGroup,
   UpdateCategoryPayload,
 } from '@/types/category';
 import { CategoryQueryParams } from '@/types/category';
@@ -24,9 +25,8 @@ export const categoriesService = {
     return api.list<CategoryRecord>(`/categories${qs ? `?${qs}` : ''}`);
   },
 
-  
-  getCategoriesByGroup(){
-    return api.list<CategoryRecord>(`/categories/group-by-parent-cat`);
+  getCategoriesByGroup(): Promise<PaginatedResponse<ParentCategoryGroup>> {
+    return api.list<ParentCategoryGroup>(`/categories/group-by-parent-cat`);
   },
 
   /** Fetch a single user by ID */

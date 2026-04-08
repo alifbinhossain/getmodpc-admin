@@ -1,102 +1,111 @@
 'use client';
 
-import { ButtonGroup } from '@/components/ui/button-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import DeleteButton from '../_helper/delete-button';
+import { IFormSelectCategory } from '../_config/form-types';
 import { FormBase } from '../_helper/form-base';
 
-type Category = {
-  id: string;
-  name: string;
-  slug: string;
-};
-
-type ParentCategory = {
-  parent_id: string;
-  parent_name: string;
-  parent_slug: string;
-  categories: Category[];
-};
-
-interface Props {
-  options: ParentCategory[];
-  isLoading?: boolean;
-  disabled?: boolean;
-  placeholder?: string;
-  valueType?: 'string' | 'number';
-  fieldProps?: any;
-}
-
-export const FormCategorySelect = ({
+export const FormCategorySelect: IFormSelectCategory = ({
   options,
   isLoading,
   disabled,
   placeholder = 'Select category',
-  valueType = 'string',
+  multiple = false,
   fieldProps,
   ...props
-}: Props & any) => {
+}) => {
   return (
     <FormBase {...props}>
-      {(field) =>
-        isLoading ? (
-          <Skeleton className='h-9 w-full rounded border border-input' />
-        ) : (
-          <Select
-            value={field?.value?.toString()}
-            onValueChange={(value) => {
-              const finalValue = valueType === 'number' ? Number(value) : value;
+      {(field) => {
+        const selectedValues: string[] = Array.isArray(field.value)
+          ? field.value.filter(
+              (value: unknown): value is string => typeof value === 'string'
+            )
+          : [];
+        const selectedValue =
+          typeof field.value === 'string' ? field.value : '';
 
-              field.onChange(finalValue);
-              fieldProps?.onValueChange?.(finalValue);
-            }}
-            disabled={disabled}
-          >
-            <ButtonGroup>
-              <SelectTrigger className='flex-1'>
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
+        const isSelected = (id: string) => {
+          return multiple ? selectedValues.includes(id) : selectedValue === id;
+        };
 
-              {field.value && (
-                <DeleteButton
-                  disabled={disabled}
-                  onClick={() => field.onChange('')}
-                />
+        const handleSelect = (id: string) => {
+          let newValue: string | string[] | null;
+
+          if (multiple) {
+            if (selectedValues.includes(id)) {
+              newValue = selectedValues.filter((value) => value !== id);
+            } else {
+              newValue = [...selectedValues, id];
+            }
+          } else {
+            newValue = selectedValue === id ? null : id;
+          }
+
+          field.onChange(newValue);
+          fieldProps?.onValueChange?.(newValue);
+        };
+
+        if (isLoading) {
+          return <Skeleton className='h-9 w-full rounded border' />;
+        }
+
+        return (
+          <div className='border rounded-md p-3 space-y-2'>
+            <div className='space-y-2 max-h-60 overflow-auto'>
+              {options.length === 0 && (
+                <p className='text-sm text-muted-foreground'>{placeholder}</p>
               )}
-            </ButtonGroup>
 
-            <SelectContent>
-              {options.map((parent: ParentCategory) => (
-                <div key={parent.parent_id}>
-                  {/* Parent selectable */}
-                  <SelectItem value={parent.parent_id}>
-                    {parent.parent_name}
-                  </SelectItem>
+              {options.map((parent) => {
+                const hasChildren = parent.categories.length > 0;
 
-                  {/* Children */}
-                  {parent.categories.map((child: Category) => (
-                    <SelectItem
-                      key={child.id}
-                      value={child.id}
-                      className='pl-5 text-muted-foreground'
-                    >
-                      {child.name}
-                    </SelectItem>
-                  ))}
-                </div>
-              ))}
-            </SelectContent>
-          </Select>
-        )
-      }
+                return (
+                  <div key={parent.parent_id} className='space-y-1'>
+                    <div className='flex items-center gap-2'>
+                      <Checkbox
+                        checked={isSelected(parent.parent_id)}
+                        disabled={disabled || hasChildren}
+                        onCheckedChange={() =>
+                          !hasChildren && handleSelect(parent.parent_id)
+                        }
+                      />
+                      <span
+                        className={
+                          hasChildren
+                            ? 'font-medium text-muted-foreground'
+                            : 'font-medium'
+                        }
+                      >
+                        {parent.parent_name}
+                      </span>
+                    </div>
+
+                    {hasChildren && (
+                      <div className='pl-6 space-y-1'>
+                        {parent.categories.map((child) => (
+                          <div
+                            key={child.id}
+                            className='flex items-center gap-2'
+                          >
+                            <Checkbox
+                              checked={isSelected(child.id)}
+                              disabled={disabled}
+                              onCheckedChange={() => handleSelect(child.id)}
+                            />
+                            <span>{child.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
     </FormBase>
   );
 };

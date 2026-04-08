@@ -13,6 +13,7 @@ export interface CreateCategoryPayload {
 }
 export interface UpdateCategoryPayload extends Partial<CreateCategoryPayload> {
   id: string;
+  parent?: UpdateCategoryPayload;
 }
 
 export interface CategoryRecord extends BaseRecord {
@@ -24,6 +25,20 @@ export interface CategoryRecord extends BaseRecord {
   category_icon_bg_color?: string;
   slug: string;
 }
+
+export interface CategoryGroupItem {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface ParentCategoryGroup {
+  parent_id: string;
+  parent_name: string;
+  parent_slug: string;
+  categories: CategoryGroupItem[];
+}
+
 export interface CategoryQueryParams extends BaseQueryParams {
   slug?: string;
   name?: string;

@@ -1,4 +1,5 @@
 import { SelectOption } from '@/types';
+import { ParentCategoryGroup } from '@/types/category';
 import { ControllerRenderProps, UseFormRegister } from 'react-hook-form';
 
 import { InputProps } from '@/components/ui/input';
@@ -71,6 +72,18 @@ export type IFormCheckbox = FormControlFunc<{
   disabled?: boolean;
   fieldProps?: {
     onValueChange?: (value: boolean) => void;
+  };
+  showLabel?: boolean;
+}>;
+
+export type IFormSelectCategory = FormControlFunc<{
+  options: ParentCategoryGroup[];
+  isLoading?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  multiple?: boolean;
+  fieldProps?: {
+    onValueChange?: (value: string | string[] | null) => void;
   };
   showLabel?: boolean;
 }>;

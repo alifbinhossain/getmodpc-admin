@@ -19,6 +19,7 @@ import {
 import { FormCheckbox } from '@/components/forms/_fields/checkbox';
 import { MediaInput } from '@/components/media';
 import AccordionContainer from '@/components/shared/accordion-container';
+import SelectCategoryField from '@/components/shared/select-category-field';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -386,6 +387,14 @@ export function AppForm({ isEditing, data }: Props) {
                     )}
                   />
                 </div>
+              </AccordionContainer>
+              <AccordionContainer title='Categories' value='categories'>
+                <SelectCategoryField
+                  multiple={true}
+                  control={control}
+                  name='categories'
+                  showLabel={false}
+                />
               </AccordionContainer>
               <MultiInputField name='app_tags' title='Tags' form={form} />
               <MultiInputField
