@@ -1,0 +1,22 @@
+import { EnumAppType } from '@/types/app';
+
+import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/play-store/_config/play-store-import';
+
+import LatestByType from './latest-by-type';
+
+type LatestAppsProps = {
+  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+};
+
+function LatestApps({ onImportComplete }: LatestAppsProps) {
+  return (
+    <LatestByType
+      description='Browse the latest LiteApks app listings and import them directly.'
+      onImportComplete={onImportComplete}
+      title='Latest Apps'
+      type={EnumAppType.APP}
+    />
+  );
+}
+
+export default LatestApps;

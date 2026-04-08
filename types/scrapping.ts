@@ -108,3 +108,11 @@ export type IPlayStoreScrapingApp = {
 
   source: string;
 };
+
+export type ILiteApkTypeAppItem = {
+  title: string;
+  scoreText: string;
+  shortMode: string;
+  link: string;
+  icon: string;
+};

@@ -181,10 +181,20 @@ export const queryKeys = {
         params.page,
         params.limit,
       ] as const,
+    liteApksByType: (params: { type: string; page: number; limit: number }) =>
+      [
+        ...queryKeys.scrapping.all,
+        'liteapks-by-type',
+        params.type,
+        params.page,
+        params.limit,
+      ] as const,
     details: () => [...queryKeys.scrapping.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.scrapping.details(), id] as const,
     getPlayStoreAppByUrl: () =>
       [...queryKeys.scrapping.all, 'playstore-url'] as const,
+    getLiteApksAppByUrl: () =>
+      [...queryKeys.scrapping.all, 'liteapks-url'] as const,
   },
 
   // Dashboard

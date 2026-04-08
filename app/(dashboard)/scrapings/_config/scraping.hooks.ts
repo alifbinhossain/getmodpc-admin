@@ -1,4 +1,7 @@
-import type { IScrapingQueryParams } from '@/types/scrapping';
+import type {
+  ILiteApksScrapingQueryParams,
+  IScrapingQueryParams,
+} from '@/types/scrapping';
 import { keepPreviousData } from '@tanstack/react-query';
 
 import { useApiListQuery, useApiMutation } from '@/hooks/api';
@@ -42,5 +45,36 @@ export function useGetPlayStoreAppByUrl() {
     mutationFn: (payload: { url: string }) =>
       scrapingService.getPlayStoreAppByUrl(payload),
     successMessage: 'Play store app fetched successfully.',
+  });
+}
+
+export function useGetLiteApksAppByType(params?: ILiteApksScrapingQueryParams) {
+  const type = params?.type;
+  const page = params?.page ?? 1;
+  const limit = params?.limit ?? 20;
+
+  return useApiListQuery({
+    queryKey: queryKeys.scrapping.liteApksByType({
+      type: type ?? '',
+      page,
+      limit,
+    }),
+    queryFn: () =>
+      scrapingService.getLiteApksAppByType(
+        type ? { ...params, type, page, limit } : undefined
+      ),
+    enabled: Boolean(type),
+    staleTime: 5 * 60 * 1000,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useGetLiteApksAppByUrl() {
+  return useApiMutation({
+    mutationFn: (payload: { url: string }) =>
+      scrapingService.getLiteApksAppByUrl(payload),
+    successMessage: 'LiteApks app fetched successfully.',
   });
 }
