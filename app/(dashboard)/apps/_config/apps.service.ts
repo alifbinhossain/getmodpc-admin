@@ -1,4 +1,4 @@
-import type { ApiResponse, PaginatedResponse } from '@/types';
+import type { ApiResponse, BaseQueryParams, PaginatedResponse } from '@/types';
 import type {
   AppQueryParams,
   AppRecord,
@@ -15,6 +15,25 @@ export const appsService = {
       ? buildQueryString(params as Record<string, unknown>)
       : '';
     return api.list<AppRecord>(`/apps${qs ? `?${qs}` : ''}`);
+  },
+
+  getAllSoftDeleteApps(
+    params?: BaseQueryParams
+  ): Promise<PaginatedResponse<AppRecord>> {
+    const qs = params
+      ? buildQueryString(params as Record<string, unknown>)
+      : '';
+    return api.list<AppRecord>(`/apps/soft-deleted-apps${qs ? `?${qs}` : ''}`);
+  },
+
+  restoreApps(ids: string[]): Promise<ApiResponse<void>> {
+    return api.post<void, { ids: string[] }>('/apps/restores', { ids });
+  },
+
+  emptyTrash(ids: string[]): Promise<ApiResponse<void>> {
+    return api.post<void, { ids: string[] }>('/apps/delete/permanently', {
+      ids,
+    });
   },
 
   getApp(id: string): Promise<ApiResponse<AppRecord>> {

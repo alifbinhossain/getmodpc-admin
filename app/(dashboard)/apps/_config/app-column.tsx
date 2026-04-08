@@ -6,28 +6,27 @@ import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 
 export const appColumns: ColumnDef<AppRecord>[] = [
-  // {
-  //   id: 'icon',
-  //   header: 'Icon',
-  //   cell: ({ row }) => {
-  //     const src = getAppField(row.original, 'icon');
+  {
+    accessorKey: 'icon',
+    header: 'Icon',
+    cell: ({ getValue }) => {
+      const src = getValue<AppRecord['icon']>();
+      if (!src) {
+        return <div className='size-10 overflow-hidden rounded' />;
+      }
 
-  //     if (!src) {
-  //       return <div className='size-10 overflow-hidden rounded' />;
-  //     }
-
-  //     return (
-  //       <Image
-  //         src={src}
-  //         alt='app icon'
-  //         width={40}
-  //         height={40}
-  //         className='size-10 overflow-hidden rounded'
-  //       />
-  //     );
-  //   },
-  //   enableSorting: false,
-  // },
+      return (
+        <Image
+          src={src}
+          alt='app icon'
+          width={40}
+          height={40}
+          className='size-10 overflow-hidden rounded'
+        />
+      );
+    },
+    enableSorting: false,
+  },
   {
     accessorKey: 'name',
     header: 'Name',

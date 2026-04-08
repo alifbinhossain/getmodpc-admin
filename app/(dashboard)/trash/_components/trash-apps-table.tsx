@@ -1,54 +1,56 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import type { AppRecord } from '@/types/app';
 import { RefreshCw } from 'lucide-react';
 
 import { DataTable } from '@/components/table';
 import { Button } from '@/components/ui/button';
 
-import { appColumns } from '../_config/app-column';
-import { appsService } from '../_config/apps.service';
+import { appsService } from '../../apps/_config/apps.service';
+import { trashColumns } from '../_config/app-column';
 
-interface AppsTableProps {
+interface TrashAppsTableProps {
   data: AppRecord[];
   isLoading?: boolean;
   isFetching?: boolean;
-  canEdit?: boolean;
-  canDelete?: boolean;
   rowCount?: number;
   onStateChange?: Parameters<typeof DataTable<AppRecord>>[0]['onStateChange'];
   refetch: () => void;
 }
 
-export function AppsTable({
+export function TrashAppsTable({
   data,
   isLoading,
   isFetching,
-  canEdit = true,
-  canDelete = false,
   rowCount,
   onStateChange,
   refetch,
-}: AppsTableProps) {
-  const router = useRouter();
-
+}: TrashAppsTableProps) {
   return (
     <DataTable<AppRecord>
       data={data}
-      columns={appColumns}
+      columns={trashColumns}
       isLoading={isLoading}
       isFetching={isFetching}
-      title='Apps'
-      description='Manage all apps.'
-      permissions={{ canEdit, canDelete, canView: false }}
+      title='Trash'
+      description='Review apps in trash.'
+      permissions={{ canEdit: false, canDelete: true, canView: false }}
       actions={{
-        onEdit: (raw) => router.push(`/apps/${raw.id}`),
         onDelete: async (app) => {
-          await appsService.deleteApps([app.id]);
+          await appsService.emptyTrash([app.id]);
           refetch();
         },
+        custom: [
+          {
+            label: 'Restore',
+            onClick: async (app) => {
+              await appsService.restoreApps([app.id]);
+              refetch();
+            },
+            icon: <RefreshCw />,
+            variant: 'default',
+          },
+        ],
       }}
       enableSearch
       enableColumnToggle
@@ -60,15 +62,12 @@ export function AppsTable({
       pageSizeOptions={[20, 30, 50]}
       defaultPageSize={20}
       toolbarExtra={
-        <div className='flex items-center gap-2'>
-          <Button onClick={() => router.push('/apps/add')}>Add App</Button>
-          <Button variant='ghost' size='sm' onClick={() => refetch()}>
-            <RefreshCw />
-          </Button>
-        </div>
+        <Button variant='ghost' size='sm' onClick={() => refetch()}>
+          <RefreshCw />
+        </Button>
       }
       deleteBulkAction={async (ids) => {
-        await appsService.deleteApps(ids);
+        await appsService.emptyTrash(ids);
         refetch();
       }}
     />

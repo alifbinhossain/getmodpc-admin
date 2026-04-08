@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import type { TableActionHandlers, TablePermissions } from '@/types/table';
-import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Eye, MoreHorizontal, Pencil, RefreshCw, Trash2 } from 'lucide-react';
 
 import DeleteAlertModal from '@/components/shared/delete-alert-modal';
 import { Button } from '@/components/ui/button';

@@ -81,6 +81,8 @@ export const queryKeys = {
       [...queryKeys.app.all, 'createScrapingApp'] as const,
     list: (params: Record<string, unknown>) =>
       [...queryKeys.app.lists(), params] as const,
+    softDeleteAppList: (params: Record<string, unknown>) =>
+      ['soft-delete-apps', params] as const,
     details: () => [...queryKeys.app.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.app.details(), id] as const,
   },

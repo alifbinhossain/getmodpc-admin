@@ -1,4 +1,4 @@
-import { PaginatedResponse } from '@/types';
+import { BaseQueryParams, PaginatedResponse } from '@/types';
 import type {
   AppQueryParams,
   AppRecord,
@@ -19,6 +19,19 @@ export function useApps(
   return useApiListQuery({
     queryKey: queryKeys.app.list((params ?? {}) as Record<string, unknown>),
     queryFn: () => appsService.getApps(params),
+    initialData,
+  });
+}
+
+export function useSoftDeleteApps(
+  params?: BaseQueryParams,
+  initialData?: PaginatedResponse<AppRecord>
+) {
+  return useApiListQuery({
+    queryKey: queryKeys.app.softDeleteAppList(
+      (params ?? {}) as Record<string, unknown>
+    ),
+    queryFn: () => appsService.getAllSoftDeleteApps(params),
     initialData,
   });
 }
