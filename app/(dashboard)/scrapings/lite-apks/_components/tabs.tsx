@@ -30,7 +30,10 @@ function Tabs() {
     payload: PlayStoreImportDebugData<ILiteApksApp>
   ) => {
     setDebugData(payload);
-    setActiveTab('debugs');
+
+    if (payload.status !== 'error') {
+      setActiveTab('debugs');
+    }
   };
 
   return (

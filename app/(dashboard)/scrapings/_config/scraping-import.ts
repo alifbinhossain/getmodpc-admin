@@ -26,7 +26,7 @@ export type PlayStoreResolvedCategory = {
   record: CategoryRecord;
 };
 
-export type PlayStoreImportDebugData<T> = {
+export type PlayStoreImportDebugData<T = IPlayStoreScrapingApp> = {
   requestedUrl: string;
   startedAt: string;
   finishedAt: string;
@@ -61,7 +61,7 @@ export function getScrapingCategoryName(app: {
   throw new Error('The scraped app did not include a usable genre/category.');
 }
 
-export function buildCategoryPayload<T>(app: {
+export function buildCategoryPayload(app: {
   genre: string;
   categories: Category[];
 }): CreateCategoryPayload {
@@ -137,24 +137,30 @@ export function buildLiteApksAppPayload(
     categories: app.categories,
     genre: app.genre ?? '',
   });
+  const fallbackPackageName = deriveLiteApksPackageName(app.url);
+  const fallbackTitle = asOptionalString(app.title) ?? fallbackPackageName;
   const developerNames = uniqueStrings([app.developer]);
   const appTags = uniqueStrings([app.title]);
 
   return {
-    name: app?.title?.trim() ?? '',
-    title: asOptionalString(app.title) ?? app?.title?.trim(),
+    name: fallbackTitle,
+    title: fallbackTitle,
     platform: EnumPlatformType.ANDROID,
     type: options.type ?? inferAppType(app),
-    source: options.source ?? EnumAppSource.PLAY_STORE,
-    description: app.description,
+    source: options.source ?? EnumAppSource.LITE_APKS,
+    description:
+      asOptionalString(app.descriptionHtml) ??
+      asOptionalString(app.description) ??
+      asOptionalString(app.summary) ??
+      'Imported from LiteApks.',
     summary: asOptionalString(app.summary),
     latest_news: asOptionalString(app.recentChanges),
     header_image: asOptionalString(app.headerImage),
     icon: asOptionalString(app.icon),
     genre: categoryName,
-    os_version: null,
+    os_version: 'Android',
     screenshots: uniqueStrings(app.screenshots),
-    developer: app?.developer?.trim(),
+    developer: asOptionalString(app.developer) ?? 'Unknown developer',
     app_tags: appTags,
     app_developers: developerNames,
     version: asOptionalString(app.version),
@@ -167,8 +173,9 @@ export function buildLiteApksAppPayload(
     comment_status: EnumAppCommentStatus.OPEN,
     categories: categoryIds,
     url: app.url,
-    installs: app.installs!,
-    score_text: app.scoreText!,
+    package_name: fallbackPackageName,
+    installs: asOptionalString(app.installs) ?? '0+',
+    score_text: asOptionalString(app.scoreText) ?? '0',
     ratings: toOptionalInt(app.ratings),
     reviews: toOptionalInt(app.reviews),
     size: asOptionalString(app.size),
@@ -200,11 +207,20 @@ export function categoryMatchesName(
   );
 }
 
-function inferAppType(app: { url: string; type?: EnumAppType }): EnumAppType {
+function inferAppType(app: {
+  genre?: string | null;
+  genreId?: string | null;
+  type?: EnumAppType;
+  url: string;
+}): EnumAppType {
   const url = app.url?.toLowerCase() ?? '';
+  const genre = app.genre?.toLowerCase() ?? '';
+  const genreId = app.genreId?.toLowerCase() ?? '';
 
   if (
     url.includes('/store/games') ||
+    genre.includes('game') ||
+    genreId.includes('game') ||
     (app.type && app.type === EnumAppType.GAME)
   ) {
     return EnumAppType.GAME;
@@ -246,6 +262,18 @@ function formatDateInput(value: number | string | undefined) {
 function asOptionalString(value?: string | null) {
   const normalized = value?.trim();
   return normalized ? normalized : undefined;
+}
+
+function deriveLiteApksPackageName(url: string) {
+  try {
+    const pathname = new URL(url).pathname;
+    const lastSegment = pathname.split('/').filter(Boolean).pop() ?? '';
+    const normalized = lastSegment.replace(/\.html$/i, '').trim();
+
+    return normalized || 'liteapks-app';
+  } catch {
+    return 'liteapks-app';
+  }
 }
 
 function uniqueStrings(values: Array<string | undefined | null>) {

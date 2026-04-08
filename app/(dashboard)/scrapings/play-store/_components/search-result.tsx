@@ -2,24 +2,16 @@
 
 import { type FormEvent, startTransition, useState } from 'react';
 
-import { AlertCircle, LoaderCircle, Search } from 'lucide-react';
+import { IPlayStoreScrapingApp } from '@/types/scrapping';
+import { AlertCircle, Search } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { formatNumber } from '@/lib/utils';
-
+import ResultsHeader from '../../_components/results-header';
+import ResultsPagination from '../../_components/results-pagination';
 import type { PlayStoreImportDebugData } from '../../_config/scraping-import';
 import { useGetSearchPlayStoreApp } from '../../_config/scraping.hooks';
 import { usePlayStoreImport } from '../_config/play-store-import.hooks';
@@ -28,7 +20,9 @@ import PlayStoreAppCard from './play-store-app-card';
 const SEARCH_PAGE_SIZE = 20;
 
 type SearchResultProps = {
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<IPlayStoreScrapingApp>
+  ) => void;
 };
 
 function SearchResult({ onImportComplete }: SearchResultProps) {
@@ -84,7 +78,9 @@ function SearchResults({
   query,
   setPage,
 }: {
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<IPlayStoreScrapingApp>
+  ) => void;
   page: number;
   query: string;
   setPage: (page: number) => void;
@@ -133,36 +129,17 @@ function SearchResults({
 
   const totalPages = Math.max(meta?.totalPages ?? 1, 1);
   const currentPage = meta?.page ?? page;
-  const startItem =
-    apps.length > 0 && meta ? (meta.page - 1) * meta.limit + 1 : 0;
-  const endItem = apps.length > 0 && meta ? startItem + apps.length - 1 : 0;
-  const pageItems = buildPaginationItems(currentPage, totalPages);
 
   return (
     <div className='space-y-4'>
-      <div className='rounded-md border bg-gray-100 p-4'>
-        <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-          <div>
-            <h2 className='text-lg font-bold uppercase'>Result</h2>
-            {meta ? (
-              <p className='text-xs text-muted-foreground'>
-                Showing {formatNumber(startItem)}-{formatNumber(endItem)} of{' '}
-                {formatNumber(meta.total)} apps
-              </p>
-            ) : showLoadingCards ? (
-              <p className='text-xs text-muted-foreground'>
-                Loading results...
-              </p>
-            ) : null}
-          </div>
-          {showLoadingCards ? (
-            <p className='flex items-center gap-1 text-xs font-medium text-muted-foreground'>
-              <LoaderCircle className='size-3.5 animate-spin' />
-              {isLoading ? 'Loading results...' : 'Updating results...'}
-            </p>
-          ) : null}
-        </div>
-      </div>
+      <ResultsHeader
+        isFetching={isFetching}
+        isLoading={isLoading}
+        meta={meta}
+        resultsCount={apps.length}
+        title={<h2 className='text-lg font-bold uppercase'>Result</h2>}
+        totalLabel='apps'
+      />
       {lastImport?.status === 'validation_error' ? (
         <Alert variant='destructive'>
           <AlertCircle className='size-4' />
@@ -199,101 +176,14 @@ function SearchResults({
               />
             ))}
       </div>
-      {meta && totalPages > 1 ? (
-        <Pagination className='flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-          <div className='text-xs text-muted-foreground'>
-            Page {formatNumber(currentPage)} of {formatNumber(totalPages)}
-          </div>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className={
-                  currentPage <= 1 ? 'pointer-events-none opacity-50' : ''
-                }
-                href='#'
-                onClick={(event) => {
-                  event.preventDefault();
-
-                  if (currentPage > 1 && !isFetching) {
-                    setPage(currentPage - 1);
-                  }
-                }}
-              />
-            </PaginationItem>
-            {pageItems.map((item, index) => (
-              <PaginationItem key={`${item}-${index}`}>
-                {item === 'ellipsis' ? (
-                  <PaginationEllipsis />
-                ) : (
-                  <PaginationLink
-                    href='#'
-                    isActive={item === currentPage}
-                    onClick={(event) => {
-                      event.preventDefault();
-
-                      if (item !== currentPage && !isFetching) {
-                        setPage(item);
-                      }
-                    }}
-                  >
-                    {item}
-                  </PaginationLink>
-                )}
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext
-                className={
-                  currentPage >= totalPages
-                    ? 'pointer-events-none opacity-50'
-                    : ''
-                }
-                href='#'
-                onClick={(event) => {
-                  event.preventDefault();
-
-                  if (currentPage < totalPages && !isFetching) {
-                    setPage(currentPage + 1);
-                  }
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      ) : null}
+      <ResultsPagination
+        currentPage={currentPage}
+        isPending={isFetching}
+        onPageChange={setPage}
+        totalPages={totalPages}
+      />
     </div>
   );
-}
-
-function buildPaginationItems(currentPage: number, totalPages: number) {
-  if (totalPages <= 5) {
-    return Array.from({ length: totalPages }, (_, index) => index + 1);
-  }
-
-  if (currentPage <= 3) {
-    return [1, 2, 3, 4, 'ellipsis', totalPages] as const;
-  }
-
-  if (currentPage >= totalPages - 2) {
-    return [
-      1,
-      'ellipsis',
-      totalPages - 3,
-      totalPages - 2,
-      totalPages - 1,
-      totalPages,
-    ] as const;
-  }
-
-  return [
-    1,
-    'ellipsis',
-    currentPage - 1,
-    currentPage,
-    currentPage + 1,
-    'ellipsis',
-    totalPages,
-  ] as const;
 }
 
 function SearchResultCardSkeleton() {

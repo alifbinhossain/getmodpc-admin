@@ -1,11 +1,14 @@
 import { EnumAppType } from '@/types/app';
+import { ILiteApksApp } from '@/types/scrapping';
 
 import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/_config/scraping-import';
 
 import LatestByType from './latest-by-type';
 
 type LatestAppsProps = {
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<ILiteApksApp>
+  ) => void;
 };
 
 function LatestApps({ onImportComplete }: LatestAppsProps) {

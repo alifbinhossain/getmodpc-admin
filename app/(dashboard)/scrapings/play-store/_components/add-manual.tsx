@@ -2,6 +2,7 @@
 
 import { type FormEvent } from 'react';
 
+import { IPlayStoreScrapingApp } from '@/types/scrapping';
 import { AlertCircle, Search } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -13,7 +14,9 @@ import type { PlayStoreImportDebugData } from '@/app/(dashboard)/scrapings/_conf
 import { usePlayStoreImport } from '../_config/play-store-import.hooks';
 
 type AddManualProps = {
-  onImportComplete?: (debugData: PlayStoreImportDebugData) => void;
+  onImportComplete?: (
+    debugData: PlayStoreImportDebugData<IPlayStoreScrapingApp>
+  ) => void;
 };
 
 function AddManual({ onImportComplete }: AddManualProps) {

@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
+import { IPlayStoreScrapingApp } from '@/types/scrapping';
 import { Bug, ExternalLink, Search } from 'lucide-react';
 
 import {
@@ -20,12 +21,17 @@ import SearchResult from './search-result';
 
 function Tabs() {
   const [activeTab, setActiveTab] = useState('manual');
-  const [debugData, setDebugData] = useState<PlayStoreImportDebugData | null>(
-    null
-  );
-  const handleImportComplete = (payload: PlayStoreImportDebugData) => {
+  const [debugData, setDebugData] =
+    useState<PlayStoreImportDebugData<IPlayStoreScrapingApp> | null>(null);
+
+  const handleImportComplete = (
+    payload: PlayStoreImportDebugData<IPlayStoreScrapingApp>
+  ) => {
     setDebugData(payload);
-    setActiveTab('debugs');
+
+    if (payload.status !== 'error') {
+      setActiveTab('debugs');
+    }
   };
 
   return (
