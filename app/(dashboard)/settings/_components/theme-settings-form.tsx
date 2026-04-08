@@ -1,7 +1,6 @@
 'use client';
 
-import { FormInput, FormSelect } from '@/components/forms';
-import { FormSwitch } from '@/components/forms/_fields/switch';
+import { FormInput } from '@/components/forms';
 
 import {
   themeSettingsDefaults,
@@ -26,20 +25,16 @@ export function ThemeSettingsForm() {
         {({ control }) => (
           <>
             <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-              <FormSelect
-                control={control}
-                name='theme_mode'
-                label='Theme Mode'
-                options={[
-                  { label: 'System', value: 'system' },
-                  { label: 'Light', value: 'light' },
-                  { label: 'Dark', value: 'dark' },
-                ]}
-              />
               <FormInput
                 control={control}
                 name='primary_color'
                 label='Primary Color'
+                fieldProps={{ type: 'color' }}
+              />
+              <FormInput
+                control={control}
+                name='secondary_color'
+                label='Secondary Color'
                 fieldProps={{ type: 'color' }}
               />
               <FormInput
@@ -50,22 +45,9 @@ export function ThemeSettingsForm() {
               />
               <FormInput
                 control={control}
-                name='surface_color'
-                label='Surface Color'
+                name='background_color'
+                label='Background Color'
                 fieldProps={{ type: 'color' }}
-              />
-            </div>
-
-            <div className='mt-4 grid gap-4 md:grid-cols-2'>
-              <FormSwitch
-                control={control}
-                name='enable_soft_shadows'
-                label='Enable soft shadows'
-              />
-              <FormSwitch
-                control={control}
-                name='show_glass_cards'
-                label='Enable glass cards'
               />
             </div>
           </>
