@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 
-import type { UpdateSettingsPayload } from '@/types/settings';
+import { IUpdateSettingPayload } from '@/types/settings';
 import type { DefaultValues } from 'react-hook-form';
 import type { z, ZodSchema } from 'zod/v3';
 
@@ -41,7 +41,7 @@ export function SettingsSectionForm<TSchema extends ZodSchema>({
 
   const onSubmit = async (values: z.infer<TSchema>) => {
     try {
-      await updateSettings.mutateAsync(values as UpdateSettingsPayload);
+      await updateSettings.mutateAsync(values as IUpdateSettingPayload);
       form.reset(values);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Invalid request';
@@ -50,7 +50,7 @@ export function SettingsSectionForm<TSchema extends ZodSchema>({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <FormWrapper>
         {children(form)}
 

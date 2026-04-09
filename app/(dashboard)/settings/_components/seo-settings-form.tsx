@@ -1,19 +1,17 @@
 'use client';
 
+import { ISeoSetting } from '@/types/settings';
+
 import { FormInput, FormTextarea } from '@/components/forms';
 import { FormSwitch } from '@/components/forms/_fields/switch';
 
-import {
-  getSeoSettingsDefaults,
-  type ISeoSettingsSchema,
-  seoSettingsSchema,
-} from '@/lib/schemas/settings-schema';
+import { seoSettingsSchema } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
 type Props = {
-  initialValues?: ISeoSettingsSchema;
+  initialValues: ISeoSetting;
 };
 
 export function SeoSettingsForm({ initialValues }: Props) {
@@ -24,7 +22,7 @@ export function SeoSettingsForm({ initialValues }: Props) {
     >
       <SettingsSectionForm
         schema={seoSettingsSchema}
-        defaultValues={getSeoSettingsDefaults(initialValues)}
+        defaultValues={initialValues}
         submitLabel='Save Seo'
       >
         {({ control }) => (
@@ -32,28 +30,28 @@ export function SeoSettingsForm({ initialValues }: Props) {
             <div className='grid gap-4 md:grid-cols-2'>
               <FormInput
                 control={control}
-                name='site_name'
+                name='value.site_name'
                 label='Site Name'
                 placeholder='GetModPC'
                 required
               />
               <FormInput
                 control={control}
-                name='site_tagline'
+                name='value.site_tagline'
                 label='Tagline'
                 placeholder='Short product tagline'
                 required
               />
               <FormInput
                 control={control}
-                name='meta_title'
+                name='value.meta_title'
                 label='Meta Title'
                 placeholder='Default meta title'
                 required
               />
               <FormInput
                 control={control}
-                name='canonical_url'
+                name='value.canonical_url'
                 label='Canonical URL'
                 placeholder='https://example.com'
                 required
@@ -63,7 +61,7 @@ export function SeoSettingsForm({ initialValues }: Props) {
             <div className='mt-4 space-y-4'>
               <FormTextarea
                 control={control}
-                name='meta_description'
+                name='value.meta_description'
                 label='Meta Description'
                 placeholder='Default meta description'
                 maxChars={320}
@@ -71,21 +69,21 @@ export function SeoSettingsForm({ initialValues }: Props) {
               />
               <FormInput
                 control={control}
-                name='meta_keywords'
+                name='value.meta_keywords'
                 label='Meta Keywords'
                 placeholder='apk, android, games'
                 required
               />
               <FormInput
                 control={control}
-                name='og_title'
+                name='value.og_title'
                 label='Open Graph Title'
                 placeholder='Default social title'
                 required
               />
               <FormTextarea
                 control={control}
-                name='og_description'
+                name='value.og_description'
                 label='Open Graph Description'
                 placeholder='Default social description'
                 maxChars={320}
@@ -96,12 +94,12 @@ export function SeoSettingsForm({ initialValues }: Props) {
             <div className='mt-4 grid gap-4 md:grid-cols-2'>
               <FormSwitch
                 control={control}
-                name='robots_index'
+                name='value.robots_index'
                 label='Allow indexing'
               />
               <FormSwitch
                 control={control}
-                name='robots_follow'
+                name='value.robots_follow'
                 label='Allow link following'
               />
             </div>

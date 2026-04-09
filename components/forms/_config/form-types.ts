@@ -14,6 +14,7 @@ export type IFormInput = FormControlFunc<{
     field?: ControllerRenderProps<any, any>
   ) => void;
   fieldProps?: InputProps;
+  showLabel?: boolean;
 }>;
 
 export type IFormTextarea = FormControlFunc<{

@@ -5,7 +5,6 @@ import { settingsService } from './_config/settings.service';
 
 async function SettingPage() {
   const initialData = await settingsService.getSettings().catch(() => null);
-
   return (
     <div className='space-y-6'>
       <div className='space-y-1'>
@@ -16,7 +15,7 @@ async function SettingPage() {
         </p>
       </div>
 
-      <SettingsForm initialData={initialData} />
+      <SettingsForm initialData={initialData?.data ?? []} />
     </div>
   );
 }

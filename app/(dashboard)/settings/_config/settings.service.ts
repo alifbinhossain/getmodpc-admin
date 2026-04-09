@@ -1,24 +1,21 @@
 import type { ApiResponse } from '@/types';
-import type { SettingsRecord, UpdateSettingsPayload } from '@/types/settings';
+import type { ISetting, IUpdateSettingPayload } from '@/types/settings';
 
 import { api } from '@/lib/axios';
 
 export const settingsService = {
-  getSettings(): Promise<ApiResponse<SettingsRecord>> {
-    return api.get<SettingsRecord>('/settings');
+  getSettings(): Promise<ApiResponse<ISetting[]>> {
+    return api.get<ISetting[]>('/settings');
   },
 
-  getSettingByKey(key: string): Promise<ApiResponse<SettingsRecord>> {
-    return api.get<SettingsRecord>(`/settings/${key}`);
+  getSettingByKey<T>(key: string): Promise<ApiResponse<T>> {
+    return api.get<T>(`/settings/${key}`);
   },
 
   updateSettings(
-    payload: UpdateSettingsPayload
-  ): Promise<ApiResponse<SettingsRecord>> {
-    return api.post<SettingsRecord, UpdateSettingsPayload>(
-      '/settings',
-      payload
-    );
+    payload: IUpdateSettingPayload
+  ): Promise<ApiResponse<ISetting>> {
+    return api.post<ISetting, IUpdateSettingPayload>('/settings', payload);
   },
 
   deleteSettings(key: string): Promise<ApiResponse<void>> {

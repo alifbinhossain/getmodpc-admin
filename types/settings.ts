@@ -1,60 +1,106 @@
-import type { BaseRecord } from './index';
+export type ISetting = {
+  id: string;
+  key: string;
+  value: object;
+  created_at: string;
+  updated_at: string;
+};
 
-export type RatingStyle = 'stars' | 'score' | 'badge';
+export type IUpdateSettingPayload = {
+  key: string;
+  value: object;
+};
 
-export interface SettingsLink {
-  label: string;
-  url: string;
-}
+export type IThemeSetting = {
+  key: 'theme';
+  value: {
+    background_color: string;
+    primary_color: string;
+    secondary_color: string;
+    accent_color: string;
+  };
+};
 
-export interface SettingsBody {
-  site_name: string;
-  site_tagline: string;
-  meta_title: string;
-  meta_description: string;
-  canonical_url: string;
-  meta_keywords: string;
-  og_title: string;
-  og_description: string;
-  robots_index: boolean;
-  robots_follow: boolean;
+export type IRatingSetting = {
+  key: 'rating';
+  value: {
+    is_active: boolean;
+    success_message: string;
+    error_message: string;
+  };
+};
 
-  primary_color: string;
-  secondary_color: string;
-  accent_color: string;
-  background_color: string;
+export type ISeoSetting = {
+  key: 'seo';
+  value: {
+    site_name: string;
+    site_tagline: string;
+    meta_title: string;
+    meta_description: string;
+    canonical_url: string;
+    meta_keywords: string;
+    og_title: string;
+    og_description: string;
+    robots_index: boolean;
+    robots_follow: boolean;
+  };
+};
 
-  rating_style: RatingStyle;
-  default_rating_value: number;
-  default_rating_count: number;
-  rating_badge_text: string;
-  rating_description: string;
-  show_editor_pick_badge: boolean;
-  show_user_rating: boolean;
+export type ISocialLinkSetting = {
+  key: 'social_links';
+  value: Array<{
+    label: string;
+    url: string;
+    is_enabled: boolean;
+    is_open_new_tab: boolean;
+  }>;
+};
 
-  primary_cta_label: string;
-  primary_cta_url: string;
-  secondary_cta_label: string;
-  secondary_cta_url: string;
-  useful_links: SettingsLink[];
+export type IIconSetting = {
+  key: 'icons';
+  value: Array<{
+    alt_text: string;
+    url: string;
+    name: string;
+  }>;
+};
 
-  social_links: SettingsLink[];
+export type ILinkSetting = {
+  key: 'links';
+  value: {
+    primary_cta_label: string;
+    primary_cta_url: string;
+    secondary_cta_label: string;
+    secondary_cta_url: string;
+    links: Array<{
+      label: string;
+      url: string;
+      is_enabled: boolean;
+      is_open_new_tab: boolean;
+    }>;
+  };
+};
 
-  footer_heading: string;
-  footer_description: string;
-  newsletter_title: string;
-  newsletter_description: string;
-  copyright_text: string;
-  footer_note: string;
-  footer_links: SettingsLink[];
+export type IFooterSetting = {
+  key: 'footer';
+  value: {
+    footer_heading: string;
+    footer_description: string;
+    newsletter_title: string;
+    newsletter_description: string;
+    copyright_text: string;
+    footer_note: string;
+    footer_links: { label: string; url: string }[];
+  };
+};
 
-  site_logo: string;
-  header_logo: string;
-  favicon: string;
-  apple_touch_icon: string;
-  og_image: string;
-}
-
-export type SettingsRecord = Partial<SettingsBody> & Partial<BaseRecord>;
-
-export type UpdateSettingsPayload = Partial<SettingsBody>;
+export type ISettingMap = {
+  seo: ISeoSetting['value'];
+  theme: IThemeSetting['value'];
+  rating: IRatingSetting['value'];
+  links: ILinkSetting['value'];
+  social_links: ISocialLinkSetting['value'];
+  footer: IFooterSetting['value'];
+  icons: IIconSetting['value'];
+  [key: string]: any;
+};

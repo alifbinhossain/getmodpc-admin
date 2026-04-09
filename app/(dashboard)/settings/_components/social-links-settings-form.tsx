@@ -1,18 +1,17 @@
 'use client';
 
-import { FormArrayField, FormInput } from '@/components/forms';
+import { ISocialLinkSetting } from '@/types/settings';
 
-import {
-  getSocialLinksSettingsDefaults,
-  type ISocialLinksSettingsSchema,
-  socialLinksSettingsSchema,
-} from '@/lib/schemas/settings-schema';
+import { FormArrayField, FormInput } from '@/components/forms';
+import { FormCheckbox } from '@/components/forms/_fields/checkbox';
+
+import { socialLinksSettingsSchema } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
 type Props = {
-  initialValues?: ISocialLinksSettingsSchema;
+  initialValues: ISocialLinkSetting;
 };
 
 export function SocialLinksSettingsForm({ initialValues }: Props) {
@@ -23,32 +22,49 @@ export function SocialLinksSettingsForm({ initialValues }: Props) {
     >
       <SettingsSectionForm
         schema={socialLinksSettingsSchema}
-        defaultValues={getSocialLinksSettingsDefaults(initialValues)}
+        defaultValues={initialValues}
         submitLabel='Save Social Links'
       >
         {({ control }) => (
           <FormArrayField
             control={control}
-            name='social_links'
+            name='value'
             label='Social Profiles'
             fieldProps={{
               type: 'array',
               arrayType: 'object',
-              defaultItem: { label: '', url: '' },
+              defaultItem: {
+                label: '',
+                url: '',
+                is_enabled: true,
+                is_open_new_tab: true,
+              },
             }}
             render={({ index }) => (
               <div className='grid w-full gap-4 rounded-lg border bg-muted/30 p-4 md:grid-cols-2'>
                 <FormInput
                   control={control}
-                  name={`social_links.${index}.label`}
+                  name={`value.${index}.label`}
                   label={`Platform ${index + 1}`}
                   placeholder='Facebook'
                 />
                 <FormInput
                   control={control}
-                  name={`social_links.${index}.url`}
+                  name={`value.${index}.url`}
                   label={`Profile URL ${index + 1}`}
                   placeholder='https://example.com/profile'
+                />
+                <FormCheckbox
+                  control={control}
+                  name={`value.${index}.is_enabled`}
+                  label='Enabled'
+                  showLabel={false}
+                />
+                <FormCheckbox
+                  control={control}
+                  name={`value.${index}.is_open_new_tab`}
+                  label='Open in New Tab'
+                  showLabel={false}
                 />
               </div>
             )}

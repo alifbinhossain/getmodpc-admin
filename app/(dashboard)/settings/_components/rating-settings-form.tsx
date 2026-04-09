@@ -1,19 +1,17 @@
 'use client';
 
-import { FormInput, FormSelect, FormTextarea } from '@/components/forms';
-import { FormSwitch } from '@/components/forms/_fields/switch';
+import { IRatingSetting } from '@/types/settings';
 
-import {
-  getRatingSettingsDefaults,
-  type IRatingSettingsSchema,
-  ratingSettingsSchema,
-} from '@/lib/schemas/settings-schema';
+import { FormRichText } from '@/components/forms';
+import { FormCheckbox } from '@/components/forms/_fields/checkbox';
+
+import { ratingSettingsSchema } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
 type Props = {
-  initialValues?: IRatingSettingsSchema;
+  initialValues: IRatingSetting;
 };
 
 export function RatingSettingsForm({ initialValues }: Props) {
@@ -24,63 +22,37 @@ export function RatingSettingsForm({ initialValues }: Props) {
     >
       <SettingsSectionForm
         schema={ratingSettingsSchema}
-        defaultValues={getRatingSettingsDefaults(initialValues)}
+        defaultValues={initialValues}
         submitLabel='Save Rating'
       >
         {({ control }) => (
           <>
-            <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-              <FormSelect
+            <div className='grid gap-4 md:grid-cols-2'>
+              <FormRichText
                 control={control}
-                name='rating_style'
-                label='Rating Style'
-                options={[
-                  { label: 'Stars', value: 'stars' },
-                  { label: 'Score', value: 'score' },
-                  { label: 'Badge', value: 'badge' },
-                ]}
+                name='value.success_message'
+                label='Success Message'
+                placeholder='Write success message'
+                required
               />
-              <FormInput
+              <FormRichText
                 control={control}
-                name='default_rating_value'
-                label='Default Rating'
-                fieldProps={{ type: 'number', min: 0, max: 5, step: '0.1' }}
-              />
-              <FormInput
-                control={control}
-                name='default_rating_count'
-                label='Default Vote Count'
-                fieldProps={{ type: 'number', min: 1, step: '1' }}
-              />
-              <FormInput
-                control={control}
-                name='rating_badge_text'
-                label='Badge Text'
-                placeholder='Editor Approved'
+                name='value.error_message'
+                label='Error Message'
+                placeholder='Write error message'
+                required
               />
             </div>
-
-            <div className='mt-4 space-y-4'>
-              <FormTextarea
+            <div className='space-y-1'>
+              <FormCheckbox
                 control={control}
-                name='rating_description'
-                label='Rating Description'
-                placeholder='Explain how ratings are displayed'
-                maxChars={280}
+                name='value.is_active'
+                label='Active'
+                showLabel={false}
               />
-            </div>
-
-            <div className='mt-4 grid gap-4 md:grid-cols-2'>
-              <FormSwitch
-                control={control}
-                name='show_editor_pick_badge'
-                label='Show editor pick badge'
-              />
-              <FormSwitch
-                control={control}
-                name='show_user_rating'
-                label='Show user rating summary'
-              />
+              <span className='text-muted-foreground text-sm'>
+                If active is true , user cannot one more rating within 24 hours
+              </span>
             </div>
           </>
         )}

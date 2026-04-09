@@ -1,18 +1,16 @@
 'use client';
 
+import { IThemeSetting } from '@/types/settings';
+
 import { FormInput } from '@/components/forms';
 
-import {
-  getThemeSettingsDefaults,
-  type IThemeSettingsSchema,
-  themeSettingsSchema,
-} from '@/lib/schemas/settings-schema';
+import { themeSettingsSchema } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
 type Props = {
-  initialValues?: IThemeSettingsSchema;
+  initialValues: IThemeSetting;
 };
 
 export function ThemeSettingsForm({ initialValues }: Props) {
@@ -23,36 +21,68 @@ export function ThemeSettingsForm({ initialValues }: Props) {
     >
       <SettingsSectionForm
         schema={themeSettingsSchema}
-        defaultValues={getThemeSettingsDefaults(initialValues)}
+        defaultValues={initialValues}
         submitLabel='Save Theme'
       >
         {({ control }) => (
           <>
             <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-              <FormInput
-                control={control}
-                name='primary_color'
-                label='Primary Color'
-                fieldProps={{ type: 'color' }}
-              />
-              <FormInput
-                control={control}
-                name='secondary_color'
-                label='Secondary Color'
-                fieldProps={{ type: 'color' }}
-              />
-              <FormInput
-                control={control}
-                name='accent_color'
-                label='Accent Color'
-                fieldProps={{ type: 'color' }}
-              />
-              <FormInput
-                control={control}
-                name='background_color'
-                label='Background Color'
-                fieldProps={{ type: 'color' }}
-              />
+              <div className='space-y-2'>
+                <FormInput
+                  control={control}
+                  name='value.primary_color'
+                  label='Primary Color'
+                  fieldProps={{ type: 'color' }}
+                />
+                <FormInput
+                  control={control}
+                  name='value.primary_color'
+                  label='Primary Color'
+                  showLabel={false}
+                />
+              </div>
+              <div className='space-y-2'>
+                <FormInput
+                  control={control}
+                  name='value.secondary_color'
+                  label='Secondary Color'
+                  fieldProps={{ type: 'color' }}
+                />
+                <FormInput
+                  control={control}
+                  name='value.secondary_color'
+                  label='Secondary Color'
+                  showLabel={false}
+                />
+              </div>
+              <div className='space-y-2'>
+                <FormInput
+                  control={control}
+                  name='value.accent_color'
+                  label='Accent Color'
+                  fieldProps={{ type: 'color' }}
+                />
+                <FormInput
+                  control={control}
+                  name='value.accent_color'
+                  label='Accent Color'
+                  showLabel={false}
+                />
+              </div>
+              <div className='space-y-2'>
+                <FormInput
+                  control={control}
+                  name='value.background_color'
+                  label='Background Color'
+                  fieldProps={{ type: 'color' }}
+                />
+                <FormInput
+                  control={control}
+                  name='value.background_color'
+                  label='Background Color'
+                  showLabel={false}
+                />
+              </div>
             </div>
           </>
         )}

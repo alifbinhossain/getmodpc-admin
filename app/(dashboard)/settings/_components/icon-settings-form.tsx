@@ -1,18 +1,17 @@
 'use client';
 
+import { IIconSetting } from '@/types/settings';
+
+import { FormArrayField, FormInput } from '@/components/forms';
 import { MediaInput } from '@/components/media';
 
-import {
-  getIconSettingsDefaults,
-  iconSettingsSchema,
-  type IIconSettingsSchema,
-} from '@/lib/schemas/settings-schema';
+import { iconSettingsSchema } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
 type Props = {
-  initialValues?: IIconSettingsSchema;
+  initialValues: IIconSetting;
 };
 
 export function IconSettingsForm({ initialValues }: Props) {
@@ -23,89 +22,52 @@ export function IconSettingsForm({ initialValues }: Props) {
     >
       <SettingsSectionForm
         schema={iconSettingsSchema}
-        defaultValues={getIconSettingsDefaults(initialValues)}
+        defaultValues={initialValues}
         submitLabel='Save Icons'
       >
-        {(form) => {
-          const siteLogo = form.watch('site_logo');
-          const headerLogo = form.watch('header_logo');
-          const favicon = form.watch('favicon');
-          const appleTouchIcon = form.watch('apple_touch_icon');
-          const ogImage = form.watch('og_image');
-
-          return (
-            <>
-              <div className='grid gap-5 lg:grid-cols-2'>
-                <div className='rounded-lg border bg-muted/30 p-4'>
-                  <MediaInput
-                    label='Site Logo'
-                    value={siteLogo}
-                    onChange={(value) => {
-                      form.setValue('site_logo', value, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                        shouldTouch: true,
-                      });
-                    }}
-                  />
-                </div>
-                <div className='rounded-lg border bg-muted/30 p-4'>
-                  <MediaInput
-                    label='Header Logo'
-                    value={headerLogo}
-                    onChange={(value) => {
-                      form.setValue('header_logo', value, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                        shouldTouch: true,
-                      });
-                    }}
-                  />
-                </div>
-                <div className='rounded-lg border bg-muted/30 p-4'>
-                  <MediaInput
-                    label='Favicon'
-                    value={favicon}
-                    onChange={(value) => {
-                      form.setValue('favicon', value, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                        shouldTouch: true,
-                      });
-                    }}
-                  />
-                </div>
-                <div className='rounded-lg border bg-muted/30 p-4'>
-                  <MediaInput
-                    label='Apple Touch Icon'
-                    value={appleTouchIcon}
-                    onChange={(value) => {
-                      form.setValue('apple_touch_icon', value, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                        shouldTouch: true,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className='mt-5 rounded-lg border bg-muted/30 p-4'>
+        {({ control, getValues, setValue }) => (
+          <FormArrayField
+            control={control}
+            name='value'
+            label='Icons'
+            fieldProps={{
+              type: 'array',
+              arrayType: 'object',
+              defaultItem: {
+                url: '',
+                name: '',
+                alt_text: '',
+              },
+            }}
+            render={({ index }) => (
+              <div className='grid w-full gap-4 rounded-lg border bg-muted/30 p-4 md:grid-cols-2'>
                 <MediaInput
-                  label='Open Graph Image'
-                  value={ogImage}
+                  label='Icon'
+                  value={getValues(`value.${index}.url`)}
                   onChange={(value) => {
-                    form.setValue('og_image', value, {
+                    setValue(`value.${index}.url`, value, {
                       shouldValidate: true,
                       shouldDirty: true,
                       shouldTouch: true,
                     });
                   }}
                 />
+                <FormInput
+                  control={control}
+                  name={`value.${index}.name`}
+                  label={`Name ${index + 1}`}
+                  placeholder='Example Logo'
+                />
+                <FormInput
+                  control={control}
+                  name={`value.${index}.alt_text`}
+                  label={`Alt Text ${index + 1}`}
+                  placeholder='Example Logo'
+                />
               </div>
-            </>
-          );
-        }}
+            )}
+          />
+        )}
       </SettingsSectionForm>
     </SettingsPanel>
   );

@@ -1,18 +1,16 @@
 'use client';
 
+import { ILinkSetting } from '@/types/settings';
+
 import { FormArrayField, FormInput } from '@/components/forms';
 
-import {
-  getLinksSettingsDefaults,
-  type ILinksSettingsSchema,
-  linksSettingsSchema,
-} from '@/lib/schemas/settings-schema';
+import { linksSettingsSchema } from '@/lib/schemas/settings-schema';
 
 import { SettingsPanel } from './settings-panel';
 import { SettingsSectionForm } from './settings-section-form';
 
 type Props = {
-  initialValues?: ILinksSettingsSchema;
+  initialValues: ILinkSetting;
 };
 
 export function LinksSettingsForm({ initialValues }: Props) {
@@ -23,7 +21,7 @@ export function LinksSettingsForm({ initialValues }: Props) {
     >
       <SettingsSectionForm
         schema={linksSettingsSchema}
-        defaultValues={getLinksSettingsDefaults(initialValues)}
+        defaultValues={initialValues}
         submitLabel='Save Links'
       >
         {({ control }) => (
@@ -31,25 +29,25 @@ export function LinksSettingsForm({ initialValues }: Props) {
             <div className='grid gap-4 md:grid-cols-2'>
               <FormInput
                 control={control}
-                name='primary_cta_label'
+                name='value.primary_cta_label'
                 label='Primary CTA Label'
                 placeholder='Download App'
               />
               <FormInput
                 control={control}
-                name='primary_cta_url'
+                name='value.primary_cta_url'
                 label='Primary CTA URL'
                 placeholder='https://example.com/download'
               />
               <FormInput
                 control={control}
-                name='secondary_cta_label'
+                name='value.secondary_cta_label'
                 label='Secondary CTA Label'
                 placeholder='View Changelog'
               />
               <FormInput
                 control={control}
-                name='secondary_cta_url'
+                name='value.secondary_cta_url'
                 label='Secondary CTA URL'
                 placeholder='https://example.com/changelog'
               />
@@ -58,7 +56,7 @@ export function LinksSettingsForm({ initialValues }: Props) {
             <div className='mt-5'>
               <FormArrayField
                 control={control}
-                name='useful_links'
+                name='value.useful_links'
                 label='Useful Links'
                 fieldProps={{
                   type: 'array',
@@ -69,13 +67,13 @@ export function LinksSettingsForm({ initialValues }: Props) {
                   <div className='grid w-full gap-4 rounded-lg border bg-muted/30 p-4 md:grid-cols-2'>
                     <FormInput
                       control={control}
-                      name={`useful_links.${index}.label`}
+                      name={`value.useful_links.${index}.label`}
                       label={`Link Label ${index + 1}`}
                       placeholder='Support Center'
                     />
                     <FormInput
                       control={control}
-                      name={`useful_links.${index}.url`}
+                      name={`value.useful_links.${index}.url`}
                       label={`Link URL ${index + 1}`}
                       placeholder='https://example.com'
                     />
