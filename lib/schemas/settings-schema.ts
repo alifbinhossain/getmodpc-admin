@@ -71,21 +71,26 @@ export const linksSettingsSchema = z.object({
 
 export const socialLinksSettingsSchema = z.object({
   key: z.string().min(1, 'Key is required').default('social_links'),
-  value: z.array(linkItemSchema).default([]),
+  value: z.object({
+    social_links: z.array(linkItemSchema).default([]),
+  }),
 });
 
 export const footerSettingsSchema = z.object({
   key: z.string().min(1, 'Key is required').default('footer'),
   value: z.object({
-    footer_heading: z.string().min(1, 'Footer heading is required'),
-    footer_description: z.string().min(1, 'Footer description is required'),
-    newsletter_title: z.string().min(1, 'Newsletter title is required'),
-    newsletter_description: z
-      .string()
-      .min(1, 'Newsletter description is required'),
-    copyright_text: z.string().min(1, 'Copyright text is required'),
-    footer_note: z.string().min(1, 'Footer note is required'),
-    footer_links: z.array(linkItemSchema).default([]),
+    footer_heading: z.string().optional(),
+    footer_description: z.string().optional(),
+    footer_links: z
+      .array(
+        z.object({
+          label: z.string().min(1, 'Label is required'),
+          url: z.string().min(1, 'URL is required'),
+          is_open_new_tab: z.boolean().default(false),
+          is_enabled: z.boolean().default(true),
+        })
+      )
+      .default([]),
   }),
 });
 
@@ -97,7 +102,9 @@ export const iconItemSchema = z.object({
 
 export const iconSettingsSchema = z.object({
   key: z.string().min(1, 'Key is required').default('icons'),
-  value: z.array(iconItemSchema).default([]),
+  value: z.object({
+    icons: z.array(iconItemSchema).default([]),
+  }),
 });
 
 export type ThemeSettingsSchemaType = z.infer<typeof themeSettingsSchema>;

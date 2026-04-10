@@ -31,22 +31,13 @@ export function FooterSettingsForm({ initialValues }: Props) {
       >
         {({ control }) => (
           <>
-            <div className='grid gap-4 md:grid-cols-2'>
+            <div className='mt-4 gap-4 grid md:grid-cols-2 lg:grid-cols-3'>
               <FormInput
                 control={control}
                 name='value.footer_heading'
                 label='Footer Heading'
                 placeholder='Stay Updated'
               />
-              <FormInput
-                control={control}
-                name='value.newsletter_title'
-                label='Newsletter Title'
-                placeholder='Weekly Release Digest'
-              />
-            </div>
-
-            <div className='mt-4 space-y-4'>
               <FormRichText
                 control={control}
                 name='value.footer_description'
@@ -54,29 +45,6 @@ export function FooterSettingsForm({ initialValues }: Props) {
                 placeholder='Write footer about content'
                 required
               />
-              <FormTextarea
-                control={control}
-                name='value.newsletter_description'
-                label='Newsletter Description'
-                placeholder='Summarize the newsletter offer'
-                maxChars={240}
-              />
-              <FormInput
-                control={control}
-                name='value.copyright_text'
-                label='Copyright Text'
-                placeholder='© 2026 GetModPC. All rights reserved.'
-              />
-              <FormTextarea
-                control={control}
-                name='value.footer_note'
-                label='Footer Note'
-                placeholder='Add compliance or trust note'
-                maxChars={320}
-              />
-            </div>
-
-            <div className='mt-5'>
               <FormArrayField
                 control={control}
                 name='value.footer_links'

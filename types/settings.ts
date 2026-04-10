@@ -6,6 +6,13 @@ export type ISetting = {
   updated_at: string;
 };
 
+export type ISettingLink = {
+  label: string;
+  url: string;
+  is_enabled: boolean;
+  is_open_new_tab: boolean;
+};
+
 export type IUpdateSettingPayload = {
   key: string;
   value: object;
@@ -48,21 +55,20 @@ export type ISeoSetting = {
 
 export type ISocialLinkSetting = {
   key: 'social_links';
-  value: Array<{
-    label: string;
-    url: string;
-    is_enabled: boolean;
-    is_open_new_tab: boolean;
-  }>;
+  value: {
+    social_links: ISettingLink[];
+  };
 };
 
 export type IIconSetting = {
   key: 'icons';
-  value: Array<{
-    alt_text: string;
-    url: string;
-    name: string;
-  }>;
+  value: {
+    icons: Array<{
+      alt_text: string;
+      url: string;
+      name: string;
+    }>;
+  };
 };
 
 export type ILinkSetting = {
@@ -72,12 +78,7 @@ export type ILinkSetting = {
     primary_cta_url: string;
     secondary_cta_label: string;
     secondary_cta_url: string;
-    links: Array<{
-      label: string;
-      url: string;
-      is_enabled: boolean;
-      is_open_new_tab: boolean;
-    }>;
+    links: ISettingLink[];
   };
 };
 
@@ -86,11 +87,7 @@ export type IFooterSetting = {
   value: {
     footer_heading: string;
     footer_description: string;
-    newsletter_title: string;
-    newsletter_description: string;
-    copyright_text: string;
-    footer_note: string;
-    footer_links: { label: string; url: string }[];
+    footer_links: ISettingLink[];
   };
 };
 

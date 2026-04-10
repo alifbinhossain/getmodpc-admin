@@ -19,7 +19,7 @@ type Props = {
 };
 
 export function SettingsForm({ initialData }: Props) {
-  const { footer, icon, links, rating, seo, social_link, theme } =
+  const { footer, icons, links, rating, seo, social_links, theme } =
     useGetSettingValuesDividedByKeys(initialData);
   return (
     <MantineProvider>
@@ -29,9 +29,9 @@ export function SettingsForm({ initialData }: Props) {
           <TabsTrigger value='theme'>Theme</TabsTrigger>
           <TabsTrigger value='rating'>Rating</TabsTrigger>
           <TabsTrigger value='links'>Links</TabsTrigger>
-          <TabsTrigger value='social_link'>Social Links</TabsTrigger>
+          <TabsTrigger value='social_links'>Social Links</TabsTrigger>
           <TabsTrigger value='footer'>Footer</TabsTrigger>
-          <TabsTrigger value='icon'>Icon</TabsTrigger>
+          <TabsTrigger value='icons'>Icon</TabsTrigger>
         </TabsList>
 
         <TabsContent value='seo' className='space-y-5'>
@@ -79,7 +79,7 @@ export function SettingsForm({ initialData }: Props) {
             key={`social_links`}
             initialValues={{
               key: 'social_links',
-              value: social_link,
+              value: social_links,
             }}
           />
         </TabsContent>
@@ -99,7 +99,7 @@ export function SettingsForm({ initialData }: Props) {
             key={`icons`}
             initialValues={{
               key: 'icons',
-              value: icon,
+              value: icons,
             }}
           />
         </TabsContent>

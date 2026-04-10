@@ -28,7 +28,7 @@ export function IconSettingsForm({ initialValues }: Props) {
         {({ control, getValues, setValue }) => (
           <FormArrayField
             control={control}
-            name='value'
+            name='value.icons'
             label='Icons'
             fieldProps={{
               type: 'array',
@@ -43,9 +43,9 @@ export function IconSettingsForm({ initialValues }: Props) {
               <div className='grid w-full gap-4 rounded-lg border bg-muted/30 p-4 md:grid-cols-2'>
                 <MediaInput
                   label='Icon'
-                  value={getValues(`value.${index}.url`)}
+                  value={getValues(`value.icons.${index}.url`)}
                   onChange={(value) => {
-                    setValue(`value.${index}.url`, value, {
+                    setValue(`value.icons.${index}.url`, value, {
                       shouldValidate: true,
                       shouldDirty: true,
                       shouldTouch: true,
@@ -54,13 +54,13 @@ export function IconSettingsForm({ initialValues }: Props) {
                 />
                 <FormInput
                   control={control}
-                  name={`value.${index}.name`}
+                  name={`value.icons.${index}.name`}
                   label={`Name ${index + 1}`}
                   placeholder='Example Logo'
                 />
                 <FormInput
                   control={control}
-                  name={`value.${index}.alt_text`}
+                  name={`value.icons.${index}.alt_text`}
                   label={`Alt Text ${index + 1}`}
                   placeholder='Example Logo'
                 />

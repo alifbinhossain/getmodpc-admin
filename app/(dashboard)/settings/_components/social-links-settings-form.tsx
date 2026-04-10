@@ -28,7 +28,7 @@ export function SocialLinksSettingsForm({ initialValues }: Props) {
         {({ control }) => (
           <FormArrayField
             control={control}
-            name='value'
+            name='value.social_links'
             label='Social Profiles'
             fieldProps={{
               type: 'array',
@@ -44,25 +44,25 @@ export function SocialLinksSettingsForm({ initialValues }: Props) {
               <div className='grid w-full gap-4 rounded-lg border bg-muted/30 p-4 md:grid-cols-2'>
                 <FormInput
                   control={control}
-                  name={`value.${index}.label`}
+                  name={`value.social_links.${index}.label`}
                   label={`Platform ${index + 1}`}
                   placeholder='Facebook'
                 />
                 <FormInput
                   control={control}
-                  name={`value.${index}.url`}
+                  name={`value.social_links.${index}.url`}
                   label={`Profile URL ${index + 1}`}
                   placeholder='https://example.com/profile'
                 />
                 <FormCheckbox
                   control={control}
-                  name={`value.${index}.is_enabled`}
+                  name={`value.social_links.${index}.is_enabled`}
                   label='Enabled'
                   showLabel={false}
                 />
                 <FormCheckbox
                   control={control}
-                  name={`value.${index}.is_open_new_tab`}
+                  name={`value.social_links.${index}.is_open_new_tab`}
                   label='Open in New Tab'
                   showLabel={false}
                 />

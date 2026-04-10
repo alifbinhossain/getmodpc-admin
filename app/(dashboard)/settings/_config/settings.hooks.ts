@@ -83,87 +83,91 @@ export function useGetSettingValuesDividedByKeys(
         },
       ],
     },
-    social_links: [
-      {
-        label: 'Facebook',
-        url: 'https://facebook.com/getmodpc',
-        is_open_new_tab: true,
-        is_enabled: true,
-      },
-      {
-        label: 'X',
-        url: 'https://x.com/getmodpc',
-        is_open_new_tab: true,
-        is_enabled: true,
-      },
-      {
-        label: 'Telegram',
-        url: 'https://t.me/getmodpc',
-        is_open_new_tab: true,
-        is_enabled: true,
-      },
-      {
-        label: 'Twitter',
-        url: 'https://twitter.com/getmodpc',
-        is_open_new_tab: true,
-        is_enabled: true,
-      },
-    ],
-    footer: {
-      footer_heading: 'Subscribe to our newsletter',
-      newsletter_title: 'Weekly Release Digest',
-      footer_description: '',
-      newsletter_description: '',
-      copyright_text: 'Copyright © 2023 GetModPC',
-      footer_note: 'All rights reserved.',
-      footer_links: [
+    social_links: {
+      social_links: [
         {
-          label: 'Privacy Policy',
-          url: 'https://getmodpc.com/privacy-policy',
+          label: 'Facebook',
+          url: 'https://facebook.com/getmodpc',
+          is_open_new_tab: true,
+          is_enabled: true,
         },
         {
-          label: 'Terms of Service',
-          url: 'https://getmodpc.com/terms-of-service',
+          label: 'X',
+          url: 'https://x.com/getmodpc',
+          is_open_new_tab: true,
+          is_enabled: true,
+        },
+        {
+          label: 'Telegram',
+          url: 'https://t.me/getmodpc',
+          is_open_new_tab: true,
+          is_enabled: true,
+        },
+        {
+          label: 'Twitter',
+          url: 'https://twitter.com/getmodpc',
+          is_open_new_tab: true,
+          is_enabled: true,
         },
       ],
     },
-    icons: [
-      {
-        alt_text: 'Android',
-        url: 'https://getmodpc.com/favicon.ico',
-        name: 'android_icon',
-      },
-      {
-        alt_text: 'Apple',
-        url: 'https://getmodpc.com/favicon.ico',
-        name: 'apple_icon',
-      },
-      {
-        alt_text: 'Windows',
-        url: 'https://getmodpc.com/favicon.ico',
-        name: 'windows_icon',
-      },
-      {
-        alt_text: 'Version',
-        url: 'https://getmodpc.com/favicon.ico',
-        name: 'version_icon',
-      },
-      {
-        alt_text: 'Size',
-        url: 'https://getmodpc.com/favicon.ico',
-        name: 'size_icon',
-      },
-      {
-        alt_text: 'Premium Unlocked Icon',
-        url: 'https://getmodpc.com/favicon.ico',
-        name: 'premium_unlocked_icon',
-      },
-      {
-        alt_text: 'Verified badge Icon',
-        url: 'https://getmodpc.com/favicon.ico',
-        name: 'verified_badge_icon',
-      },
-    ],
+    footer: {
+      footer_heading: 'Get Started today',
+      footer_description: '',
+      footer_links: [
+        {
+          label: 'Privacy Policy',
+          url: '/privacy-policy',
+          is_enabled: true,
+          is_open_new_tab: false,
+        },
+        {
+          label: 'Terms of Service',
+          url: '/terms-of-service',
+          is_enabled: true,
+          is_open_new_tab: false,
+        },
+      ],
+    },
+    icons: {
+      icons: [
+        {
+          alt_text: 'Android',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'android_icon',
+        },
+        {
+          alt_text: 'Apple',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'apple_icon',
+        },
+        {
+          alt_text: 'Windows',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'windows_icon',
+        },
+        {
+          alt_text: 'Version',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'version_icon',
+        },
+        {
+          alt_text: 'Size',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'size_icon',
+        },
+        {
+          alt_text: 'Premium Unlocked Icon',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'premium_unlocked_icon',
+        },
+        {
+          alt_text: 'Verified badge Icon',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'verified_badge_icon',
+        },
+      ],
+    },
   };
 
   return values.reduce<ISettingMap>((acc, curr) => {
