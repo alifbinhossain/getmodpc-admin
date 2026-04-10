@@ -27,6 +27,7 @@ export const apiClient = axios.create({
     Accept: 'application/json',
     Authorization: `Bearer ${token}`,
   },
+  withCredentials: true,
 });
 
 // =============================================================================

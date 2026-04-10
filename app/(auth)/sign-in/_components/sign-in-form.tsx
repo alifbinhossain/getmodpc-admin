@@ -4,14 +4,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import type { LoginResponse } from '@/types/auth';
 import { z } from 'zod/v3';
-
 import { useAppForm } from '@/hooks/form';
-
 import { FormInput, FormWrapper } from '@/components/forms';
 import { Button } from '@/components/ui/button';
-
 import { api } from '@/lib/axios';
-import { setTokenCookie } from '@/lib/utils';
 
 // =============================================================================
 // SCHEMA
@@ -47,11 +43,7 @@ export function SignInForm() {
 
   const onSubmit = async (values: SignInFormValues) => {
     try {
-      const response = await api.post<LoginResponse, SignInFormValues>(
-        '/auth/login',
-        values
-      );
-      setTokenCookie(response.data.tokens.accessToken);
+      await api.post<LoginResponse, SignInFormValues>('/auth/login', values);
       router.push(callbackUrl);
       router.refresh();
     } catch (err) {

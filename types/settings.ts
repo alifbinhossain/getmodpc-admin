@@ -18,13 +18,22 @@ export type IUpdateSettingPayload = {
   value: object;
 };
 
-export type IThemeSetting = {
-  key: 'theme';
+export type ISystemSetting = {
+  key: 'system_settings';
   value: {
-    background_color: string;
-    primary_color: string;
-    secondary_color: string;
-    accent_color: string;
+    site: {
+      logo_url?: string | null;
+      favicon_url?: string | null;
+    };
+    setting: {
+      app_deleted_time: string;
+    };
+    theme: {
+      background_color: string;
+      primary_color: string;
+      secondary_color: string;
+      accent_color: string;
+    };
   };
 };
 
@@ -93,7 +102,7 @@ export type IFooterSetting = {
 
 export type ISettingMap = {
   seo: ISeoSetting['value'];
-  theme: IThemeSetting['value'];
+  system_settings: ISystemSetting['value'];
   rating: IRatingSetting['value'];
   buttons: IButtonSetting['value'];
   social_links: ISocialLinkSetting['value'];

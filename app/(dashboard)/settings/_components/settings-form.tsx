@@ -12,21 +12,21 @@ import { IconSettingsForm } from './icon-settings-form';
 import { RatingSettingsForm } from './rating-settings-form';
 import { SeoSettingsForm } from './seo-settings-form';
 import { SocialLinksSettingsForm } from './social-links-settings-form';
-import { ThemeSettingsForm } from './theme-settings-form';
+import { SystemSettingsForm } from './system-settings-form';
 
 type Props = {
   initialData: ISetting[] | [];
 };
 
 export function SettingsForm({ initialData }: Props) {
-  const { footer, icons, buttons, rating, seo, social_links, theme } =
+  const { footer, icons, buttons, rating, seo, social_links, system_settings } =
     useGetSettingValuesDividedByKeys(initialData);
   return (
     <MantineProvider>
-      <Tabs defaultValue='seo'>
+      <Tabs defaultValue='system_settings'>
         <TabsList className='h-auto flex-wrap justify-start'>
+          <TabsTrigger value='system_settings'>System</TabsTrigger>
           <TabsTrigger value='seo'>Seo</TabsTrigger>
-          <TabsTrigger value='theme'>Theme</TabsTrigger>
           <TabsTrigger value='rating'>Rating</TabsTrigger>
           <TabsTrigger value='buttons'>Buttons</TabsTrigger>
           <TabsTrigger value='social_links'>Social Links</TabsTrigger>
@@ -44,12 +44,12 @@ export function SettingsForm({ initialData }: Props) {
           />
         </TabsContent>
 
-        <TabsContent value='theme' className='space-y-5'>
-          <ThemeSettingsForm
-            key={`theme`}
+        <TabsContent value='system_settings' className='space-y-5'>
+          <SystemSettingsForm
+            key={`system_settings`}
             initialValues={{
-              key: 'theme',
-              value: theme,
+              key: 'system_settings',
+              value: system_settings,
             }}
           />
         </TabsContent>

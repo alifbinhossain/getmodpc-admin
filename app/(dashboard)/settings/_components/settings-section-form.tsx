@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 
 import { IUpdateSettingPayload } from '@/types/settings';
 import type { DefaultValues } from 'react-hook-form';
+import { toast } from 'sonner';
 import type { z, ZodSchema } from 'zod/v3';
 
 import type { AppForm } from '@/hooks/form';
@@ -43,6 +44,7 @@ export function SettingsSectionForm<TSchema extends ZodSchema>({
     try {
       await updateSettings.mutateAsync(values as IUpdateSettingPayload);
       form.reset(values);
+      toast.success('Settings updated successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Invalid request';
       setError('root', { message });

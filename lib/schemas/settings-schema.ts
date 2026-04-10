@@ -27,13 +27,22 @@ export const seoSettingsSchema = z.object({
   }),
 });
 
-export const themeSettingsSchema = z.object({
+export const systemSettingsSchema = z.object({
   key: z.string().min(1, 'Key is required').default('theme'),
   value: z.object({
-    primary_color: z.string().regex(hexColor, 'Enter a valid hex color'),
-    secondary_color: z.string().regex(hexColor, 'Enter a valid hex color'),
-    accent_color: z.string().regex(hexColor, 'Enter a valid hex color'),
-    background_color: z.string().regex(hexColor, 'Enter a valid hex color'),
+    site: z.object({
+      logo_url: imageUrlField.optional().nullable(),
+      favicon_url: imageUrlField.optional().nullable(),
+    }),
+    setting: z.object({
+      app_deleted_time: z.string().default('off'),
+    }),
+    theme: z.object({
+      primary_color: z.string().regex(hexColor, 'Enter a valid hex color'),
+      secondary_color: z.string().regex(hexColor, 'Enter a valid hex color'),
+      accent_color: z.string().regex(hexColor, 'Enter a valid hex color'),
+      background_color: z.string().regex(hexColor, 'Enter a valid hex color'),
+    }),
   }),
 });
 
@@ -98,7 +107,6 @@ export const iconSettingsSchema = z.object({
   }),
 });
 
-export type ThemeSettingsSchemaType = z.infer<typeof themeSettingsSchema>;
 export type RatingSettingsSchemaType = z.infer<typeof ratingSettingsSchema>;
 export type SocialLinksSettingsSchemaType = z.infer<
   typeof socialLinksSettingsSchema
@@ -106,3 +114,5 @@ export type SocialLinksSettingsSchemaType = z.infer<
 export type FooterSettingsSchemaType = z.infer<typeof footerSettingsSchema>;
 export type IconSettingsSchemaType = z.infer<typeof iconSettingsSchema>;
 export type ButtonsSettingsSchemaType = z.infer<typeof buttonsSettingsSchema>;
+export type SeoSettingsSchemaType = z.infer<typeof seoSettingsSchema>;
+export type SystemSettingsSchemaType = z.infer<typeof systemSettingsSchema>;

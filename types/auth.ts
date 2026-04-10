@@ -27,8 +27,9 @@ export interface LoginCredentials {
 }
 
 export interface LoginResponse {
-  user: User;
-  tokens: AuthTokens;
+  admin: User;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface AuthState {

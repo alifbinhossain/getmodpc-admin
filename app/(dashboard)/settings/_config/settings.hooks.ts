@@ -51,11 +51,20 @@ export function useGetSettingValuesDividedByKeys(
       site_name: '',
       site_tagline: '',
     },
-    theme: {
-      background_color: '#d7d7d7',
-      primary_color: '',
-      secondary_color: '',
-      accent_color: '',
+    system_settings: {
+      site: {
+        logo_url: undefined,
+        favicon_url: undefined,
+      },
+      setting: {
+        app_deleted_time: 'off',
+      },
+      theme: {
+        background_color: '#d7d7d7',
+        primary_color: '',
+        secondary_color: '',
+        accent_color: '',
+      },
     },
     rating: {
       is_active: false,
