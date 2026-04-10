@@ -11,12 +11,12 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <Layout>
-      <QueryProvider>
+    <QueryProvider>
+      <Layout>
         {children}
         <GlobalFormModal />
-      </QueryProvider>
-      <Toaster />
-    </Layout>
+        <Toaster />
+      </Layout>
+    </QueryProvider>
   );
 }

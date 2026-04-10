@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { Bell, LogOut, Settings, User } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+import api from '@/lib/axios';
 import { removeTokenCookie } from '@/lib/utils';
 
 import { SidebarTrigger } from '../ui/sidebar';
@@ -22,10 +24,18 @@ import { SidebarTrigger } from '../ui/sidebar';
 export function Header() {
   const router = useRouter();
 
-  const handleSignOut = () => {
-    removeTokenCookie();
-    router.push('/sign-in');
-    router.refresh();
+  const handleSignOut = async () => {
+    try {
+      await api.post('/auth/logout');
+      removeTokenCookie();
+      router.push('/sign-in');
+      router.refresh();
+      toast.success('Signed out successfully');
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Invalid request';
+      toast.error(message);
+    }
   };
 
   return (

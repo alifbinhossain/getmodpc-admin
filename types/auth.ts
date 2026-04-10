@@ -5,11 +5,10 @@
 export interface User {
   id: string;
   email: string;
-  name: string;
-  role: UserRole;
+  full_name: string;
   avatar?: string;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  last_login_at: string;
 }
 
 export type UserRole = 'super_admin' | 'admin' | 'manager' | 'viewer';

@@ -20,7 +20,6 @@ import {
   Tornado,
   Trash2,
   User2,
-  Users,
 } from 'lucide-react';
 
 import {
@@ -109,11 +108,6 @@ const NAV_ITEMS: NavItem[] = [
       { title: 'Report Reasons', href: '/report-reasons' },
     ],
     disabled: true,
-  },
-  {
-    title: 'Users',
-    href: '/users',
-    icon: Users,
   },
   { title: 'Trash', href: '/trash', icon: Trash2 },
 ];

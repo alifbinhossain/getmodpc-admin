@@ -1,5 +1,6 @@
 import type { UserQueryParams } from '@/types/users';
 import type { CreateUserPayload, UpdateUserPayload } from '@/types/users';
+import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '@/lib/react-query';
 
@@ -20,9 +21,9 @@ export function useUsers(params?: UserQueryParams) {
 
 /** Fetch single user */
 export function useUser(id: string) {
-  return useApiListQuery({
+  return useQuery({
     queryKey: queryKeys.users.detail(id),
-    queryFn: () => usersService.getUsers({ search: id }),
+    queryFn: () => usersService.getUser(id),
     enabled: !!id,
   });
 }
