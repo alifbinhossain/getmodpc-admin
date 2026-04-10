@@ -18,9 +18,10 @@ import type { FieldError as IFieldError } from 'react-hook-form';
 
 import { FieldError } from '@/components/ui/field';
 
+import { cn } from '@/lib/utils';
+
 import { IFormRichText } from '../_config/form-types';
 import { FormBase } from '../_helper/form-base';
-import { cn } from '@/lib/utils';
 
 type Props = {
   content: string;
@@ -156,7 +157,9 @@ function RichTextEditorComponent({
           </RichTextEditor.Toolbar>
 
           {/* ✅ CONTENT */}
-          <RichTextEditor.Content className={cn('min-h-50 p-4' , className)}/>
+          <RichTextEditor.Content
+            className={cn('editor min-h-50 p-4', className)}
+          />
         </RichTextEditor>
       </div>
 
@@ -178,7 +181,11 @@ function RichTextEditorComponent({
   );
 }
 
-export const FormRichText: IFormRichText = ({ maxChars,className, ...props }) => {
+export const FormRichText: IFormRichText = ({
+  maxChars,
+  className,
+  ...props
+}) => {
   return (
     <FormBase disableError {...props}>
       {(field) => (

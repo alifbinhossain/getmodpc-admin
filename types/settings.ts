@@ -77,6 +77,7 @@ export type IButtonSetting = {
   value: {
     download_button: Omit<ISettingLink, 'url' | 'is_open_new_tab'>;
     telegram_button: ISettingLink;
+    installation_guideline: string;
   };
 };
 

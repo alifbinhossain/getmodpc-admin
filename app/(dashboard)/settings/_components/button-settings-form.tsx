@@ -2,7 +2,7 @@
 
 import { IButtonSetting } from '@/types/settings';
 
-import { FormInput } from '@/components/forms';
+import { FormInput, FormRichText } from '@/components/forms';
 import { FormCheckbox } from '@/components/forms/_fields/checkbox';
 
 import { buttonsSettingsSchema } from '@/lib/schemas/settings-schema';
@@ -74,6 +74,12 @@ export function LinksSettingsForm({ initialValues }: Props) {
                 </div>
               </div>
             </div>
+            <FormRichText
+              control={control}
+              name='value.installation_guideline'
+              label='Installation Guide'
+              placeholder='Write your installation guide here'
+            />
           </>
         )}
       </SettingsSectionForm>

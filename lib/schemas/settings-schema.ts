@@ -15,19 +15,13 @@ export const seoSettingsSchema = z.object({
   key: z.string().min(1, 'Key is required').default('seo'),
   value: z.object({
     site_name: z.string().min(2, 'Site name is required').max(120),
-    site_tagline: z.string().min(2, 'Tagline is required').max(180),
-    meta_title: z.string().min(2, 'Meta title is required').max(160),
-    meta_description: z
-      .string()
-      .min(20, 'Meta description must be at least 20 characters')
-      .max(320, 'Meta description is too long'),
-    canonical_url: z.string().url('Enter a valid canonical URL'),
-    meta_keywords: z.string().min(3, 'Meta keywords are required').max(255),
-    og_title: z.string().min(2, 'Open Graph title is required').max(160),
-    og_description: z
-      .string()
-      .min(20, 'Open Graph description must be at least 20 characters')
-      .max(320, 'Open Graph description is too long'),
+    site_tagline: z.string().optional(),
+    meta_title: z.string().optional(),
+    meta_description: z.string().optional(),
+    canonical_url: z.string().url('Enter a valid canonical URL').optional(),
+    meta_keywords: z.string().optional(),
+    og_title: z.string().optional(),
+    og_description: z.string().optional(),
     robots_index: z.boolean().default(true),
     robots_follow: z.boolean().default(true),
   }),
@@ -60,6 +54,7 @@ export const buttonsSettingsSchema = z.object({
       is_enabled: z.boolean().default(true),
     }),
     telegram_button: linkItemSchema,
+    installation_guideline: z.string().optional(),
   }),
 });
 

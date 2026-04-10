@@ -73,6 +73,7 @@ export function useGetSettingValuesDividedByKeys(
         is_enabled: true,
         is_open_new_tab: true,
       },
+      installation_guideline: '',
     },
     social_links: {
       social_links: [

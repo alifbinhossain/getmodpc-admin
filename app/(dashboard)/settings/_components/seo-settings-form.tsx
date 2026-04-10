@@ -40,21 +40,18 @@ export function SeoSettingsForm({ initialValues }: Props) {
                 name='value.site_tagline'
                 label='Tagline'
                 placeholder='Short product tagline'
-                required
               />
               <FormInput
                 control={control}
                 name='value.meta_title'
                 label='Meta Title'
                 placeholder='Default meta title'
-                required
               />
               <FormInput
                 control={control}
                 name='value.canonical_url'
                 label='Canonical URL'
                 placeholder='https://example.com'
-                required
               />
             </div>
 
@@ -65,21 +62,18 @@ export function SeoSettingsForm({ initialValues }: Props) {
                 label='Meta Description'
                 placeholder='Default meta description'
                 maxChars={320}
-                required
               />
               <FormInput
                 control={control}
                 name='value.meta_keywords'
                 label='Meta Keywords'
                 placeholder='apk, android, games'
-                required
               />
               <FormInput
                 control={control}
                 name='value.og_title'
                 label='Open Graph Title'
                 placeholder='Default social title'
-                required
               />
               <FormTextarea
                 control={control}
@@ -87,7 +81,6 @@ export function SeoSettingsForm({ initialValues }: Props) {
                 label='Open Graph Description'
                 placeholder='Default social description'
                 maxChars={320}
-                required
               />
             </div>
 
@@ -96,11 +89,13 @@ export function SeoSettingsForm({ initialValues }: Props) {
                 control={control}
                 name='value.robots_index'
                 label='Allow indexing'
+                showLabel={false}
               />
               <FormSwitch
                 control={control}
                 name='value.robots_follow'
                 label='Allow link following'
+                showLabel={false}
               />
             </div>
           </>
