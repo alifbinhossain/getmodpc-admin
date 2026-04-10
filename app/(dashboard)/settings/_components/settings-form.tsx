@@ -6,9 +6,9 @@ import { MantineProvider } from '@mantine/core';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { useGetSettingValuesDividedByKeys } from '../_config/settings.hooks';
+import { LinksSettingsForm } from './button-settings-form';
 import { FooterSettingsForm } from './footer-settings-form';
 import { IconSettingsForm } from './icon-settings-form';
-import { LinksSettingsForm } from './links-settings-form';
 import { RatingSettingsForm } from './rating-settings-form';
 import { SeoSettingsForm } from './seo-settings-form';
 import { SocialLinksSettingsForm } from './social-links-settings-form';
@@ -19,7 +19,7 @@ type Props = {
 };
 
 export function SettingsForm({ initialData }: Props) {
-  const { footer, icons, links, rating, seo, social_links, theme } =
+  const { footer, icons, buttons, rating, seo, social_links, theme } =
     useGetSettingValuesDividedByKeys(initialData);
   return (
     <MantineProvider>
@@ -28,10 +28,10 @@ export function SettingsForm({ initialData }: Props) {
           <TabsTrigger value='seo'>Seo</TabsTrigger>
           <TabsTrigger value='theme'>Theme</TabsTrigger>
           <TabsTrigger value='rating'>Rating</TabsTrigger>
-          <TabsTrigger value='links'>Links</TabsTrigger>
+          <TabsTrigger value='buttons'>Buttons</TabsTrigger>
           <TabsTrigger value='social_links'>Social Links</TabsTrigger>
           <TabsTrigger value='footer'>Footer</TabsTrigger>
-          <TabsTrigger value='icons'>Icon</TabsTrigger>
+          <TabsTrigger value='icons'>Icons</TabsTrigger>
         </TabsList>
 
         <TabsContent value='seo' className='space-y-5'>
@@ -64,12 +64,12 @@ export function SettingsForm({ initialData }: Props) {
           />
         </TabsContent>
 
-        <TabsContent value='links' className='space-y-5'>
+        <TabsContent value='buttons' className='space-y-5'>
           <LinksSettingsForm
-            key={`links`}
+            key={`buttons`}
             initialValues={{
-              key: 'links',
-              value: links,
+              key: 'buttons',
+              value: buttons,
             }}
           />
         </TabsContent>

@@ -68,17 +68,15 @@ export type IIconSetting = {
       url: string;
       name: string;
     }>;
+    verified_badge_tooltip_text: string;
   };
 };
 
-export type ILinkSetting = {
-  key: 'links';
+export type IButtonSetting = {
+  key: 'buttons';
   value: {
-    primary_cta_label: string;
-    primary_cta_url: string;
-    secondary_cta_label: string;
-    secondary_cta_url: string;
-    links: ISettingLink[];
+    download_button: Omit<ISettingLink, 'url' | 'is_open_new_tab'>;
+    telegram_button: ISettingLink;
   };
 };
 
@@ -88,6 +86,7 @@ export type IFooterSetting = {
     footer_heading: string;
     footer_description: string;
     footer_links: ISettingLink[];
+    footer_logo: string;
   };
 };
 
@@ -95,9 +94,9 @@ export type ISettingMap = {
   seo: ISeoSetting['value'];
   theme: IThemeSetting['value'];
   rating: IRatingSetting['value'];
-  links: ILinkSetting['value'];
+  buttons: IButtonSetting['value'];
   social_links: ISocialLinkSetting['value'];
   footer: IFooterSetting['value'];
   icons: IIconSetting['value'];
-  [key: string]: any;
+  [key: string]: unknown;
 };

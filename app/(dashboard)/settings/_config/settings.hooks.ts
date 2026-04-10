@@ -62,26 +62,17 @@ export function useGetSettingValuesDividedByKeys(
       success_message: 'Thanks for your rating!',
       error_message: 'Something went wrong, please try again.',
     },
-    links: {
-      primary_cta_label: '',
-      primary_cta_url: '',
-      secondary_cta_label: '',
-      secondary_cta_url: '',
-
-      links: [
-        {
-          label: 'Discord',
-          url: 'https://discord.com/invite/getmodpc',
-          is_open_new_tab: true,
-          is_enabled: true,
-        },
-        {
-          label: 'GitHub',
-          url: 'https://github.com/getmodpc',
-          is_open_new_tab: true,
-          is_enabled: true,
-        },
-      ],
+    buttons: {
+      download_button: {
+        label: 'Download',
+        is_enabled: true,
+      },
+      telegram_button: {
+        label: 'Telegram',
+        url: 'https://t.me/getmodpc',
+        is_enabled: true,
+        is_open_new_tab: true,
+      },
     },
     social_links: {
       social_links: [
@@ -114,6 +105,7 @@ export function useGetSettingValuesDividedByKeys(
     footer: {
       footer_heading: 'Get Started today',
       footer_description: '',
+      footer_logo: '',
       footer_links: [
         {
           label: 'Privacy Policy',
@@ -166,7 +158,13 @@ export function useGetSettingValuesDividedByKeys(
           url: 'https://getmodpc.com/favicon.ico',
           name: 'verified_badge_icon',
         },
+        {
+          alt_text: 'source of truth badge Icon',
+          url: 'https://getmodpc.com/favicon.ico',
+          name: 'source_of',
+        },
       ],
+      verified_badge_tooltip_text: '',
     },
   };
 

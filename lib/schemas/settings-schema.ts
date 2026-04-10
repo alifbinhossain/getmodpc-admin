@@ -1,4 +1,4 @@
-import z from 'zod/v3';
+import z, { string } from 'zod/v3';
 
 const hexColor = /^#([0-9A-F]{3}){1,2}$/i;
 
@@ -52,20 +52,14 @@ export const ratingSettingsSchema = z.object({
   }),
 });
 
-export const linksSettingsSchema = z.object({
+export const buttonsSettingsSchema = z.object({
   key: z.string().min(1, 'Key is required').default('links'),
   value: z.object({
-    primary_cta_label: z
-      .string()
-      .min(2, 'Primary CTA label is required')
-      .max(80),
-    primary_cta_url: z.string().url('Enter a valid URL'),
-    secondary_cta_label: z
-      .string()
-      .min(2, 'Secondary CTA label is required')
-      .max(80),
-    secondary_cta_url: z.string().url('Enter a valid URL'),
-    useful_links: z.array(linkItemSchema).default([]),
+    download_button: z.object({
+      label: z.string().min(1, 'Label is required'),
+      is_enabled: z.boolean().default(true),
+    }),
+    telegram_button: linkItemSchema,
   }),
 });
 
@@ -81,6 +75,7 @@ export const footerSettingsSchema = z.object({
   value: z.object({
     footer_heading: z.string().optional(),
     footer_description: z.string().optional(),
+    footer_logo: string().optional(),
     footer_links: z
       .array(
         z.object({
@@ -104,14 +99,15 @@ export const iconSettingsSchema = z.object({
   key: z.string().min(1, 'Key is required').default('icons'),
   value: z.object({
     icons: z.array(iconItemSchema).default([]),
+    verified_badge_tooltip_text: z.string().optional(),
   }),
 });
 
 export type ThemeSettingsSchemaType = z.infer<typeof themeSettingsSchema>;
 export type RatingSettingsSchemaType = z.infer<typeof ratingSettingsSchema>;
-export type LinksSettingsSchemaType = z.infer<typeof linksSettingsSchema>;
 export type SocialLinksSettingsSchemaType = z.infer<
   typeof socialLinksSettingsSchema
 >;
 export type FooterSettingsSchemaType = z.infer<typeof footerSettingsSchema>;
 export type IconSettingsSchemaType = z.infer<typeof iconSettingsSchema>;
+export type ButtonsSettingsSchemaType = z.infer<typeof buttonsSettingsSchema>;
