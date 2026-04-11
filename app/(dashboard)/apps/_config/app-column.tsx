@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 export const appColumns: ColumnDef<AppRecord>[] = [
   {
     accessorKey: 'icon',
-    header: 'Icon',
+    header: 'App Icon',
     cell: ({ getValue }) => {
       const src = getValue<AppRecord['icon']>();
       if (!src) {
@@ -21,7 +21,7 @@ export const appColumns: ColumnDef<AppRecord>[] = [
           alt='app icon'
           width={40}
           height={40}
-          className='size-10 overflow-hidden rounded'
+          className='size-10 shrink-0 overflow-hidden rounded'
         />
       );
     },
@@ -30,6 +30,10 @@ export const appColumns: ColumnDef<AppRecord>[] = [
   {
     accessorKey: 'name',
     header: 'Name',
+    cell: ({ getValue }) => {
+      const name = getValue<AppRecord['name']>();
+      return <span className='capitalize whitespace-break-spaces'>{name}</span>;
+    },
   },
 
   {
@@ -39,7 +43,7 @@ export const appColumns: ColumnDef<AppRecord>[] = [
       const categories =
         getValue<Array<{ id: string; name: string; slug: string }>>();
       return (
-        <span className='capitalize text-muted-foreground'>
+        <span className='capitalize text-muted-foreground whitespace-break-spaces'>
           {categories.map((category) => category.name).join(', ') || '--'}
         </span>
       );
@@ -52,7 +56,7 @@ export const appColumns: ColumnDef<AppRecord>[] = [
     cell: ({ getValue }) => {
       const tags = getValue<string[]>();
       return (
-        <span className='capitalize text-muted-foreground'>
+        <span className='capitalize text-muted-foreground whitespace-break-spaces'>
           {tags.join(', ') || '--'}
         </span>
       );

@@ -6,7 +6,7 @@ import { type ColumnDef } from '@tanstack/react-table';
 export const updatedAppsColumns: ColumnDef<UpdatedAppRecord>[] = [
   {
     accessorKey: 'icon',
-    header: 'Icon',
+    header: 'App Icon',
     cell: ({ getValue }) => {
       const src = getValue<string>();
       if (!src) {

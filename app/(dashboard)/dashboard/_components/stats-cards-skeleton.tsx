@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export function StatsCardsSkeleton() {
   return (
     <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-      {Array.from({ length: 4 }).map((_, index) => (
+      {Array.from({ length: 8 }).map((_, index) => (
         <Card key={index} className='transition-shadow hover:shadow-md'>
           <CardHeader className='flex flex-row items-center justify-between pb-2'>
             <Skeleton className='h-4 w-20' />

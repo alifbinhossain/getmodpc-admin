@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 
 import { IDashboard } from '@/types';
 
@@ -15,11 +16,15 @@ type Props = {
 };
 export default async function DashboardPage({ searchParams }: Props) {
   const searchParamsResolved = await searchParams;
+  const token = (await cookies()).get('accessToken')?.value;
   const data = await api
     .get<IDashboard[]>('/apps/dashboard', {
       params: {
         startDate: searchParamsResolved?.startDate,
         endDate: searchParamsResolved?.endDate,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     })
     .then((r) => r.data)

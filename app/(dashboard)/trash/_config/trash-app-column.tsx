@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 export const trashColumns: ColumnDef<AppRecord>[] = [
   {
     accessorKey: 'icon',
-    header: 'Icon',
+    header: 'App Icon',
     cell: ({ getValue }) => {
       const src = getValue<string>();
       if (!src) {

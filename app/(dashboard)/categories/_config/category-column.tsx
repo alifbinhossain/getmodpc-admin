@@ -50,7 +50,7 @@ export const categoryColumns: ColumnDef<CategoryRecord>[] = [
     cell: ({ getValue }) => {
       const details = getValue<CategoryRecord['description']>();
       return (
-        <span className='text-sm text-muted-foreground line-clamp-2'>
+        <span className='text-sm text-muted-foreground line-clamp-2 whitespace-break-spaces'>
           {details}
         </span>
       );
