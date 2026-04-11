@@ -47,11 +47,8 @@ export function SignInForm() {
 
   const onSubmit = async (values: SignInFormValues) => {
     try {
-      const res = await api.post<LoginResponse, SignInFormValues>(
-        '/auth/login',
-        values
-      );
-      // router.push(callbackUrl);
+      await api.post<LoginResponse, SignInFormValues>('/auth/login', values);
+      router.push(callbackUrl);
     } catch (err: any) {
       const message =
         (err instanceof Error ? err.message : err.response.message) ??

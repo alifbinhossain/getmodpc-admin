@@ -3,6 +3,7 @@ import type { CreateUserPayload, UpdateUserPayload } from '@/types/users';
 import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '@/lib/react-query';
+import { getTokenFromCookie } from '@/lib/utils';
 
 import { useApiListQuery, useApiMutation } from './index';
 import { usersService } from './users.service';
@@ -25,6 +26,15 @@ export function useUser(id: string) {
     queryKey: queryKeys.users.detail(id),
     queryFn: () => usersService.getUser(id),
     enabled: !!id,
+  });
+}
+
+/** Fetch single user */
+export function useGetMe() {
+  return useQuery({
+    queryKey: queryKeys.users.profile(),
+    queryFn: () => usersService.getMe(),
+    // enabled: !!getTokenFromCookie(),
   });
 }
 

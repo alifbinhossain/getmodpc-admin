@@ -5,26 +5,17 @@ import type { BaseQueryParams, BaseRecord } from './index';
 // =============================================================================
 
 export interface UserRecord extends BaseRecord {
-  name: string;
+  full_name: string;
   email: string;
-  role: string;
-  status: UserStatus;
+  is_active: boolean;
   avatar?: string;
-  phone?: string;
-  department?: string;
-  lastLoginAt?: string;
 }
 
-export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending';
-
 export interface CreateUserPayload {
-  name: string;
+  full_name: string;
   email: string;
   password: string;
-  role: string;
-  status: UserStatus;
-  phone?: string;
-  department?: string;
+  is_active: boolean;
 }
 
 export interface UpdateUserPayload extends Partial<
@@ -34,7 +25,7 @@ export interface UpdateUserPayload extends Partial<
 }
 
 export interface UserQueryParams extends BaseQueryParams {
-  role?: string;
-  status?: UserStatus;
-  department?: string;
+  email?: string;
+  full_name?: string;
+  is_active?: boolean;
 }

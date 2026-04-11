@@ -27,6 +27,10 @@ export const usersService = {
     return api.get<UserRecord>(`/users/${id}`);
   },
 
+  getMe(): Promise<ApiResponse<UserRecord>> {
+    return api.get<UserRecord>('/auth/profile');
+  },
+
   /** Create a new user */
   createUser(payload: CreateUserPayload): Promise<ApiResponse<UserRecord>> {
     return api.post<UserRecord, CreateUserPayload>('/users', payload);

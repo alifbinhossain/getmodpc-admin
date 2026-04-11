@@ -191,7 +191,7 @@ export function buildQueryString(params: Record<string, unknown>): string {
 // =============================================================================
 
 export const TOKEN_COOKIE_NAME =
-  process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME ?? 'admin_auth_token';
+  process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME ?? 'accessToken';
 
 export function getTokenFromCookie(): string | null {
   if (typeof document === 'undefined') return null;

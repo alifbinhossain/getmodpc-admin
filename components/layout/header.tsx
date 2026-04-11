@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Bell, LogOut, Settings, User } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useGetMe } from '@/hooks/api/users.hooks';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,10 +22,11 @@ import api from '@/lib/axios';
 import { removeTokenCookie } from '@/lib/utils';
 
 import { SidebarTrigger } from '../ui/sidebar';
+import { Skeleton } from '../ui/skeleton';
 
 export function Header() {
   const router = useRouter();
-
+  const { data, isLoading } = useGetMe();
   const handleSignOut = async () => {
     try {
       await api.post('/auth/logout');
@@ -37,6 +40,8 @@ export function Header() {
       toast.error(message);
     }
   };
+
+  const user = data?.data;
 
   return (
     <header className='flex h-16 shrink-0 items-center justify-between border-b bg-background/95 px-4 backdrop-blur supports-backdrop-filter:bg-background/60'>
@@ -63,27 +68,47 @@ export function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='ghost' className='relative h-9 w-9 rounded-full'>
-              <Avatar className='h-9 w-9'>
-                <AvatarFallback className='bg-primary text-sm font-semibold text-primary-foreground'>
-                  AD
-                </AvatarFallback>
-              </Avatar>
+              {isLoading ? (
+                <Skeleton className='h-9 w-9 rounded-full' />
+              ) : (
+                <Avatar className='h-9 w-9'>
+                  <AvatarImage src={user?.avatar} alt={user?.full_name} />
+                  <AvatarFallback className='bg-primary text-sm font-semibold text-primary-foreground'>
+                    {user?.full_name?.slice(0, 2)?.toUpperCase() || 'AD'}
+                  </AvatarFallback>
+                </Avatar>
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className='w-56' align='end' forceMount>
             <DropdownMenuLabel className='font-normal'>
-              <div className='flex flex-col space-y-1'>
-                <p className='text-sm font-medium leading-none'>Admin User</p>
-                <p className='text-xs leading-none text-muted-foreground'>
-                  admin@company.com
-                </p>
-              </div>
+              {isLoading ? (
+                <div className='space-y-2'>
+                  <Skeleton className='h-4 w-24' />
+                  <Skeleton className='h-3 w-32' />
+                </div>
+              ) : (
+                <div className='flex flex-col space-y-1'>
+                  <p className='text-sm font-medium leading-none'>
+                    {user?.full_name}
+                  </p>
+                  <p className='text-xs leading-none text-muted-foreground'>
+                    {user?.email}
+                  </p>
+                </div>
+              )}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className='cursor-pointer gap-2'>
+            <DropdownMenuItem
+              onClick={() => router.push('/profile')}
+              className='cursor-pointer gap-2'
+            >
               <User className='h-4 w-4' /> Profile
             </DropdownMenuItem>
-            <DropdownMenuItem className='cursor-pointer gap-2'>
+            <DropdownMenuItem
+              onClick={() => router.push('/settings')}
+              className='cursor-pointer gap-2'
+            >
               <Settings className='h-4 w-4' /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
