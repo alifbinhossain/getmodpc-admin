@@ -21,6 +21,7 @@ import {
 import api from '@/lib/axios';
 import { removeTokenCookie } from '@/lib/utils';
 
+import Notifications from '../notification/notifications';
 import { SidebarTrigger } from '../ui/sidebar';
 import { Skeleton } from '../ui/skeleton';
 
@@ -55,14 +56,18 @@ export function Header() {
       {/* Right — Actions */}
       <div className='flex items-center gap-2'>
         {/* Notification bell */}
-        <Button variant='ghost' size='icon' className='relative h-9 w-9'>
-          <Bell className='h-4 w-4' />
-          <span className='absolute right-1.5 top-1.5 flex h-2 w-2'>
-            <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75' />
-            <span className='relative inline-flex h-2 w-2 rounded-full bg-primary' />
-          </span>
-          <span className='sr-only'>Notifications</span>
-        </Button>
+        <Notifications
+          trigger={
+            <Button variant='ghost' size='icon' className='relative h-9 w-9'>
+              <Bell className='h-4 w-4' />
+              <span className='absolute right-1.5 top-1.5 flex h-2 w-2'>
+                <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75' />
+                <span className='relative inline-flex h-2 w-2 rounded-full bg-primary' />
+              </span>
+              <span className='sr-only'>Notifications</span>
+            </Button>
+          }
+        />
 
         {/* User menu */}
         <DropdownMenu>

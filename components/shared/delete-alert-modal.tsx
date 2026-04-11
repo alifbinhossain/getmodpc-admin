@@ -29,7 +29,9 @@ function DeleteAlertModal({ onSubmit, open, setOpen }: Props) {
       toast.success('Deleted successfully');
     } catch (error: any) {
       toast.error(
-        error?.message || 'Something went wrong. Could not delete item.'
+        error?.message ??
+          error?.response?.message ??
+          'Something went wrong. Could not delete item.'
       );
     } finally {
       setLoading(false);

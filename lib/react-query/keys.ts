@@ -206,6 +206,13 @@ export const queryKeys = {
       [...queryKeys.scrapping.all, 'liteapks-url'] as const,
   },
 
+  // Notifications
+  notification: {
+    all: ['notification'] as const,
+    list: (params: Record<string, unknown>) =>
+      [...queryKeys.notification.all, params] as const,
+  },
+
   // Dashboard
   dashboard: {
     all: ['dashboard'] as const,
