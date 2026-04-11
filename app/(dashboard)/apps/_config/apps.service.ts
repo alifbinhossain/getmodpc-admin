@@ -4,6 +4,7 @@ import type {
   AppRecord,
   CreateAppPayload,
   UpdateAppPayload,
+  UpdatedAppRecord,
 } from '@/types/app';
 
 import { api } from '@/lib/axios';
@@ -24,6 +25,17 @@ export const appsService = {
       ? buildQueryString(params as Record<string, unknown>)
       : '';
     return api.list<AppRecord>(`/apps/soft-deleted-apps${qs ? `?${qs}` : ''}`);
+  },
+
+  getAllUpdatedApps(
+    params?: BaseQueryParams
+  ): Promise<PaginatedResponse<UpdatedAppRecord>> {
+    const qs = params
+      ? buildQueryString(params as Record<string, unknown>)
+      : '';
+    return api.list<UpdatedAppRecord>(
+      `/apps/updated-apps${qs ? `?${qs}` : ''}`
+    );
   },
 
   restoreApps(ids: string[]): Promise<ApiResponse<void>> {

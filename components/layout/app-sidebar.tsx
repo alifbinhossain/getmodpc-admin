@@ -109,6 +109,8 @@ const NAV_ITEMS: NavItem[] = [
     ],
     disabled: true,
   },
+  { title: 'Updated Apps', href: '/updated-apps', icon: AppWindow },
+
   { title: 'Trash', href: '/trash', icon: Trash2 },
 ];
 

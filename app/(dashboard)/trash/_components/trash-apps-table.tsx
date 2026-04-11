@@ -7,7 +7,7 @@ import { DataTable } from '@/components/table';
 import { Button } from '@/components/ui/button';
 
 import { appsService } from '../../apps/_config/apps.service';
-import { trashColumns } from '../_config/app-column';
+import { trashColumns } from '../_config/trash-app-column';
 
 interface TrashAppsTableProps {
   data: AppRecord[];

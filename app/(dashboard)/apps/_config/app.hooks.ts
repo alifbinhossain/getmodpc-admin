@@ -4,6 +4,7 @@ import type {
   AppRecord,
   CreateAppPayload,
   UpdateAppPayload,
+  UpdatedAppRecord,
 } from '@/types/app';
 
 import { useApiListQuery, useApiMutation } from '@/hooks/api';
@@ -32,6 +33,19 @@ export function useSoftDeleteApps(
       (params ?? {}) as Record<string, unknown>
     ),
     queryFn: () => appsService.getAllSoftDeleteApps(params),
+    initialData,
+  });
+}
+
+export function useUpdatedApps(
+  params?: BaseQueryParams,
+  initialData?: PaginatedResponse<UpdatedAppRecord>
+) {
+  return useApiListQuery({
+    queryKey: queryKeys.app.updatedAppList(
+      (params ?? {}) as Record<string, unknown>
+    ),
+    queryFn: () => appsService.getAllUpdatedApps(params),
     initialData,
   });
 }

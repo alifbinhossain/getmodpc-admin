@@ -84,6 +84,8 @@ export const queryKeys = {
       [...queryKeys.app.lists(), params] as const,
     softDeleteAppList: (params: Record<string, unknown>) =>
       ['soft-delete-apps', params] as const,
+    updatedAppList: (params: Record<string, unknown>) =>
+      ['updated-apps-list', params] as const,
     details: () => [...queryKeys.app.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.app.details(), id] as const,
   },

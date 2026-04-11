@@ -102,3 +102,12 @@ export interface AppQueryParams extends BaseQueryParams {
   platform?: EnumPlatformType;
   type?: EnumAppType;
 }
+
+export interface UpdatedAppRecord {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  version: string;
+  latest_version: string;
+}
