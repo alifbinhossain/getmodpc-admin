@@ -1,11 +1,23 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
+
+import { TestimonialRecord } from '@/types/testimonial';
+
+import api from '@/lib/axios';
+import { fallBackData } from '@/lib/utils';
 
 import Testimonials from './_components/testimonials';
-import { testimonialsService } from './_config/testimonials.service';
 
 export const metadata: Metadata = { title: 'Testimonials' };
 
 export default async function TestimonialsPage() {
-  const response = await testimonialsService.getTestimonials();
+  const token = (await cookies()).get('accessToken')?.value;
+  const response = await api
+    .list<TestimonialRecord>('/testimonials', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .catch(() => fallBackData<TestimonialRecord>());
   return <Testimonials initialData={response} />;
 }

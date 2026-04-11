@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import api from '@/lib/axios';
-import { removeTokenCookie } from '@/lib/utils';
+import {  removeTokenCookie } from '@/lib/utils';
 
 import Notifications from '../notification/notifications';
 import { SidebarTrigger } from '../ui/sidebar';
@@ -28,6 +28,7 @@ import { Skeleton } from '../ui/skeleton';
 export function Header() {
   const router = useRouter();
   const { data, isLoading } = useGetMe();
+
   const handleSignOut = async () => {
     try {
       await api.post('/auth/logout');
@@ -95,10 +96,10 @@ export function Header() {
               ) : (
                 <div className='flex flex-col space-y-1'>
                   <p className='text-sm font-medium leading-none'>
-                    {user?.full_name}
+                    {user?.full_name || 'Admin'}
                   </p>
                   <p className='text-xs leading-none text-muted-foreground'>
-                    {user?.email}
+                    {user?.email || 'demo@example.com'}
                   </p>
                 </div>
               )}

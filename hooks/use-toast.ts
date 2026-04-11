@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 const TOAST_LIMIT = 5;
 const TOAST_REMOVE_DELAY = 5000;
@@ -74,9 +74,9 @@ export function toast(props: ToastProps) {
 }
 
 export function useToast() {
-  const [state, setState] = React.useState<ToastState>(memoryState);
+  const [state, setState] = useState<ToastState>(memoryState);
 
-  React.useEffect(() => {
+  useEffect(() => {
     listeners.push(setState);
     return () => {
       const index = listeners.indexOf(setState);

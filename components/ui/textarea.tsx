@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { cn } from '@/lib/utils/index';
 
 export type TextareaProps = React.ComponentPropsWithoutRef<'textarea'>;

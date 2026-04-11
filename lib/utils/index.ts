@@ -1,3 +1,4 @@
+import { PaginatedResponse } from '@/types';
 import { AppRecord, UpdateAppPayload } from '@/types/app';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -309,4 +310,21 @@ export function getAppFormDefaults(data?: AppRecord): UpdateAppPayload {
     short_mode: data?.short_mode ?? '',
     title: data?.title ?? '',
   };
+}
+
+export function fallBackData<T>() {
+  return {
+    data: [] as T[],
+    meta: {
+      total: 0,
+      page: 0,
+      limit: 0,
+      totalPages: 0,
+      hasNextPage: false,
+      hasPreviousPage: false,
+    },
+    success: false,
+    statusCode: 200,
+    message: '',
+  } satisfies PaginatedResponse<T>;
 }
