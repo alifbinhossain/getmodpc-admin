@@ -1,8 +1,9 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { INotification } from '@/types/notification';
+import { Bell } from 'lucide-react';
 import { toast } from 'sonner';
 
 import DeleteAlertModal from '../shared/delete-alert-modal';
@@ -14,20 +15,17 @@ import NotificationSkeleton from './notification-skeleton';
 import { useGetAllNotifications } from './notification.hooks';
 import { notificationService } from './notification.service';
 
-type Props = {
-  trigger: ReactNode;
-};
-
-function Notifications({ trigger }: Props) {
+function Notifications() {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [totalUnread, setTotalUnread] = useState(0);
 
   const [open, setOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [page, setPage] = useState(1);
   const [allNotifications, setAllNotifications] = useState<INotification[]>([]);
 
-  const { data, isLoading, refetch } = useGetAllNotifications(open, {
+  const { data, isLoading, refetch } = useGetAllNotifications(true, {
     page,
   });
 
@@ -35,7 +33,7 @@ function Notifications({ trigger }: Props) {
   useEffect(() => {
     if (data?.data) {
       const newNotifications = data.data.notifications ?? [];
-
+      setTotalUnread(data.data.totalUnreadCount ?? 0);
       setAllNotifications((prev) =>
         page === 1 ? newNotifications : [...prev, ...newNotifications]
       );
@@ -105,9 +103,19 @@ function Notifications({ trigger }: Props) {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
+      <PopoverTrigger asChild>
+        <Button variant='ghost' size='icon' className='relative h-9 w-9'>
+          <Bell className='h-4 w-4' />
+          {totalUnread > 0 && (
+            <span className='absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-medium text-white'>
+              {totalUnread > 99 ? '99+' : totalUnread}
+            </span>
+          )}
+          <span className='sr-only'>Notifications</span>
+        </Button>
+      </PopoverTrigger>
 
-      <PopoverContent className='w-100 p-0'>
+      <PopoverContent className='w-100 p-0' align='end'>
         {/* 🔝 Header */}
         <div className='flex items-center justify-between p-4 pb-0'>
           <Button
