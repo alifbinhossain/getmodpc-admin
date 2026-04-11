@@ -1,15 +1,16 @@
+
 import type { Metadata } from 'next';
 
 import { Card, CardContent } from '@/components/ui/card';
 
-import { SignInForm } from '@/app/(auth)/sign-in/_components/sign-in-form';
+import { ForgotPasswordForm } from './_components/forgot-password-form';
 
 export const metadata: Metadata = {
-  title: 'Sign In',
-  description: 'Sign in to your admin dashboard',
+  title: 'Forgot Password',
+  description: 'Sent a reset password otp to your email address',
 };
 
-export default function SignInPage() {
+export default function ForgotPasswordPage() {
   return (
     <div className='space-y-6'>
       {/* Brand */}
@@ -31,13 +32,13 @@ export default function SignInPage() {
           </svg>
         </div>
         <h1 className='text-2xl font-bold text-white'>Admin Dashboard</h1>
-        <p className='mt-1 text-sm text-slate-400'>Sign in to your account</p>
+        <p className='mt-1 text-sm text-slate-400'>Forgot password</p>
       </div>
 
       {/* Form Card */}
       <Card>
         <CardContent>
-          <SignInForm />
+          <ForgotPasswordForm />
         </CardContent>
       </Card>
     </div>

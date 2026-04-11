@@ -1,9 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-import type { LoginResponse } from '@/types/auth';
 import { z } from 'zod/v3';
 
 import { useAppForm } from '@/hooks/form';
@@ -17,25 +16,22 @@ import { api } from '@/lib/axios';
 // SCHEMA
 // =============================================================================
 
-const signInSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
-type SignInFormValues = z.infer<typeof signInSchema>;
+type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 // =============================================================================
 // COMPONENT
 // =============================================================================
 
-export function SignInForm() {
+export function ForgotPasswordForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') ?? '/dashboard';
 
   const form = useAppForm({
-    schema: signInSchema,
-    defaultValues: { email: '', password: '' },
+    schema: forgotPasswordSchema,
+    defaultValues: { email: '' },
   });
 
   const {
@@ -45,17 +41,16 @@ export function SignInForm() {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = async (values: SignInFormValues) => {
+  const onSubmit = async (values: ForgotPasswordFormValues) => {
     try {
-      const res = await api.post<LoginResponse, SignInFormValues>(
-        '/auth/login',
+      await api.post<void, ForgotPasswordFormValues>(
+        '/auth/forgot-password',
         values
       );
-      // router.push(callbackUrl);
-    } catch (err: any) {
+      router.push('/reset-password');
+    } catch (err) {
       const message =
-        (err instanceof Error ? err.message : err.response.message) ??
-        'Invalid credentials';
+        err instanceof Error ? err.message : 'Invalid email address';
       setError('root', { message });
     }
   };
@@ -71,20 +66,13 @@ export function SignInForm() {
             type: 'email',
           }}
         />
-        <FormInput
-          control={control}
-          name='password'
-          placeholder='••••••••'
-          fieldProps={{
-            type: 'password',
-          }}
-        />
+
         <div className='flex justify-end'>
           <Link
-            href='/forgot-password'
+            href='/sign-in'
             className='text-center text-sm text-muted-foreground hover:underline hover:text-primary'
           >
-            Forgot password
+            Remember Password
           </Link>
         </div>
 
@@ -95,12 +83,8 @@ export function SignInForm() {
         )}
 
         <Button type='submit' className='w-full' loading={isSubmitting}>
-          Sign In
+          Send OTP
         </Button>
-
-        <p className='text-center text-xs text-slate-500'>
-          Note: Provide your email and password to sign in.
-        </p>
       </FormWrapper>
     </form>
   );

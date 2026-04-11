@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 
 import { Card, CardContent } from '@/components/ui/card';
 
-import { SignInForm } from '@/app/(auth)/sign-in/_components/sign-in-form';
+import { ResetPasswordForm } from './_components/reset-password-form';
 
 export const metadata: Metadata = {
-  title: 'Sign In',
-  description: 'Sign in to your admin dashboard',
+  title: 'Reset Password',
+  description: 'Reset your password here for sign in to your admin dashboard',
 };
 
-export default function SignInPage() {
+export default function ResetPasswordPage() {
   return (
     <div className='space-y-6'>
       {/* Brand */}
@@ -31,13 +31,13 @@ export default function SignInPage() {
           </svg>
         </div>
         <h1 className='text-2xl font-bold text-white'>Admin Dashboard</h1>
-        <p className='mt-1 text-sm text-slate-400'>Sign in to your account</p>
+        <p className='mt-1 text-sm text-slate-400'>Reset your password</p>
       </div>
 
       {/* Form Card */}
       <Card>
         <CardContent>
-          <SignInForm />
+          <ResetPasswordForm />
         </CardContent>
       </Card>
     </div>
