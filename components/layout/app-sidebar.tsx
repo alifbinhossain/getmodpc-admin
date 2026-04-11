@@ -14,6 +14,7 @@ import {
   MessageCircle,
   NotepadTextDashed,
   Play,
+  Rss,
   Settings,
   Shield,
   Tags,
@@ -109,7 +110,7 @@ const NAV_ITEMS: NavItem[] = [
     ],
     disabled: true,
   },
-  { title: 'Updated Apps', href: '/updated-apps', icon: AppWindow },
+  { title: 'Updated Apps', href: '/updated-apps', icon: Rss },
 
   { title: 'Trash', href: '/trash', icon: Trash2 },
 ];

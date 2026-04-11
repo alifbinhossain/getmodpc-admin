@@ -23,8 +23,8 @@ function Profile({ initialValues }: Props) {
         <ProfileForm
           key={'profile'}
           initialValues={{
-            full_name: initialValues.full_name,
-            avatar: initialValues.avatar || null,
+            full_name: initialValues?.full_name,
+            avatar: initialValues?.avatar || null,
           }}
         />
       </TabsContent>
