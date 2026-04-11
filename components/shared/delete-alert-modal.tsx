@@ -26,7 +26,6 @@ function DeleteAlertModal({ onSubmit, open, setOpen }: Props) {
     try {
       setLoading(true);
       await onSubmit();
-      toast.success('Deleted successfully');
     } catch (error: any) {
       toast.error(
         error?.message ??

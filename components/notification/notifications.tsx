@@ -31,14 +31,6 @@ function Notifications({ trigger }: Props) {
     page,
   });
 
-  // ✅ Reset when popover opens
-  useEffect(() => {
-    if (open) {
-      setPage(1);
-      setAllNotifications([]);
-    }
-  }, [open]);
-
   // ✅ Append notifications
   useEffect(() => {
     if (data?.data) {
