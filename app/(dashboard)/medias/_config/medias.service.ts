@@ -1,5 +1,9 @@
 import type { ApiResponse, PaginatedResponse } from '@/types';
-import type { MediaQueryParams, MediaRecord } from '@/types/media';
+import type {
+  FolderMediaRecord,
+  MediaQueryParams,
+  MediaRecord,
+} from '@/types/media';
 
 import { api } from '@/lib/axios';
 import { buildQueryString } from '@/lib/utils';
@@ -19,9 +23,41 @@ export const mediasService = {
     return api.list<MediaRecord>(`/medias${qs ? `?${qs}` : ''}`);
   },
 
+  getAllMediasByFolder(
+    params?: MediaQueryParams
+  ): Promise<PaginatedResponse<FolderMediaRecord>> {
+    const qs = params
+      ? buildQueryString(params as Record<string, unknown>)
+      : '';
+    return api.list<FolderMediaRecord>(`/medias/folder${qs ? `?${qs}` : ''}`);
+  },
+
   /** Fetch a single media by key */
   getMediaKey(key: string): Promise<ApiResponse<MediaRecord>> {
     return api.get<MediaRecord>(`/medias/${key}`);
+  },
+
+  // create a new folder
+  createFolder(payload: { folderName: string }): Promise<ApiResponse<string>> {
+    return api.post<string>('/medias/create-folder', payload);
+  },
+
+  // rename a folder
+  renameFolder(payload: {
+    oldFolder: string;
+    newFolder: string;
+  }): Promise<ApiResponse<{ moved: number }>> {
+    return api.put<{ moved: number }>('/medias/rename-folder', payload);
+  },
+
+  // delete folder
+  deleteFolder(payload: {
+    folderName: string;
+  }): Promise<ApiResponse<{ success: string[]; failed: string[] }>> {
+    return api.post<{ success: string[]; failed: string[] }>(
+      '/medias/delete-folder',
+      payload
+    );
   },
 
   /** Upload a new media */

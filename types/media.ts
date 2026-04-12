@@ -17,4 +17,10 @@ export interface MediaQueryParams extends BaseQueryParams {
   searchTerm?: string;
   limit?: number;
   page?: number;
+  folder?: string;
+}
+
+export interface FolderMediaRecord {
+  folders: string[];
+  files: MediaRecord[];
 }

@@ -1,5 +1,9 @@
 import { PaginatedResponse } from '@/types';
-import type { MediaQueryParams, MediaRecord } from '@/types/media';
+import type {
+  FolderMediaRecord,
+  MediaQueryParams,
+  MediaRecord,
+} from '@/types/media';
 
 import { useApiListQuery, useApiMutation, useApiQuery } from '@/hooks/api';
 
@@ -20,6 +24,22 @@ export function useMedias(
   return useApiListQuery({
     queryKey: queryKeys.media.list((params ?? {}) as Record<string, unknown>),
     queryFn: () => mediasService.getAllMedias(params),
+    initialData,
+    enabled: enabled != undefined ? enabled : true,
+  });
+}
+
+/** Fetch paginated medias */
+export function useAllMediasWithFoldersMedias(
+  params?: MediaQueryParams,
+  initialData?: PaginatedResponse<FolderMediaRecord>,
+  enabled?: boolean
+) {
+  return useApiListQuery({
+    queryKey: queryKeys.media.folderList(
+      (params ?? {}) as Record<string, unknown>
+    ),
+    queryFn: () => mediasService.getAllMediasByFolder(params),
     initialData,
     enabled: enabled != undefined ? enabled : true,
   });

@@ -67,7 +67,11 @@ export function Header() {
                 <Skeleton className='h-9 w-9 rounded-full' />
               ) : (
                 <Avatar className='h-9 w-9'>
-                  <AvatarImage src={user?.avatar} alt={user?.full_name} />
+                  <AvatarImage
+                    src={user?.avatar}
+                    alt={user?.full_name}
+                    className='object-cover'
+                  />
                   <AvatarFallback className='bg-primary text-sm font-semibold text-primary-foreground'>
                     {user?.full_name?.slice(0, 2)?.toUpperCase() || 'AD'}
                   </AvatarFallback>
