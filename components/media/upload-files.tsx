@@ -115,7 +115,9 @@ export function UploadFiles({
           <ArrowLeft />
         </Button>
       </div>
-      <div className='space-y-4 w-full h-[calc(100vh-8rem)] flex flex-col'>
+      <div className='space-y-4 w-full flex flex-col flex-1 min-h-[calc(100%-70px)]'>
+        {' '}
+        {/* Adjusted height */}
         <div
           className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors flex-1 flex flex-col justify-center ${
             dragOver ? 'border-primary bg-primary/5' : 'border-gray-300'
@@ -128,29 +130,28 @@ export function UploadFiles({
             <Upload className='mx-auto h-12 w-12 text-gray-400' />
             <div>
               <p className='text-lg font-medium mb-2'>
-                Drag and drop images here
+                Drag and drop media here
               </p>
               <p className='text-gray-500 mb-4'>or</p>
               <label htmlFor='file-upload'>
                 <Button variant='outline' asChild>
-                  <span>Select Images</span>
+                  <span>Select Media</span>
                 </Button>
                 <input
                   id='file-upload'
                   type='file'
                   multiple
-                  accept='image/*'
+                  accept='image/*,video/*'
                   className='hidden'
                   onChange={handleFileSelect}
                 />
               </label>
               <p className='text-sm text-gray-500 mt-2'>
-                Maximum {MAX_FILES} files • Only images allowed
+                Maximum {MAX_FILES} files • Only image and video allowed
               </p>
             </div>
           </div>
         </div>
-
         {files.length > 0 && (
           <div className='space-y-4 border-t pt-4'>
             <div className='flex items-center justify-between'>
@@ -182,6 +183,7 @@ export function UploadFiles({
                     />
                     <div className='flex-1 min-w-0'>
                       <p className='text-sm font-medium truncate'>
+                        {folder ? folder + '/' : ''}
                         {file.name}
                       </p>
                       <p className='text-xs text-gray-500'>

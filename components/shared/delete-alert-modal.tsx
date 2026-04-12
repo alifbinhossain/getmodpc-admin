@@ -18,8 +18,9 @@ type Props = {
   onSubmit: () => Promise<void>;
   open: boolean;
   setOpen: (open: boolean) => void;
+  description?: string;
 };
-function DeleteAlertModal({ onSubmit, open, setOpen }: Props) {
+function DeleteAlertModal({ onSubmit, open, setOpen, description }: Props) {
   const [loading, setLoading] = React.useState(false);
 
   const handleConfirmDelete = async () => {
@@ -43,8 +44,9 @@ function DeleteAlertModal({ onSubmit, open, setOpen }: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete this
-            item.
+            {description ||
+              ` This action cannot be undone. This will permanently delete this
+            item.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
 

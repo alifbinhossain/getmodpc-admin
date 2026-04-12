@@ -1,4 +1,4 @@
-import type { ApiResponse, PaginatedResponse } from '@/types';
+import type { ApiResponse, PaginatedResponse, PaginationMeta } from '@/types';
 import type {
   FolderMediaRecord,
   IFolderMeta,
@@ -6,7 +6,7 @@ import type {
   MediaRecord,
 } from '@/types/media';
 
-import { api } from '@/lib/axios';
+import { api, apiClient } from '@/lib/axios';
 import { buildQueryString } from '@/lib/utils';
 
 // =============================================================================
@@ -26,11 +26,15 @@ export const mediasService = {
 
   getAllMediasByFolder(
     params?: MediaQueryParams
-  ): Promise<PaginatedResponse<FolderMediaRecord>> {
+  ): Promise<{
+    data: FolderMediaRecord;
+    meta: PaginationMeta;
+    success: boolean;
+  }> {
     const qs = params
       ? buildQueryString(params as Record<string, unknown>)
       : '';
-    return api.list<FolderMediaRecord>(`/medias/folder${qs ? `?${qs}` : ''}`);
+    return apiClient.get(`/medias/folder${qs ? `?${qs}` : ''}`);
   },
 
   getAllFolders(

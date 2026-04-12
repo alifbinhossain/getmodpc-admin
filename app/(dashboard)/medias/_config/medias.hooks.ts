@@ -1,9 +1,6 @@
 import { PaginatedResponse } from '@/types';
-import type {
-  FolderMediaRecord,
-  MediaQueryParams,
-  MediaRecord,
-} from '@/types/media';
+import type { MediaQueryParams, MediaRecord } from '@/types/media';
+import { useQuery } from '@tanstack/react-query';
 
 import { useApiListQuery, useApiMutation, useApiQuery } from '@/hooks/api';
 
@@ -32,15 +29,13 @@ export function useMedias(
 /** Fetch paginated medias */
 export function useAllMediasWithFoldersMedias(
   params?: MediaQueryParams,
-  initialData?: PaginatedResponse<FolderMediaRecord>,
   enabled?: boolean
 ) {
-  return useApiListQuery({
+  return useQuery({
     queryKey: queryKeys.media.folderList(
       (params ?? {}) as Record<string, unknown>
     ),
     queryFn: () => mediasService.getAllMediasByFolder(params),
-    initialData,
     enabled: enabled != undefined ? enabled : true,
   });
 }

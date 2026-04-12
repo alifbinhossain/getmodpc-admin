@@ -47,6 +47,7 @@ export function MediaInput({
         )}
         <div className='flex gap-2'>
           <Input
+            id='media-input' // Added id for accessibility
             value={value || ''}
             placeholder={placeholder}
             onChange={(e) => onChange?.(e.target.value)}

@@ -14,18 +14,16 @@ const createFolderSchema = z.object({
   folderName: z.string().min(1, 'Folder name is required'),
 });
 
-type RenameMediaFormValues = z.infer<typeof createFolderSchema>;
+type CreateFolderFormValues = z.infer<typeof createFolderSchema>;
 
 type Props = {
-  data: string;
-  isEditing: boolean;
-  onClose?: (isRefreshData?: boolean) => void;
+  onClose: () => void;
 };
-export default function CreateFolderForm({ data, isEditing, onClose }: Props) {
+export default function CreateFolderForm({ onClose }: Props) {
   const form = useAppForm({
     schema: createFolderSchema,
     defaultValues: {
-      folderName: data,
+      folderName: '',
     },
   });
 
@@ -36,11 +34,11 @@ export default function CreateFolderForm({ data, isEditing, onClose }: Props) {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = async (values: RenameMediaFormValues) => {
+  const onSubmit = async (values: CreateFolderFormValues) => {
     try {
       await mediasService.createFolder(values);
       toast.success('Folder created successfully');
-      onClose?.(true);
+      onClose();
       form.reset();
     } catch (err) {
       const message =

@@ -25,7 +25,6 @@ type ModalType =
   | 'EDIT_USER_APP_REQUEST'
   | 'RENAME_FILE'
   | 'RENAME_FOLDER'
-  | 'CREATE_FOLDER'
   | null;
 
 interface ModalState {

@@ -52,40 +52,38 @@ export function MediaModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className='sm:max-w-[90vw] h-[90vh] overflow-hidden'>
-        <div className='space-y-3 size-full'>
-          <DialogHeader>
-            <DialogTitle>Select Media</DialogTitle>
-          </DialogHeader>
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className='h-[calc(100%-1.7rem)]'
-          >
-            <TabsList className='flex gap-2'>
-              <TabsTrigger value='upload' className='w-40'>
-                Upload Files
-              </TabsTrigger>
-              <TabsTrigger value='gallery' className='w-40'>
-                Gallery
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value='upload' className='flex-1 overflow-auto'>
-              <UploadTab
-                onUploadSuccess={handleUploadSuccess}
-                onClose={onClose}
-              />
-            </TabsContent>
-            <TabsContent value='gallery' className='flex-1 overflow-auto'>
-              <GalleryTab
-                search={search}
-                dateFilter={dateFilter}
-                onFiltersChange={handleFiltersChange}
-                onSelectImage={handleSelectImage}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
+      <DialogContent className='sm:max-w-[90vw] h-[90vh] flex flex-col'>
+        <DialogHeader>
+          <DialogTitle>Select Media</DialogTitle>
+        </DialogHeader>
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className='flex-1 flex flex-col overflow-hidden' // Added flex-col and overflow-hidden
+        >
+          <TabsList className='flex gap-2'>
+            <TabsTrigger value='upload' className='w-40'>
+              Upload Files
+            </TabsTrigger>
+            <TabsTrigger value='gallery' className='w-40'>
+              Gallery
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value='upload' className='flex-1 overflow-auto'>
+            <UploadTab
+              onUploadSuccess={handleUploadSuccess}
+              onClose={onClose}
+            />
+          </TabsContent>
+          <TabsContent value='gallery' className='flex-1 overflow-auto'>
+            <GalleryTab
+              search={search}
+              dateFilter={dateFilter}
+              onFiltersChange={handleFiltersChange}
+              onSelectImage={handleSelectImage}
+            />
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
