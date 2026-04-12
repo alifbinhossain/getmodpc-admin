@@ -35,11 +35,11 @@ export const mediasService = {
 
   getAllFolders(
     params?: MediaQueryParams
-  ): Promise<PaginatedResponse<IFolderMeta[]>> {
+  ): Promise<PaginatedResponse<IFolderMeta>> {
     const qs = params
       ? buildQueryString(params as Record<string, unknown>)
       : '';
-    return api.list<IFolderMeta[]>(`/medias/get-folders${qs ? `?${qs}` : ''}`);
+    return api.list<IFolderMeta>(`/medias/get-folders${qs ? `?${qs}` : ''}`);
   },
 
   /** Fetch a single media by key */

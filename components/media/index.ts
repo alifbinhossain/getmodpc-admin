@@ -1,4 +1,4 @@
 export { MediaModal } from './media-modal';
-export { UploadTab } from './upload-tab';
+export { UploadFiles as UploadTab } from './upload-files';
 export { GalleryTab } from './gallery-tab';
 export { MediaInput } from './media-input';

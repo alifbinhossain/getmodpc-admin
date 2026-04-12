@@ -25,6 +25,7 @@ import { UserAppRequestForm } from '@/app/(dashboard)/user-app-requests/_compone
 
 import { UploadTab } from '../media';
 import { Separator } from '../ui/separator';
+import CreateFolderForm from '../media/create-folder-form';
 
 export function GlobalFormModal() {
   const { type, isOpen, closeModal, data } = useFormModal();
@@ -57,6 +58,7 @@ export function GlobalFormModal() {
     EDIT_USER_APP_REQUEST: UserAppRequestForm,
     RENAME_FILE: RenameMediaForm,
     RENAME_FOLDER: RenameMediaForm,
+    CREATE_FOLDER:CreateFolderForm
     // EDIT_USER: EditUserForm,
   };
 
