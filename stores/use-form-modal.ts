@@ -23,7 +23,8 @@ type ModalType =
   | 'EDIT_COMMENT'
   | 'EDIT_CONTACT'
   | 'EDIT_USER_APP_REQUEST'
-  | 'EDIT_USER'
+  | 'RENAME_FILE'
+  | 'RENAME_FOLDER'
   | null;
 
 interface ModalState {

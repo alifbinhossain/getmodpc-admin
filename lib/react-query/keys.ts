@@ -135,6 +135,8 @@ export const queryKeys = {
       [...queryKeys.media.lists(), params] as const,
     folderList: (params: Record<string, unknown>) =>
       [...queryKeys.media.lists(), 'folders', params] as const,
+    getAllFolderList: (params: Record<string, unknown>) =>
+      [...queryKeys.media.lists(), 'all-folders', params] as const,
     details: () => [...queryKeys.media.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.media.details(), id] as const,
   },

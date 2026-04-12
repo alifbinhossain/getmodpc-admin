@@ -45,6 +45,17 @@ export function useAllMediasWithFoldersMedias(
   });
 }
 
+// get all folders
+
+export function useGetAllFolders(params?: MediaQueryParams, enabled?: boolean) {
+  return useApiListQuery({
+    queryKey: queryKeys.media.getAllFolderList(
+      (params ?? {}) as Record<string, unknown>
+    ),
+    queryFn: () => mediasService.getAllFolders(params),
+    enabled: enabled != undefined ? enabled : true,
+  });
+}
 /** Fetch single media */
 export function useMedia(key: string) {
   return useApiQuery({

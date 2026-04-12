@@ -15,6 +15,7 @@ import { CommentForm } from '@/app/(dashboard)/comments/_components/comment-form
 import { ContactForm } from '@/app/(dashboard)/contacts/_components/contact-form';
 import { DeveloperForm } from '@/app/(dashboard)/developers/_components/developer-form';
 import { FaqForm } from '@/app/(dashboard)/faqs/_components/faq-form';
+import RenameMediaForm from '@/app/(dashboard)/medias/_components/rename-media-form';
 import { PageForm } from '@/app/(dashboard)/pages/_components/page-form';
 import { ReportReasonForm } from '@/app/(dashboard)/report-reasons/_components/report-reason-form';
 import { ReportForm } from '@/app/(dashboard)/reports/_components/report-form';
@@ -54,6 +55,8 @@ export function GlobalFormModal() {
     EDIT_COMMENT: CommentForm,
     EDIT_CONTACT: ContactForm,
     EDIT_USER_APP_REQUEST: UserAppRequestForm,
+    RENAME_FILE: RenameMediaForm,
+    RENAME_FOLDER: RenameMediaForm,
     // EDIT_USER: EditUserForm,
   };
 
@@ -62,6 +65,7 @@ export function GlobalFormModal() {
   if (!FormComponent) return null; //
 
   const isEditing = type.startsWith('EDIT');
+  const isRename = type === 'RENAME_FILE' || type === 'RENAME_FOLDER';
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
@@ -76,8 +80,19 @@ export function GlobalFormModal() {
         </DialogHeader>
 
         <Separator />
-
-        <FormComponent data={data} onClose={closeModal} isEditing={isEditing} />
+        {isRename ? (
+          <RenameMediaForm
+            data={data}
+            onClose={closeModal}
+            isFolder={type === 'RENAME_FOLDER'}
+          />
+        ) : (
+          <FormComponent
+            data={data}
+            onClose={closeModal}
+            isEditing={isEditing}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

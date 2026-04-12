@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { useFormModal } from '@/stores/use-form-modal';
 import { MediaRecord } from '@/types/media';
-import { RefreshCw } from 'lucide-react';
+import { Pencil, RefreshCw } from 'lucide-react';
 
 import { DataTable } from '@/components/table';
 import { Button } from '@/components/ui/button';
@@ -48,7 +48,13 @@ export function MediasTable({
       permissions={{ canEdit, canDelete, canView: false }}
       actions={{
         onView: (media) => router.push(`/medias/${media.id}`),
-
+        // custom: [
+        //   {
+        //     label: 'Rename',
+        //     onClick: (media) => openModal('RENAME_FILE', media.key, refetch),
+        //     icon: <Pencil />,
+        //   },
+        // ],
         onDelete: async (media) => {
           await mediasService.deleteMedias([media.key]);
           refetch();

@@ -11,6 +11,7 @@ export interface MediaRecord extends BaseRecord {
   type: string;
   created_at: string;
   url: string;
+  folder: string;
 }
 export interface MediaQueryParams extends BaseQueryParams {
   dateFilter?: string;
@@ -23,4 +24,11 @@ export interface MediaQueryParams extends BaseQueryParams {
 export interface FolderMediaRecord {
   folders: string[];
   files: MediaRecord[];
+}
+
+export interface IFolderMeta {
+  name: string;
+  totalFiles: number;
+  totalSize: number;
+  createdAt: Date | null;
 }

@@ -1,6 +1,7 @@
 import type { ApiResponse, PaginatedResponse } from '@/types';
 import type {
   FolderMediaRecord,
+  IFolderMeta,
   MediaQueryParams,
   MediaRecord,
 } from '@/types/media';
@@ -32,6 +33,15 @@ export const mediasService = {
     return api.list<FolderMediaRecord>(`/medias/folder${qs ? `?${qs}` : ''}`);
   },
 
+  getAllFolders(
+    params?: MediaQueryParams
+  ): Promise<PaginatedResponse<IFolderMeta[]>> {
+    const qs = params
+      ? buildQueryString(params as Record<string, unknown>)
+      : '';
+    return api.list<IFolderMeta[]>(`/medias/get-folders${qs ? `?${qs}` : ''}`);
+  },
+
   /** Fetch a single media by key */
   getMediaKey(key: string): Promise<ApiResponse<MediaRecord>> {
     return api.get<MediaRecord>(`/medias/${key}`);
@@ -40,6 +50,14 @@ export const mediasService = {
   // create a new folder
   createFolder(payload: { folderName: string }): Promise<ApiResponse<string>> {
     return api.post<string>('/medias/create-folder', payload);
+  },
+
+  //rename file name
+  renameFile(payload: {
+    oldKey: string;
+    newKey: string;
+  }): Promise<ApiResponse<any>> {
+    return api.put<any>('/medias/rename-file', payload);
   },
 
   // rename a folder

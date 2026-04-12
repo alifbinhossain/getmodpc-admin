@@ -34,6 +34,20 @@ export const mediaColumns: ColumnDef<MediaRecord>[] = [
     meta: { hideFromToggle: true } satisfies ColumnMeta,
   },
   {
+    accessorKey: 'folder',
+    header: 'Folder',
+    cell: ({ getValue }) => {
+      const folder = getValue<MediaRecord['folder']>();
+      return (
+        <span className='text-sm text-muted-foreground line-clamp-2'>
+          {folder === '.' ? 'root' : folder}
+        </span>
+      );
+    },
+    enableHiding: true,
+    meta: { hideFromToggle: true } satisfies ColumnMeta,
+  },
+  {
     accessorKey: 'size',
     header: 'Size',
     cell: ({ getValue }) => {
