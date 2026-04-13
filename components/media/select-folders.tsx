@@ -48,11 +48,11 @@ export function SelectFolders({ selectFolder, setSelectedFolder }: Props) {
 
   if (isLoading && page === 1) {
     return (
-      <div className='p-1 flex grow gap-3'>
+      <div className='p-1 flex flex-wrap gap-3'>
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className='max-w-70 shadow border rounded-md flex justify-between gap-3 p-3 h-full'
+            className='w-62 shadow h-max border rounded-md flex justify-between gap-3 p-3'
           >
             <div className='flex-1 w-full space-y-2'>
               <Skeleton className='w-full h-4' />
@@ -68,42 +68,43 @@ export function SelectFolders({ selectFolder, setSelectedFolder }: Props) {
     );
   }
 
-  if (!folders.length && !isLoading) {
-    // Added !isLoading to prevent showing "No folders found" while loading
-    return (
-      <div className='w-full h-full flex items-center justify-center'>
-        <span className='text-sm text-muted-foreground'>No folders found</span>
-      </div>
-    );
-  }
-
   return (
     <>
-      <div className='w-full h-full overflow-y-auto space-y-5'>
+      <div className='w-full min-h-0 h-full flex flex-col space-y-5'>
         <div className='flex justify-end'>
           <Button onClick={() => setOpen(true)}>
             <FolderPlus />
           </Button>
         </div>
-        <div className='p-1 flex grow 6 gap-3'>
-          {folders.map((folder) => (
-            <Folder
-              selectFolder={selectFolder}
-              setSelectedFolder={setSelectedFolder}
-              key={folder.name}
-              folder={folder}
-              onDelete={() => refetch()}
-            />
-          ))}
-        </div>
-        {data?.meta?.hasNextPage && (
-          <div className='flex justify-center items-center mt-4'>
-            <Button
-              onClick={() => setPage((prev) => prev + 1)}
-              disabled={isFetching}
-            >
-              {isFetching ? 'Loading...' : 'Load more'}
-            </Button>
+
+        {!folders.length && !isLoading ? (
+          <div className='flex-1 flex items-center justify-center'>
+            <span className='text-sm text-muted-foreground'>
+              No folders found
+            </span>
+          </div>
+        ) : (
+          <div className='flex-1 overflow-y-auto p-1 flex gap-3 flex-wrap'>
+            {folders.map((folder) => (
+              <Folder
+                selectFolder={selectFolder}
+                setSelectedFolder={setSelectedFolder}
+                key={folder.name}
+                folder={folder}
+                onDelete={() => refetch()}
+              />
+            ))}
+
+            {data?.meta?.hasNextPage && (
+              <div className='w-full flex justify-center mt-4'>
+                <Button
+                  onClick={() => setPage((prev) => prev + 1)}
+                  disabled={isFetching}
+                >
+                  {isFetching ? 'Loading...' : 'Load more'}
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>
