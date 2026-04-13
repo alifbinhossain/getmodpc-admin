@@ -18,7 +18,7 @@ type Props = {
   selectFolder: string;
 };
 
-function SelectFolders({ selectFolder, setSelectedFolder }: Props) {
+export function SelectFolders({ selectFolder, setSelectedFolder }: Props) {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [folders, setFolders] = useState<IFolderMeta[]>([]);
@@ -48,11 +48,11 @@ function SelectFolders({ selectFolder, setSelectedFolder }: Props) {
 
   if (isLoading && page === 1) {
     return (
-      <div className='p-1 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3'>
+      <div className='p-1 flex grow gap-3'>
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className='w-full shadow border rounded-md flex justify-between gap-3 p-3 h-full'
+            className='max-w-70 shadow border rounded-md flex justify-between gap-3 p-3 h-full'
           >
             <div className='flex-1 w-full space-y-2'>
               <Skeleton className='w-full h-4' />
@@ -85,7 +85,7 @@ function SelectFolders({ selectFolder, setSelectedFolder }: Props) {
             <FolderPlus />
           </Button>
         </div>
-        <div className='p-1 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3'>
+        <div className='p-1 flex grow 6 gap-3'>
           {folders.map((folder) => (
             <Folder
               selectFolder={selectFolder}
@@ -124,5 +124,3 @@ function SelectFolders({ selectFolder, setSelectedFolder }: Props) {
     </>
   );
 }
-
-export default SelectFolders;

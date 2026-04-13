@@ -1,13 +1,15 @@
+'use client';
+
 import React, { useState } from 'react';
 
-import SelectFolders from './select-folders';
+import { SelectFolders } from './select-folders';
 import { UploadFiles } from './upload-files';
 
 type Props = {
   onUploadSuccess?: () => void;
   onClose?: (isRefreshData?: boolean) => void;
 };
-function UploadTab({ onClose, onUploadSuccess }: Props) {
+export function UploadTab({ onClose, onUploadSuccess }: Props) {
   const [selectFolder, setSelectedFolder] = useState<string>('');
   return (
     <>
@@ -27,5 +29,3 @@ function UploadTab({ onClose, onUploadSuccess }: Props) {
     </>
   );
 }
-
-export default UploadTab;

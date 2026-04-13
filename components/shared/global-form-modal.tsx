@@ -70,7 +70,7 @@ export function GlobalFormModal() {
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent
-        className={'max-h-[90vh] overflow-auto sm:max-w-lg'}
+        className={'max-h-[90vh] overflow-auto sm:max-w-xl'}
         aria-describedby={`${type}-form-modal-description`}
       >
         <DialogHeader>

@@ -25,7 +25,7 @@ function Folder({ folder, selectFolder, setSelectedFolder, onDelete }: Props) {
     <>
       <div
         className={cn(
-          'cursor-pointer p-3 hover:bg-muted/50 transition flex justify-between gap-3 rounded-md shadow border',
+          'max-w-70 cursor-pointer p-3 hover:bg-muted/50 transition flex justify-between gap-3 rounded-md shadow border',
           selectFolder === folder.name && 'border-blue-500'
         )}
         onClick={() => setSelectedFolder(folder.name)}

@@ -11,7 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { GalleryTab } from './gallery-tab';
-import UploadTab from './upload-tab';
+import { UploadTab } from './upload-tab';
 
 interface MediaModalProps {
   isOpen: boolean;

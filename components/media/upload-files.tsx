@@ -110,7 +110,7 @@ export function UploadFiles({
 
   return (
     <>
-      <div className='pb-5'>
+      <div className='flex justify-end'>
         <Button onClick={onBack}>
           <ArrowLeft />
         </Button>
